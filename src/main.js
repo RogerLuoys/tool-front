@@ -7,8 +7,10 @@ import VueAxios from 'vue-axios'
 import axios from 'axios'
 import {ElementUI} from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import VueCookies from "vue-cookies";
 
 Vue.use(VueAxios, axios)
+Vue.use(VueCookies)
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 
