@@ -1,4 +1,4 @@
-# tools-front
+# tool-front
 
 > A Vue.js project
 
