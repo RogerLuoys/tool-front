@@ -1,15 +1,9 @@
 <template>
-  <div>
-    <list></list>
-  </div>
+  <div>home</div>
 </template>
 
 <script>
-import list from './list'
-
 export default {
-  components: {list}
-
 }
 </script>
 

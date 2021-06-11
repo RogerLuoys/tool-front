@@ -1,15 +1,9 @@
 <template>
-  <div>
-    <list></list>
-  </div>
+  <div>custom factory</div>
 </template>
 
 <script>
-import list from './list'
-
 export default {
-  components: {list}
-
 }
 </script>
 

@@ -1,15 +1,9 @@
 <template>
-  <div>
-    <list></list>
-  </div>
+  <div>配置</div>
 </template>
 
 <script>
-import list from './list'
-
 export default {
-  components: {list}
-
 }
 </script>
 
