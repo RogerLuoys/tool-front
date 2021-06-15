@@ -7,23 +7,23 @@
                    text-color="#fff"
                    active-text-color="#ffd04b" style="height: 16cm;">
             <el-menu-item index="1" @click="$router.push('/')">
-              <i class="el-icon-s-flag"></i>
+              <i class="el-icon-s-home"></i>
               <span slot="title">首页</span>
             </el-menu-item>
             <el-submenu index="2">
               <template slot="title">
-                <i class="el-icon-date"></i>
+                <i class="el-icon-s-management"></i>
                 <span>数据工厂</span>
               </template>
               <el-menu-item index="2-1" @click="$router.push('/dataFactory')">通用</el-menu-item>
               <el-menu-item index="2-2" @click="$router.push('/customFactory')">自定义</el-menu-item>
             </el-submenu>
             <el-menu-item index="3" @click="$router.push('/device')">
-              <i class="el-icon-notebook-1"></i>
+              <i class="el-icon-s-platform"></i>
               <span slot="title">环境和设备</span>
             </el-menu-item>
             <el-menu-item index="4" @click="$router.push('/config')">
-              <i class="el-icon-present"></i>
+              <i class="el-icon-setting"></i>
               <span slot="title">配置管理</span>
             </el-menu-item>
           </el-menu>

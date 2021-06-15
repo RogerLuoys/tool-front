@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import home from '@/views/home/index'
 import config from '@/views/config/index'
 import dataFactory from '@/views/data-factory/index'
 import customFactory from '@/views/custom-factory/index'
@@ -12,8 +12,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      name: 'home',
+      component: home
     },
     {
       path: '/config',
