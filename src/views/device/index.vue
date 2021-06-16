@@ -1,9 +1,13 @@
 <template>
-  <div>device</div>
+  <div>
+    <tl-list></tl-list>
+  </div>
 </template>
 
 <script>
+import tlList from './list'
 export default {
+  components: {tlList}
 }
 </script>
 

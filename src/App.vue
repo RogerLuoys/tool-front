@@ -18,9 +18,17 @@
               <el-menu-item index="2-1" @click="$router.push('/dataFactory')">通用</el-menu-item>
               <el-menu-item index="2-2" @click="$router.push('/customFactory')">自定义</el-menu-item>
             </el-submenu>
+            <el-submenu index="3">
+              <template slot="title">
+                <i class="el-icon-s-management"></i>
+                <span>自动化平台</span>
+              </template>
+              <el-menu-item index="3-1" @click="$router.push('/dataFactory')">用例管理</el-menu-item>
+              <el-menu-item index="3-2" @click="$router.push('/customFactory')">套件管理</el-menu-item>
+            </el-submenu>
             <el-menu-item index="3" @click="$router.push('/device')">
               <i class="el-icon-s-platform"></i>
-              <span slot="title">环境和设备</span>
+              <span slot="title">设备领用</span>
             </el-menu-item>
             <el-menu-item index="4" @click="$router.push('/config')">
               <i class="el-icon-setting"></i>
