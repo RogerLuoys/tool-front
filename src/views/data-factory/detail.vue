@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--基本信息-->
-    <el-form :model="pageData" label-width="2cm">
+    <el-form :model="pageData" label-width="90px">
       <el-form-item label="标题">
         <el-input v-model="pageData.title" placeholder="请输入标题" size="small" maxlength="30" show-word-limit></el-input>
       </el-form-item>
@@ -10,7 +10,7 @@
                   show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="类型">
-        <el-radio-group v-model="pageData.type" size="small">
+        <el-radio-group v-model="pageData.type" :disabled="toolId!==0" size="small">
           <el-radio :label="1">SQL</el-radio>
           <el-radio :label="2">HTTP</el-radio>
           <el-radio :label="3">DUBBO</el-radio>
@@ -22,96 +22,128 @@
           <el-radio :label="2">自己可见</el-radio>
         </el-radio-group>
       </el-form-item>
-      <!--参数-->
+      <!--参数设置-->
       <el-divider content-position="right"></el-divider>
-      <div v-for="(item, index) in pageData.params" :key="index">
-        <el-form-item>
-          <template #label>
-            <div>{{ pageData.params[index].paramName }}</div>
-          </template>
-          <el-input v-model="pageData.params[index].paramValue" placeholder="请输入参数" size="small" maxlength="30"
-                    show-word-limit>
-            <template #append>
-              <el-button @click="deleteParam(index)" type="primary" size="mini">删除参数</el-button>
-            </template>
-          </el-input>
+      <div v-for="(item, index) in pageData.paramList" :key="index">
+        <el-form-item label="参数">
+          <el-row :gutter="5">
+            <el-col :span="10">
+              <el-input v-model="pageData.paramList[index].name" size="small" placeholder="请输入参数名"
+                        maxlength="20" show-word-limit></el-input>
+            </el-col>
+            <el-col :span="10">
+              <el-input v-model="pageData.paramList[index].value" size="small" placeholder="请输入参数值"
+                        maxlength="20" show-word-limit>
+              </el-input>
+            </el-col>
+            <el-col :span="3">
+              <el-button @click="deleteParam(index)" size="small">删除</el-button>
+            </el-col>
+          </el-row>
         </el-form-item>
       </div>
-      <el-form-item v-if="pageControl.isNewParam" label="请设置">
-        <el-input v-model="pageControl.paramName" placeholder="请输入参数名" size="small" maxlength="20" show-word-limit>
-          <template #prepend>
-            <el-select v-model="pageControl.paramType" size="mini" placeholder="参数类型"
-                       style="float:left; width: 100px">
-              <el-option key="1" label="String" value="String"></el-option>
-            </el-select>
-          </template>
-          <template #append>
-            <el-button @click="newParam()" type="primary" size="mini" icon="el-icon-check"></el-button>
-            <el-button @click="pageControl.isNewParam=false" size="mini" icon="el-icon-close"></el-button>
-          </template>
-        </el-input>
-      </el-form-item>
-      <el-form-item v-else>
-        <template #label>
-          <el-button type="text" size="mini" @click="pageControl.isNewParam=true">+新增参数</el-button>
-        </template>
+      <el-form-item label="新增参数">
+        <div v-if="pageControl.isNewParam">
+          <el-input v-if="pageControl.isNewParam" v-model="pageControl.paramName" size="small" placeholder="请输入新的参数名"
+                    maxlength="20" show-word-limit>
+            <template #append>
+              <el-button @click="newParam()" type="primary" size="small">确认</el-button>
+              <el-button @click="pageControl.isNewParam=false" size="small">取消</el-button>
+            </template>
+          </el-input>
+        </div>
+        <div v-else>
+          <el-button @click="pageControl.isNewParam=true" type="primary" size="mini" icon="el-icon-plus" circle></el-button>
+        </div>
       </el-form-item>
       <!--模板-->
       <el-divider content-position="right"></el-divider>
-      <template v-if="pageData.type===1">
+      <!--SQL模板-->
+      <div v-if="pageData.type===1">
         <el-form-item label="SQL模板">
-          <div v-for="(item, index) in pageControl.sqlTemplateList" :key="index">
-            <el-input v-model="pageControl.sqlTemplateList[index]" placeholder="请输入单行SQL" size="mini"
+          <div v-for="(item, index) in pageData.sqlList" :key="index">
+            <el-input v-model="pageData.sqlList[index]" placeholder="请输入单行SQL" size="small"
                       maxlength="200" show-word-limit>
               <template #append>
-                <el-button @click="deleteSQL(index)" type="primary" size="mini">删除SQL</el-button>
+                <el-button @click="deleteSQL(index)" type="primary" size="small">删除</el-button>
               </template>
             </el-input>
           </div>
         </el-form-item>
-        <el-form-item>
-          <template #label>
-            <el-button type="text" size="mini" @click="pageControl.isNewSQL=true">+新增SQL</el-button>
-          </template>
-          <el-input v-if="pageControl.isNewSQL" v-model="pageControl.sqlTemplate" size="mini" placeholder="请输入新的单行SQL模板"
-                    maxlength="200" show-word-limit>
-            <template #append>
-              <el-button @click="newSQL()" type="primary" size="mini" icon="el-icon-check"></el-button>
-              <el-button @click="pageControl.isNewSQL=false" size="mini" icon="el-icon-close"></el-button>
-            </template>
-          </el-input>
+        <el-form-item label="新增SQL">
+          <div v-if="pageControl.isNewSQL">
+            <el-input v-if="pageControl.isNewSQL" v-model="pageControl.sql" size="small" placeholder="请输入新的单行SQL模板"
+                      maxlength="200" show-word-limit>
+              <template #append>
+                <el-button @click="newSQL()" type="primary" size="small">确认</el-button>
+                <el-button @click="pageControl.isNewSQL=false" size="small">取消</el-button>
+              </template>
+            </el-input>
+          </div>
+          <div v-else>
+            <el-button @click="pageControl.isNewSQL=true" type="primary" size="mini" icon="el-icon-plus" circle></el-button>
+          </div>
         </el-form-item>
-      </template>
-      <template v-else-if="pageData.type===2">
+      </div>
+      <!--HTTP模板-->
+      <div v-else-if="pageData.type===2">
         <el-form-item label="URL">
-          <el-input v-model="pageControl.httpTemplateList[0]" size="small" placeholder="请输入URL"
+          <el-input v-model="pageData.httpURL" size="small" placeholder="请输入URL"
                     maxlength="200" show-word-limit>
             <template #prepend>
-              <el-select v-model="pageControl.httpType" size="mini" placeholder="请求方法"
+              <el-select v-model="pageData.httpType" size="small" placeholder="请求方法"
                          style="float:left; width: 100px">
                 <el-option key="1" label="GET" value="GET"></el-option>
-                <el-option key="1" label="POST" value="POST"></el-option>
-                <el-option key="1" label="PUT" value="PUT"></el-option>
-                <el-option key="1" label="DELETE" value="DELETE"></el-option>
+                <el-option key="2" label="POST" value="POST"></el-option>
+                <el-option key="3" label="PUT" value="PUT"></el-option>
+                <el-option key="4" label="DELETE" value="DELETE"></el-option>
               </el-select>
             </template>
           </el-input>
         </el-form-item>
         <el-form-item label="Header">
-          <el-input v-model="pageControl.httpTemplateList[1]" size="small" placeholder="请输入Header"
-                    maxlength="200" show-word-limit></el-input>
+          <div v-for="(item, index) in pageData.httpHeaderList" :key="index">
+            <el-row :gutter="5">
+              <el-col :span="10">
+                <el-input v-model="pageData.httpHeaderList[index].name" size="small" placeholder="请输入Header名"
+                          maxlength="20" show-word-limit></el-input>
+              </el-col>
+              <el-col :span="10">
+                <el-input v-model="pageData.httpHeaderList[index].value" size="small" placeholder="请输入Header值"
+                          maxlength="20" show-word-limit>
+                </el-input>
+              </el-col>
+              <el-col :span="3">
+                <el-button @click="deleteHeader(index)" size="small">删除</el-button>
+              </el-col>
+            </el-row>
+          </div>
+        </el-form-item>
+        <el-form-item label="新增Header">
+          <div v-if="pageControl.isNewHeader">
+            <el-input v-if="pageControl.isNewHeader" v-model="pageControl.httpHeader" size="small" placeholder="请输入新的参数名"
+                      maxlength="20" show-word-limit>
+              <template #append>
+                <el-button @click="newHeader()" type="primary" size="small">确认</el-button>
+                <el-button @click="pageControl.isNewHeader=false" size="small">取消</el-button>
+              </template>
+            </el-input>
+          </div>
+          <div v-else>
+            <el-button @click="pageControl.isNewHeader=true" type="primary" size="mini" icon="el-icon-plus" circle></el-button>
+          </div>
         </el-form-item>
         <el-form-item label="Body">
-          <el-input v-model="pageControl.httpTemplateList[2]" :autosize="{ minRows: 4, maxRows: 9}" placeholder="请输入Body" type="textarea"
+          <el-input v-model="pageData.httpBody" :autosize="{ minRows: 4, maxRows: 9}" placeholder="请输入Body" type="textarea"
                     maxlength="500" show-word-limit></el-input>
         </el-form-item>
-      </template>
-      <template v-else>
+      </div>
+      <div v-else>
         <el-form-item label="未知类型">
           <el-input v-model="pageData.templateList[0]" :autosize="{ minRows: 4, maxRows: 9}" placeholder="请输入模板" type="textarea"
                     maxlength="500" show-word-limit></el-input>
         </el-form-item>
-      </template>
+      </div>
     </el-form>
     <div style="text-align: center">
       <el-button type="primary" size="small">保存</el-button>
@@ -137,43 +169,56 @@ export default {
         templateList: [],
         type: 1,
         status: 1,
-        params: [{
-          paramName: 'name',
-          paramValue: 'value'
+        sqlList: ['sql1', 'sql2'],
+        httpType: 'POST',
+        httpURL: 'URL',
+        httpHeaderList: [{
+          name: 'header1',
+          value: 'value1'
+        }],
+        httpBody: 'BODY',
+        paramList: [{
+          name: 'name',
+          value: 'value'
         }]
       },
       pageControl: {
         isNewParam: false,
         isNewTool: false,
         isNewSQL: false,
+        isNewHeader: false,
         paramType: 'String',
         paramName: '',
-        sqlTemplate: '',
-        httpType: 'GET',
-        httpURL: '',
-        httpHeader: '',
-        httpBody: '',
-        sqlTemplateList: ['sql1', 'sql2'],
-        httpTemplateList: ['url', 'header', 'body']
+        sql: '',
+        httpHeader: ''
       }
     }
   },
   methods: {
     newParam () {
-      this.pageData.params.push({paramName: this.pageControl.paramName, paramValue: ''})
+      this.pageData.paramList.push({name: this.pageControl.paramName, value: ''})
       this.pageControl.paramName = ''
       this.pageControl.isNewParam = false
     },
     deleteParam (index) {
-      this.pageData.params.splice(index, 1)
+      this.pageData.paramList.splice(index, 1)
     },
     newSQL () {
-      this.pageControl.sqlTemplateList.push(this.pageControl.sqlTemplate)
-      this.pageControl.sqlTemplate = ''
+      this.pageData.sqlList.push(this.pageControl.sql)
+      this.pageControl.sql = ''
       this.pageControl.isNewSQL = false
     },
     deleteSQL (index) {
-      this.pageControl.sqlTemplateList.splice(index, 1)
+      this.pageData.sqlList.splice(index, 1)
+    },
+    newHeader () {
+      this.pageData.httpHeaderList.push({name: this.pageControl.httpHeader, value: ''})
+      this.pageControl.httpHeader = ''
+      this.pageControl.isNewHeader = false
+    },
+    deleteHeader (index) {
+      this.pageData.httpHeaderList.splice(index, 1)
+      debugger
     }
   }
 }
