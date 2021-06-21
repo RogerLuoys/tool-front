@@ -153,6 +153,7 @@
 </template>
 
 <script>
+import {create} from '@/api/commonFactory'
 export default {
   props: {
     toolId: {
@@ -219,6 +220,13 @@ export default {
     deleteHeader (index) {
       this.pageData.httpHeaderList.splice(index, 1)
       debugger
+    },
+    create () {
+      create(this.pageData).then(response => {
+        if (response.data.success === true) {
+          this.$message.success('更新基本信息成功')
+        }
+      })
     }
   }
 }

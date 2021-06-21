@@ -8,9 +8,9 @@ const api = axios.create({
   // 办公电脑
   // baseURL: 'http://10.201.10.183:9001/',
   // 我的云主机
-  baseURL: 'http://118.24.117.181:9001/',
+  // baseURL: 'http://118.24.117.181:9001/',
   // 本地
-  // baseURL: 'http://localhost:9001/',
+  baseURL: 'http://localhost:9001/',
   timeout: 10000,
   withCredentials: false
 })
@@ -33,6 +33,9 @@ api.interceptors.request.use(function (config) {
 // 添加响应拦截器
 api.interceptors.response.use(function (response) {
   // 对响应数据做点什么
+  if (response.data.success === false) {
+    Message.error(response.data.message)
+  }
   return response
 }, function (error) {
   // 对响应错误做点什么
