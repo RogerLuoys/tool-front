@@ -20,7 +20,7 @@
             </el-submenu>
             <el-submenu index="3">
               <template slot="title">
-                <i class="el-icon-s-management"></i>
+                <i class="el-icon-s-promotion"></i>
                 <span>自动化平台</span>
               </template>
               <el-menu-item index="3-1" @click="$router.push('/commonFactory')">用例管理</el-menu-item>

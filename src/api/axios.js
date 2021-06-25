@@ -39,7 +39,7 @@ api.interceptors.response.use(function (response) {
   return response
 }, function (error) {
   // 对响应错误做点什么
-  Message.error('未知系统错误，请稍后重试，或联系管理员')
+  Message.error('未知系统错误，请联系管理员')
   return Promise.reject(error)
 })
 

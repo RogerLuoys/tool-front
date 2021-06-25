@@ -1,12 +1,11 @@
 <template>
   <div>
     <!--搜索-->
-    <el-select v-model="pageControl.search.status" clearable size="mini" placeholder="请选择状态"
+    <el-select v-model="pageControl.search.status" clearable size="mini" placeholder="请选择类型"
                style="width:110px; float:left">
-      <el-option key="1" label="未开始" value="1"></el-option>
-      <el-option key="2" label="进行中" value="2"></el-option>
-      <el-option key="3" label="已完成" value="3"></el-option>
-      <el-option key="4" label="已撤销" value="4"></el-option>
+      <el-option key="1" label="SQL" value="1"></el-option>
+      <el-option key="2" label="HTTP" value="2"></el-option>
+      <el-option key="3" label="DUBBO" value="3"></el-option>
     </el-select>
     <el-input placeholder="请输入名称" clearable size="mini" v-model="pageControl.search.name"
               style="width:200px; float:left"></el-input>

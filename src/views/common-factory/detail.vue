@@ -140,13 +140,13 @@
       </div>
       <div v-else>
         <el-form-item label="未知类型">
-          <el-input v-model="pageData.templateList[0]" :autosize="{ minRows: 4, maxRows: 9}" placeholder="请输入模板" type="textarea"
+          <el-input :autosize="{ minRows: 4, maxRows: 9}" placeholder="请输入模板" type="textarea"
                     maxlength="500" show-word-limit></el-input>
         </el-form-item>
       </div>
     </el-form>
     <div style="text-align: center">
-      <el-button type="primary" size="small">保存</el-button>
+      <el-button @click="create()" type="primary" size="small">保存</el-button>
       <el-button type="primary" size="small">删除</el-button>
     </div>
   </div>
@@ -167,9 +167,12 @@ export default {
         toolId: 0,
         title: '',
         description: '',
-        templateList: [],
         type: 1,
         status: 1,
+        paramList: [{
+          name: 'name',
+          value: 'value'
+        }],
         sqlList: ['sql1', 'sql2'],
         httpType: 'POST',
         httpURL: 'URL',
@@ -177,11 +180,7 @@ export default {
           name: 'header1',
           value: 'value1'
         }],
-        httpBody: 'BODY',
-        paramList: [{
-          name: 'name',
-          value: 'value'
-        }]
+        httpBody: 'BODY'
       },
       pageControl: {
         isNewParam: false,
@@ -224,7 +223,7 @@ export default {
     create () {
       create(this.pageData).then(response => {
         if (response.data.success === true) {
-          this.$message.success('更新基本信息成功')
+          this.$message.success('创建工具成功')
         }
       })
     }
