@@ -146,14 +146,15 @@
       </div>
     </el-form>
     <div style="text-align: center">
-      <el-button @click="create()" type="primary" size="small">保存</el-button>
-      <el-button type="primary" size="small">删除</el-button>
+      <el-button type="primary" size="small">试用</el-button>
+      <el-button @click="save()" type="primary" size="small">保存</el-button>
+      <el-button v-if="toolId !== 0" @click="remove()" size="small">删除</el-button>
     </div>
   </div>
 </template>
 
 <script>
-import {create} from '@/api/commonFactory'
+import {createAPI, updateAPI, deleteAPI} from '@/api/commonFactory'
 export default {
   props: {
     toolId: {
@@ -167,6 +168,8 @@ export default {
         toolId: 0,
         title: '',
         description: '',
+        owner: 'tester',
+        permission: 2,
         type: 1,
         status: 1,
         paramList: [{
@@ -220,10 +223,31 @@ export default {
       this.pageData.httpHeaderList.splice(index, 1)
       debugger
     },
+    save () {
+      if (this.toolId === 0) {
+        this.create()
+      } else {
+        this.update()
+      }
+    },
     create () {
-      create(this.pageData).then(response => {
+      createAPI(this.pageData).then(response => {
         if (response.data.success === true) {
           this.$message.success('创建工具成功')
+        }
+      })
+    },
+    update () {
+      updateAPI(this.pageData).then(response => {
+        if (response.data.success === true) {
+          this.$message.success('编辑工具成功')
+        }
+      })
+    },
+    remove () {
+      deleteAPI({toolId: this.pageData.toolId}).then(response => {
+        if (response.data.success === true) {
+          this.$message.success('删除工具成功')
         }
       })
     }

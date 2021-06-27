@@ -18,23 +18,29 @@
       </div>
       <el-form-item v-if="pageControl.isViewTemplate">
         <template #label>
-          <el-button type="text" size="mini" @click="pageControl.isViewTemplate=false">收起模板</el-button>
+          <el-button type="text" size="small" @click="pageControl.isViewTemplate=false">收起模板</el-button>
         </template>
         <span>{{pageData.template}}</span>
       </el-form-item>
       <el-form-item v-else>
         <template #label>
-          <el-button type="text" size="mini" @click="pageControl.isViewTemplate=true">查看模板</el-button>
+          <el-button type="text" size="small" @click="pageControl.isViewTemplate=true">查看模板</el-button>
         </template>
       </el-form-item>
+      <el-form-item label="使用结果">
+        <div>{{pageControl.respondBody}}</div>
+      </el-form-item>
     </el-form>
+    <el-input v-model="toolId"></el-input>
     <div style="text-align: center">
-      <el-button type="primary" size="small">确认使用</el-button>
+      <el-button @click="use()" type="primary" size="small">确认使用</el-button>
     </div>
   </div>
 </template>
 
 <script>
+import {useAPI} from '@/api/commonFactory'
+
 export default {
   props: {
     toolId: {
@@ -58,7 +64,8 @@ export default {
         }]
       },
       pageControl: {
-        isViewTemplate: false
+        isViewTemplate: false,
+        respondBody: '--'
       }
     }
   },
@@ -67,6 +74,14 @@ export default {
       this.pageData.params.push({paramName: this.pageControl.paramName, paramValue: ''})
       this.pageControl.paramName = ''
       this.pageControl.isNewParam = false
+    },
+    use () {
+      useAPI({toolId: this.toolId}).then(response => {
+        if (response.data.success === true) {
+          this.pageControl.respondBody = response.data
+          this.$message.success('创建工具成功')
+        }
+      })
     }
   }
 }

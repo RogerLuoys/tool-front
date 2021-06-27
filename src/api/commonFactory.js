@@ -1,6 +1,6 @@
 import api from './axios'
 
-export function create (data) {
+export function createAPI (data) {
   return api({
     url: 'api/commonFactory/create',
     method: 'post',
@@ -8,7 +8,15 @@ export function create (data) {
   })
 }
 
-export function update (data) {
+export function deleteAPI (params) {
+  return api({
+    url: 'api/commonFactory/delete',
+    method: 'delete',
+    params: params
+  })
+}
+
+export function updateAPI (data) {
   return api({
     url: 'api/commonFactory/update',
     method: 'put',
@@ -16,9 +24,18 @@ export function update (data) {
   })
 }
 
-export function query (params) {
+export function queryAPI (params) {
   return api({
     url: 'api/commonFactory/query',
-    method: 'get'
+    method: 'get',
+    params: params
+  })
+}
+
+export function useAPI (data) {
+  return api({
+    url: 'api/commonFactory/use',
+    method: 'post',
+    data: data
   })
 }
