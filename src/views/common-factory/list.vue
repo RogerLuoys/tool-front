@@ -11,7 +11,8 @@
               style="width:200px; float:left"></el-input>
     <el-button icon="el-icon-search" type="primary" size="mini"></el-button>
     <!--新增-->
-    <el-button type="primary" @click="pageControl.isNewTool = true" size="mini" style="float:right">新增</el-button>
+<!--    <el-button type="primary" @click="pageControl.isNewTool = true" size="mini" style="float:right">新增</el-button>-->
+    <el-button type="primary" @click="$router.push(`commonFactoryDetail/0`)" size="mini" style="float:right">新增</el-button>
     <!--列表-->
     <el-table border :data="pageData" size="mini" style="width: 100%">
       <el-table-column prop="type" label="类型" width="180">
@@ -25,21 +26,21 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button @click="pageControl.isUseTool=true" type="text" size="small">使用</el-button>
-          <el-button @click="pageControl.isEditTool=true" type="text" size="small">编辑</el-button>
+          <el-button @click="$router.push(`commonFactoryDetail/${scope.row.toolId}`)" type="text" size="small">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
     <!--弹出框-->
-    <el-dialog :visible.sync="pageControl.isNewTool" title="新增数据工厂">
-      <el-card>
-        <tl-detail></tl-detail>
-      </el-card>
-    </el-dialog>
-    <el-dialog :visible.sync="pageControl.isEditTool" title="编辑数据工厂">
-      <el-card>
-        <tl-detail :tool-id="pageData[pageControl.selectIndex].toolId"></tl-detail>
-      </el-card>
-    </el-dialog>
+<!--    <el-dialog :visible.sync="pageControl.isNewTool" title="新增数据工厂">-->
+<!--      <el-card>-->
+<!--        <tl-detail></tl-detail>-->
+<!--      </el-card>-->
+<!--    </el-dialog>-->
+<!--    <el-dialog :visible.sync="pageControl.isEditTool" title="编辑数据工厂">-->
+<!--      <el-card>-->
+<!--        <tl-detail :tool-id="pageData[pageControl.selectIndex].toolId"></tl-detail>-->
+<!--      </el-card>-->
+<!--    </el-dialog>-->
     <el-dialog :visible.sync="pageControl.isUseTool" title="使用数据工厂">
       <el-card>
         <tl-use :tool-id="pageData[pageControl.selectIndex].owner"></tl-use>

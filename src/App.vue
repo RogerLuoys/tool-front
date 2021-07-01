@@ -45,10 +45,10 @@
 <!--          </el-dropdown>-->
 <!--        </el-col>-->
       </el-aside>
-      <el-main style="background-color: whitesmoke">
-        <el-card style="height: 15cm;">
-          <router-view></router-view>
-        </el-card>
+      <el-main style="background-color: whitesmoke; height: 15cm">
+<!--        <el-card style="height: 15cm;">-->
+<!--        </el-card>-->
+        <router-view></router-view>
       </el-main>
     </el-container>
   </div>

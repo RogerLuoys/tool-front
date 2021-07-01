@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import home from '@/views/home/index'
 import config from '@/views/config/index'
 import commonFactory from '@/views/common-factory/index'
+import commonFactoryDetail from '@/views/common-factory/detail'
 import customFactory from '@/views/custom-factory/index'
 import device from '@/views/device/index'
 
@@ -24,6 +25,11 @@ export default new Router({
       path: '/commonFactory',
       name: 'commonFactory',
       component: commonFactory
+    },
+    {
+      path: '/commonFactoryDetail/:id',
+      name: 'commonFactoryDetail',
+      component: commonFactoryDetail
     },
     {
       path: '/customFactory',

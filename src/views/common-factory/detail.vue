@@ -1,6 +1,12 @@
 <template>
   <div>
+    <el-page-header @back="$router.push('/commonFactory')" title="返回列表">
+      <template #content>
+        <span>{{pageData.title}}</span>
+      </template>
+    </el-page-header>
     <!--基本信息-->
+    <el-divider content-position="right"></el-divider>
     <el-form :model="pageData" label-width="90px">
       <el-form-item label="标题">
         <el-input v-model="pageData.title" placeholder="请输入标题" size="small" maxlength="30" show-word-limit></el-input>
@@ -72,7 +78,7 @@
         </el-form-item>
         <el-form-item label="新增SQL">
           <div v-if="pageControl.isNewSQL">
-            <el-input v-if="pageControl.isNewSQL" v-model="pageControl.sql" size="small" placeholder="请输入新的单行SQL模板"
+            <el-input v-model="pageControl.sql" size="small" placeholder="请输入新的单行SQL模板"
                       maxlength="200" show-word-limit>
               <template #append>
                 <el-button @click="newSQL()" type="primary" size="small">确认</el-button>
@@ -83,6 +89,19 @@
           <div v-else>
             <el-button @click="pageControl.isNewSQL=true" type="primary" size="mini" icon="el-icon-plus" circle></el-button>
           </div>
+        </el-form-item>
+        <el-form-item label="关联数据源">
+<!--          <el-input v-if="pageControl.isContactDB" v-model="pageControl.sql" size="small" placeholder="请输入新的单行SQL模板"-->
+<!--                    maxlength="200" show-word-limit>-->
+<!--            <template #append>-->
+<!--              <el-button @click="newSQL()" type="primary" size="small">确认</el-button>-->
+<!--              <el-button @click="pageControl.isContactDB=false" size="small">取消</el-button>-->
+<!--            </template>-->
+<!--          </el-input>-->
+<!--          <div v-else>-->
+<!--            <el-button @click="pageControl.isContactDB=true" type="primary" size="mini" icon="el-icon-plus" circle></el-button>-->
+<!--          </div>-->
+          <el-button @click="pageControl.isContactDB=true" type="primary" size="mini" icon="el-icon-plus" circle></el-button>
         </el-form-item>
       </div>
       <!--HTTP模板-->
@@ -150,12 +169,18 @@
       <el-button @click="save()" type="primary" size="small">保存</el-button>
       <el-button v-if="toolId !== 0" @click="remove()" size="small">删除</el-button>
     </div>
+    <el-dialog :visible.sync="pageControl.isContactDB" title="请关联数据库">
+      <select-device></select-device>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import {createAPI, updateAPI, deleteAPI} from '@/api/commonFactory'
+import SelectDevice from '../../components/selectDevice'
+
 export default {
+  components: {SelectDevice},
   props: {
     toolId: {
       type: Number,
@@ -190,6 +215,7 @@ export default {
         isNewTool: false,
         isNewSQL: false,
         isNewHeader: false,
+        isContactDB: false,
         paramType: 'String',
         paramName: '',
         sql: '',
