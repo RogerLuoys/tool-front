@@ -28,7 +28,7 @@
             </el-submenu>
             <el-menu-item index="3" @click="$router.push('/device')">
               <i class="el-icon-s-platform"></i>
-              <span slot="title">设备领用</span>
+              <span slot="title">设备与环境</span>
             </el-menu-item>
             <el-menu-item index="4" @click="$router.push('/config')">
               <i class="el-icon-setting"></i>

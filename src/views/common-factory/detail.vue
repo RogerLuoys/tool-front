@@ -30,8 +30,8 @@
       </el-form-item>
       <!--参数设置-->
       <el-divider content-position="right"></el-divider>
-      <div v-for="(item, index) in pageData.paramList" :key="index">
-        <el-form-item label="参数">
+      <el-form-item label="参数">
+        <div v-for="(item, index) in pageData.paramList" :key="index">
           <el-row :gutter="5">
             <el-col :span="10">
               <el-input v-model="pageData.paramList[index].name" size="small" placeholder="请输入参数名"
@@ -46,8 +46,8 @@
               <el-button @click="deleteParam(index)" size="small">删除</el-button>
             </el-col>
           </el-row>
-        </el-form-item>
-      </div>
+        </div>
+      </el-form-item>
       <el-form-item label="新增参数">
         <div v-if="pageControl.isNewParam">
           <el-input v-if="pageControl.isNewParam" v-model="pageControl.paramName" size="small" placeholder="请输入新的参数名"

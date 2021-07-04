@@ -10,7 +10,7 @@ const api = axios.create({
   // 我的云主机
   // baseURL: 'http://118.24.117.181:9001/',
   // 本地
-  baseURL: 'http://localhost:9001/',
+  baseURL: 'http://localhost:9011/',
   timeout: 10000,
   withCredentials: false
 })

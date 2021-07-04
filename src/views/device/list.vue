@@ -3,8 +3,9 @@
     <!--搜索-->
     <el-select v-model="pageControl.search.status" clearable size="mini" placeholder="请选择状态"
                style="width:110px; float:left">
-      <el-option key="1" label="设备" value="1"></el-option>
-      <el-option key="2" label="容器" value="2"></el-option>
+      <el-option key="1" label="数据库" value="1"></el-option>
+      <el-option key="2" label="手机" value="2"></el-option>
+      <el-option key="3" label="容器" value="3"></el-option>
     </el-select>
     <el-input placeholder="请输入名称" clearable size="mini" v-model="pageControl.search.name"
               style="width:200px; float:left"></el-input>
@@ -18,8 +19,6 @@
       <el-table-column prop="title" label="标题" width="180">
       </el-table-column>
       <el-table-column prop="description" label="说明" width="180">
-      </el-table-column>
-      <el-table-column prop="owner" label="状态">
       </el-table-column>
       <el-table-column prop="owner" label="归属">
       </el-table-column>
