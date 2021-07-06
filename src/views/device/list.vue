@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--搜索-->
-    <el-select v-model="pageControl.search.status" clearable size="mini" placeholder="请选择状态"
+    <el-select v-model="pageControl.search.type" clearable size="mini" placeholder="请选择状态"
                style="width:110px; float:left">
       <el-option key="1" label="数据库" value="1"></el-option>
       <el-option key="2" label="手机" value="2"></el-option>
@@ -9,7 +9,7 @@
     </el-select>
     <el-input placeholder="请输入名称" clearable size="mini" v-model="pageControl.search.name"
               style="width:200px; float:left"></el-input>
-    <el-button icon="el-icon-search" type="primary" size="mini"></el-button>
+    <el-button @click="query()" icon="el-icon-search" type="primary" size="mini"></el-button>
     <!--新增-->
     <el-button type="primary" @click="pageControl.isNewTool = true" size="mini" style="float:right">新增</el-button>
     <!--列表-->
@@ -39,6 +39,7 @@
 
 <script>
 import tlDetail from './detail'
+import {queryAPI} from '@/api/device'
 
 export default {
   components: {tlDetail},
@@ -60,7 +61,6 @@ export default {
         title: 'title',
         description: 'desc',
         owner: '',
-        status: '--',
         permission: ''
       }],
       pageControl: {
@@ -70,14 +70,14 @@ export default {
         isNewTool: false,
         isUseTool: false,
         search: {
-          status: '',
+          type: '1',
           name: null
         }
       }
     }
   },
   created: function () {
-    // this.queryPointLogList()
+    this.query()
   },
   watch: {
     // '$store.state.point.expendPointCount': function (newVal, oldVal) {
@@ -87,16 +87,13 @@ export default {
     // }
   },
   methods: {
-    // queryPointLogList () {
-    //   queryPointLogListAPI({
-    //     pointId: this.$store.state.point.pointId,
-    //     type: this.type
-    //   }).then(response => {
-    //     if (response.data.success === true) {
-    //       this.pageData = response.data.data
-    //     }
-    //   })
-    // }
+    query () {
+      queryAPI(this.pageControl.search).then(response => {
+        if (response.data.success === true) {
+          this.pageData = response.data.data
+        }
+      })
+    }
   }
 }
 </script>
