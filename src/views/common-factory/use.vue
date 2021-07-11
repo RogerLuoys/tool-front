@@ -44,14 +44,14 @@ import {useAPI} from '@/api/commonFactory'
 export default {
   props: {
     toolId: {
-      type: Number,
-      default: 0
+      type: String,
+      default: '0'
     }
   },
   data () {
     return {
       pageData: {
-        toolId: 0,
+        toolId: '0',
         title: '标题啊啊啊啊',
         description: '说明啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊',
         template: 'select * from dzb_company_wechat_groupchat_member order by create_date desc;\n' +

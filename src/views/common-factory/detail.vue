@@ -67,8 +67,8 @@
       <!--SQL模板-->
       <div v-if="pageData.type===1">
         <el-form-item label="SQL模板">
-          <div v-for="(item, index) in pageData.sqlList" :key="index">
-            <el-input v-model="pageData.sqlList[index]" placeholder="请输入单行SQL" size="small"
+          <div v-for="(item, index) in pageData.jdbc.sqlList" :key="index">
+            <el-input v-model="pageData.jdbc.sqlList[index].sql" placeholder="请输入单行SQL" size="small"
                       maxlength="200" show-word-limit>
               <template #append>
                 <el-button @click="deleteSQL(index)" type="primary" size="small">删除</el-button>
@@ -176,7 +176,7 @@
 </template>
 
 <script>
-import {createAPI, updateAPI, deleteAPI} from '@/api/commonFactory'
+import {createAPI, updateAPI, deleteAPI, queryDetailAPI} from '@/api/commonFactory'
 import SelectDevice from '../../components/selectDevice'
 
 export default {
@@ -190,7 +190,7 @@ export default {
   data () {
     return {
       pageData: {
-        toolId: 0,
+        toolId: '0',
         title: '',
         description: '',
         owner: 'tester',
@@ -201,7 +201,18 @@ export default {
           name: 'name',
           value: 'value'
         }],
-        sqlList: ['sql1', 'sql2'],
+        jdbc: {
+          dataSource: {
+            driver: 'test driver',
+            url: 'test url',
+            userName: 'test user name',
+            password: 'test password'
+          },
+          sqlList: [{
+            type: null,
+            sql: ''
+          }]
+        },
         httpType: 'POST',
         httpURL: 'URL',
         httpHeaderList: [{
@@ -221,6 +232,11 @@ export default {
         sql: '',
         httpHeader: ''
       }
+    }
+  },
+  created: function () {
+    if (this.$route.params.id !== '0') {
+      this.queryDetail()
     }
   },
   methods: {
@@ -274,6 +290,15 @@ export default {
       deleteAPI({toolId: this.pageData.toolId}).then(response => {
         if (response.data.success === true) {
           this.$message.success('删除工具成功')
+        }
+      })
+    },
+    queryDetail () {
+      queryDetailAPI(
+        this.$route.params.id
+      ).then(response => {
+        if (response.data.success === true) {
+          this.pageData = response.data.data
         }
       })
     }

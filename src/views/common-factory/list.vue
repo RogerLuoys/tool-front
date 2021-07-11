@@ -9,19 +9,19 @@
     </el-select>
     <el-input placeholder="请输入名称" clearable size="mini" v-model="pageControl.search.name"
               style="width:200px; float:left"></el-input>
-    <el-button icon="el-icon-search" type="primary" size="mini"></el-button>
+    <el-button @click="queryList()" icon="el-icon-search" type="primary" size="mini"></el-button>
     <!--新增-->
 <!--    <el-button type="primary" @click="pageControl.isNewTool = true" size="mini" style="float:right">新增</el-button>-->
     <el-button type="primary" @click="$router.push(`commonFactoryDetail/0`)" size="mini" style="float:right">新增</el-button>
     <!--列表-->
-    <el-table border :data="pageData" size="mini" style="width: 100%">
+    <el-table border :data="pageData.list" size="mini" style="width: 100%">
       <el-table-column prop="type" label="类型" width="180">
       </el-table-column>
       <el-table-column prop="title" label="标题" width="180">
       </el-table-column>
       <el-table-column prop="description" label="说明" width="180">
       </el-table-column>
-      <el-table-column prop="owner" label="归属">
+      <el-table-column prop="ownerName" label="归属">
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
@@ -43,7 +43,7 @@
 <!--    </el-dialog>-->
     <el-dialog :visible.sync="pageControl.isUseTool" title="使用数据工厂">
       <el-card>
-        <tl-use :tool-id="pageData[pageControl.selectIndex].owner"></tl-use>
+        <tl-use :tool-id="pageData.list[pageControl.selectIndex].toolId"></tl-use>
       </el-card>
     </el-dialog>
   </div>
@@ -59,27 +59,18 @@ export default {
 
   data () {
     return {
-      pageData: [{
-        toolId: 12345,
-        title: 'title',
-        description: 'desc',
-        owner: 'tester',
-        permission: 2,
-        type: 1,
-        status: 1,
-        paramList: [{
-          name: 'name',
-          value: 'value'
+      pageData: {
+        list: [{
+          toolId: 12345,
+          title: 'title',
+          description: 'desc',
+          ownerId: 'tester',
+          ownerName: '',
+          permission: 2,
+          type: 1
         }],
-        sqlList: ['sql1', 'sql2'],
-        httpType: 'POST',
-        httpURL: 'URL',
-        httpHeaderList: [{
-          name: 'header1',
-          value: 'value1'
-        }],
-        httpBody: 'BODY'
-      }],
+        total: 1
+      },
       pageControl: {
         totalCount: 1,
         pageIndex: 1,
@@ -109,7 +100,8 @@ export default {
     queryList () {
       queryAPI({
         name: this.pageControl.search.name,
-        type: this.pageControl.search.type
+        type: this.pageControl.search.type,
+        startIndex: 1
       }).then(response => {
         if (response.data.success === true) {
           this.pageData = response.data.data

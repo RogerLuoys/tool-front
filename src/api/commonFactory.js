@@ -32,6 +32,14 @@ export function queryAPI (params) {
   })
 }
 
+export function queryDetailAPI (params) {
+  return api({
+    url: 'commonFactory/queryDetail',
+    method: 'get',
+    params: params
+  })
+}
+
 export function useAPI (data) {
   return api({
     url: 'commonFactory/use',
