@@ -67,13 +67,15 @@
       <!--SQL模板-->
       <div v-if="pageData.type===1">
         <el-form-item label="SQL模板">
-          <div v-for="(item, index) in pageData.jdbc.sqlList" :key="index">
-            <el-input v-model="pageData.jdbc.sqlList[index].sql" placeholder="请输入单行SQL" size="small"
-                      maxlength="200" show-word-limit>
-              <template #append>
-                <el-button @click="deleteSQL(index)" type="primary" size="small">删除</el-button>
-              </template>
-            </el-input>
+          <div v-if="pageData.jdbc!==null">
+            <div v-for="(item, index) in pageData.jdbc.sqlList" :key="index">
+              <el-input v-model="pageData.jdbc.sqlList[index].sql" placeholder="请输入单行SQL" size="small"
+                        maxlength="200" show-word-limit>
+                <template #append>
+                  <el-button @click="deleteSQL(index)" type="primary" size="small">删除</el-button>
+                </template>
+              </el-input>
+            </div>
           </div>
         </el-form-item>
         <el-form-item label="新增SQL">
@@ -91,16 +93,6 @@
           </div>
         </el-form-item>
         <el-form-item label="关联数据源">
-<!--          <el-input v-if="pageControl.isContactDB" v-model="pageControl.sql" size="small" placeholder="请输入新的单行SQL模板"-->
-<!--                    maxlength="200" show-word-limit>-->
-<!--            <template #append>-->
-<!--              <el-button @click="newSQL()" type="primary" size="small">确认</el-button>-->
-<!--              <el-button @click="pageControl.isContactDB=false" size="small">取消</el-button>-->
-<!--            </template>-->
-<!--          </el-input>-->
-<!--          <div v-else>-->
-<!--            <el-button @click="pageControl.isContactDB=true" type="primary" size="mini" icon="el-icon-plus" circle></el-button>-->
-<!--          </div>-->
           <el-button @click="pageControl.isContactDB=true" type="primary" size="mini" icon="el-icon-plus" circle></el-button>
         </el-form-item>
       </div>

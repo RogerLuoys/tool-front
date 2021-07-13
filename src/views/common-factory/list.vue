@@ -87,7 +87,7 @@ export default {
     }
   },
   created: function () {
-    // this.queryPointLogList()
+    this.queryList()
   },
   watch: {
     // '$store.state.point.expendPointCount': function (newVal, oldVal) {
