@@ -24,6 +24,14 @@ export function updateAPI (data) {
   })
 }
 
+export function queryDetailAPI (params) {
+  return api({
+    url: 'device/queryDetail',
+    method: 'get',
+    params: params
+  })
+}
+
 export function queryAPI (params) {
   return api({
     url: 'device/query',

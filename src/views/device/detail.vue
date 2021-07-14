@@ -17,7 +17,7 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="权限">
-        <el-radio-group v-model="pageData.status" size="small">
+        <el-radio-group v-model="pageData.permission" size="small">
           <el-radio :label="1">公开</el-radio>
           <el-radio :label="2">自己可见</el-radio>
         </el-radio-group>
@@ -27,19 +27,19 @@
       <!--数据源模板-->
       <div v-if="pageData.type===1">
         <el-form-item label="驱动">
-          <el-input v-model="pageData.dataBase.driver" size="small" placeholder="请输入驱动"
+          <el-input v-model="pageData.dataSource.driver" size="small" placeholder="请输入驱动"
                     maxlength="20" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="URL">
-          <el-input v-model="pageData.dataBase.url" size="small" placeholder="请输入URL"
+          <el-input v-model="pageData.dataSource.url" size="small" placeholder="请输入URL"
                     maxlength="100" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="用户名">
-          <el-input v-model="pageData.dataBase.userName" size="small" placeholder="请输入用户名"
+          <el-input v-model="pageData.dataSource.userName" size="small" placeholder="请输入用户名"
                     maxlength="50" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="密码">
-          <el-input v-model="pageData.dataBase.password" size="small" placeholder="请输入密码"
+          <el-input v-model="pageData.dataSource.password" size="small" placeholder="请输入密码"
                     maxlength="50" show-word-limit></el-input>
         </el-form-item>
       </div>
@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import {createAPI, updateAPI, deleteAPI} from '@/api/device'
+import {createAPI, updateAPI, deleteAPI, queryDetailAPI} from '@/api/device'
 // import SelectDevice from '../../components/selectDevice'
 
 export default {
@@ -104,10 +104,10 @@ export default {
         deviceId: 0,
         title: '',
         description: '',
-        owner: 'tester',
-        permission: 2,
+        owner: null,
+        permission: 1,
         type: 1,
-        dataBase: {
+        dataSource: {
           driver: '',
           url: '',
           userName: '',
@@ -137,32 +137,17 @@ export default {
       }
     }
   },
+  created: function () {
+    if (this.deviceId !== 0) {
+      this.queryDetail()
+    }
+  },
+  mounted: function () {
+    if (this.deviceId !== 0) {
+      this.queryDetail()
+    }
+  },
   methods: {
-    newParam () {
-      this.pageData.paramList.push({name: this.pageControl.paramName, value: ''})
-      this.pageControl.paramName = ''
-      this.pageControl.isNewParam = false
-    },
-    deleteParam (index) {
-      this.pageData.paramList.splice(index, 1)
-    },
-    newSQL () {
-      this.pageData.sqlList.push(this.pageControl.sql)
-      this.pageControl.sql = ''
-      this.pageControl.isNewSQL = false
-    },
-    deleteSQL (index) {
-      this.pageData.sqlList.splice(index, 1)
-    },
-    newHeader () {
-      this.pageData.httpHeaderList.push({name: this.pageControl.httpHeader, value: ''})
-      this.pageControl.httpHeader = ''
-      this.pageControl.isNewHeader = false
-    },
-    deleteHeader (index) {
-      this.pageData.httpHeaderList.splice(index, 1)
-      debugger
-    },
     save () {
       if (this.deviceId === 0) {
         this.create()
@@ -188,6 +173,15 @@ export default {
       deleteAPI({deviceId: this.pageData.deviceId}).then(response => {
         if (response.data.success === true) {
           this.$message.success('删除成功')
+        }
+      })
+    },
+    queryDetail () {
+      queryDetailAPI({
+        deviceId: this.deviceId
+      }).then(response => {
+        if (response.data.success === true) {
+          this.pageData = response.data.data
         }
       })
     }

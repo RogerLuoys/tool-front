@@ -19,11 +19,11 @@
         <el-radio-group v-model="pageData.type" :disabled="toolId!==0" size="small">
           <el-radio :label="1">SQL</el-radio>
           <el-radio :label="2">HTTP</el-radio>
-          <el-radio :label="3">DUBBO</el-radio>
+          <el-radio :label="3">RPC</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="权限">
-        <el-radio-group v-model="pageData.status" size="small">
+        <el-radio-group v-model="pageData.permission" size="small">
           <el-radio :label="1">公开</el-radio>
           <el-radio :label="2">自己可见</el-radio>
         </el-radio-group>
@@ -241,12 +241,12 @@ export default {
       this.pageData.paramList.splice(index, 1)
     },
     newSQL () {
-      this.pageData.sqlList.push(this.pageControl.sql)
+      this.pageData.jdbc.sqlList.push(this.pageControl.sql)
       this.pageControl.sql = ''
       this.pageControl.isNewSQL = false
     },
     deleteSQL (index) {
-      this.pageData.sqlList.splice(index, 1)
+      this.pageData.jdbc.sqlList.splice(index, 1)
     },
     newHeader () {
       this.pageData.httpHeaderList.push({name: this.pageControl.httpHeader, value: ''})
