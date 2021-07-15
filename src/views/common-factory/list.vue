@@ -27,7 +27,7 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button @click="pageControl.isUseTool=true" type="text" size="small">使用</el-button>
+          <el-button @click="use(scope.row.toolId)" type="text" size="small">使用</el-button>
           <el-button @click="$router.push(`commonFactoryDetail/${scope.row.toolId}`)" type="text" size="small">编辑</el-button>
         </template>
       </el-table-column>
@@ -39,7 +39,7 @@
     <!--弹出框-->
     <el-dialog :visible.sync="pageControl.isUseTool" title="使用数据工厂">
       <el-card>
-        <tl-use :tool-id="pageData.list[pageControl.selectIndex].toolId"></tl-use>
+        <tl-use :tool-id="pageControl.selectedToolId"></tl-use>
       </el-card>
     </el-dialog>
   </div>
@@ -74,6 +74,7 @@ export default {
         isNewTool: false,
         isEditTool: false,
         isUseTool: false,
+        selectedToolId: '0',
         search: {
           pageIndex: 1,
           type: null,
@@ -105,6 +106,10 @@ export default {
           return 'UNKNOWN'
       }
       return type
+    },
+    use (toolId) {
+      this.pageControl.selectedToolId = toolId
+      this.pageControl.isUseTool = true
     },
     queryList () {
       queryAPI(this.pageControl.search).then(response => {

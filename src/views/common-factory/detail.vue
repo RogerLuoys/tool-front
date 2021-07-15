@@ -16,7 +16,7 @@
                   show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="类型">
-        <el-radio-group v-model="pageData.type" :disabled="toolId!==0" size="small">
+        <el-radio-group v-model="pageData.type" :disabled="pageControl.isEdit" size="small">
           <el-radio :label="1">SQL</el-radio>
           <el-radio :label="2">HTTP</el-radio>
           <el-radio :label="3">RPC</el-radio>
@@ -99,10 +99,10 @@
       <!--HTTP模板-->
       <div v-else-if="pageData.type===2">
         <el-form-item label="URL">
-          <el-input v-model="pageData.httpURL" size="small" placeholder="请输入URL"
+          <el-input v-model="pageData.httpRequest.httpURL" size="small" placeholder="请输入URL"
                     maxlength="200" show-word-limit>
             <template #prepend>
-              <el-select v-model="pageData.httpType" size="small" placeholder="请求方法"
+              <el-select v-model="pageData.httpRequest.httpType" size="small" placeholder="请求方法"
                          style="float:left; width: 100px">
                 <el-option key="1" label="GET" value="GET"></el-option>
                 <el-option key="2" label="POST" value="POST"></el-option>
@@ -113,14 +113,14 @@
           </el-input>
         </el-form-item>
         <el-form-item label="Header">
-          <div v-for="(item, index) in pageData.httpHeaderList" :key="index">
+          <div v-for="(item, index) in pageData.httpRequest.httpHeaderList" :key="index">
             <el-row :gutter="5">
               <el-col :span="10">
-                <el-input v-model="pageData.httpHeaderList[index].name" size="small" placeholder="请输入Header名"
+                <el-input v-model="pageData.httpRequest.httpHeaderList[index].name" size="small" placeholder="请输入Header名"
                           maxlength="20" show-word-limit></el-input>
               </el-col>
               <el-col :span="10">
-                <el-input v-model="pageData.httpHeaderList[index].value" size="small" placeholder="请输入Header值"
+                <el-input v-model="pageData.httpRequest.httpHeaderList[index].value" size="small" placeholder="请输入Header值"
                           maxlength="20" show-word-limit>
                 </el-input>
               </el-col>
@@ -159,7 +159,7 @@
     <div style="text-align: center">
       <el-button type="primary" size="small">试用</el-button>
       <el-button @click="save()" type="primary" size="small">保存</el-button>
-      <el-button v-if="toolId !== 0" @click="remove()" size="small">删除</el-button>
+      <el-button v-if="pageControl.isEdit" @click="remove()" size="small">删除</el-button>
     </div>
     <el-dialog :visible.sync="pageControl.isContactDB" title="请关联数据库">
       <select-device></select-device>
@@ -173,12 +173,6 @@ import SelectDevice from '../../components/selectDevice'
 
 export default {
   components: {SelectDevice},
-  props: {
-    toolId: {
-      type: Number,
-      default: 0
-    }
-  },
   data () {
     return {
       pageData: {
@@ -188,37 +182,41 @@ export default {
         owner: 'tester',
         permission: 2,
         type: 1,
-        status: 1,
         paramList: [{
           name: 'name',
           value: 'value'
         }],
         jdbc: {
           dataSource: {
-            driver: 'test driver',
-            url: 'test url',
-            userName: 'test user name',
-            password: 'test password'
+            driver: 'com.mysql.cj.jdbc.Driver',
+            url: 'jdbc:mysql://118.24.117.181:3306/onepiece?useUnicode=true&characterEncoding=UTF-8&userSSL=false',
+            userName: 'testerone',
+            password: 'testerone'
           },
           sqlList: [{
-            type: null,
+            type: 'UNKNOWN',
             sql: ''
           }]
         },
-        httpType: 'POST',
-        httpURL: 'URL',
-        httpHeaderList: [{
-          name: 'header1',
-          value: 'value1'
-        }],
-        httpBody: 'BODY'
+        httpRequest: {
+          httpType: 'GET',
+          httpURL: 'URL',
+          httpHeaderList: [{
+            name: 'header1',
+            value: 'value1'
+          }],
+          httpBody: 'BODY'
+        },
+        rpc: {
+          provide: ''
+        }
       },
       pageControl: {
         isNewParam: false,
-        isNewTool: false,
         isNewSQL: false,
         isNewHeader: false,
         isContactDB: false,
+        isEdit: false,
         paramType: 'String',
         paramName: '',
         sql: '',
@@ -228,6 +226,7 @@ export default {
   },
   created: function () {
     if (this.$route.params.id !== '0') {
+      this.pageControl.isEdit = true
       this.queryDetail()
     }
   },
@@ -241,7 +240,7 @@ export default {
       this.pageData.paramList.splice(index, 1)
     },
     newSQL () {
-      this.pageData.jdbc.sqlList.push(this.pageControl.sql)
+      this.pageData.jdbc.sqlList.push({type: 'UNKNOWN', sql: this.pageControl.sql})
       this.pageControl.sql = ''
       this.pageControl.isNewSQL = false
     },
@@ -258,13 +257,30 @@ export default {
       debugger
     },
     save () {
-      if (this.toolId === 0) {
-        this.create()
-      } else {
+      if (this.pageControl.isEdit) {
         this.update()
+      } else {
+        this.create()
       }
     },
     create () {
+      switch (this.pageData.type) {
+        // sql类型
+        case 1:
+          this.pageData.httpRequest = null
+          this.pageData.rpc = null
+          break
+        // http类型
+        case 2:
+          this.pageData.jdbc = null
+          this.pageData.rpc = null
+          break
+        // rpcl类型
+        case 3:
+          this.pageData.jdbc = null
+          this.pageData.httpRequest = null
+          break
+      }
       createAPI(this.pageData).then(response => {
         if (response.data.success === true) {
           this.$message.success('创建工具成功')
