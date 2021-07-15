@@ -302,9 +302,9 @@ export default {
       })
     },
     queryDetail () {
-      queryDetailAPI(
-        this.$route.params.id
-      ).then(response => {
+      queryDetailAPI({
+        toolId: this.$route.params.id
+      }).then(response => {
         if (response.data.success === true) {
           this.pageData = response.data.data
         }
