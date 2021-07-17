@@ -31,21 +31,27 @@
       <!--参数设置-->
       <el-divider content-position="right"></el-divider>
       <el-form-item label="参数">
-        <div v-for="(item, index) in pageData.paramList" :key="index">
-          <el-row :gutter="5">
-            <el-col :span="10">
-              <el-input v-model="pageData.paramList[index].name" size="small" placeholder="请输入参数名"
-                        maxlength="20" show-word-limit></el-input>
-            </el-col>
-            <el-col :span="10">
-              <el-input v-model="pageData.paramList[index].value" size="small" placeholder="请输入参数值"
-                        maxlength="20" show-word-limit>
-              </el-input>
-            </el-col>
-            <el-col :span="3">
-              <el-button @click="deleteParam(index)" size="small">删除</el-button>
-            </el-col>
-          </el-row>
+        <div v-if="pageData.paramList === null || pageData.paramList.length===0">暂无参数，可点+添加</div>
+        <div v-else>
+          <div v-for="(item, index) in pageData.paramList" :key="index">
+            <el-row :gutter="5">
+              <el-col :span="10">
+                <el-input v-model="pageData.paramList[index].name" size="small" placeholder="请输入参数名"
+                          maxlength="20" show-word-limit></el-input>
+              </el-col>
+              <el-col :span="10">
+                <el-input v-model="pageData.paramList[index].value" size="small" placeholder="请输入参数值"
+                          maxlength="20" show-word-limit>
+                </el-input>
+              </el-col>
+              <el-col :span="3">
+                <el-button @click="deleteParam(index)" size="small">删除</el-button>
+                <el-tooltip class="item" effect="dark" :content="'$$${'+pageData.paramList[index].name+'}'" placement="top-start">
+                  <i class="el-icon-info"></i>
+                </el-tooltip>
+              </el-col>
+            </el-row>
+          </div>
         </div>
       </el-form-item>
       <el-form-item label="新增参数">
@@ -113,21 +119,26 @@
           </el-input>
         </el-form-item>
         <el-form-item label="Header">
-          <div v-for="(item, index) in pageData.httpRequest.httpHeaderList" :key="index">
-            <el-row :gutter="5">
-              <el-col :span="10">
-                <el-input v-model="pageData.httpRequest.httpHeaderList[index].name" size="small" placeholder="请输入Header名"
-                          maxlength="20" show-word-limit></el-input>
-              </el-col>
-              <el-col :span="10">
-                <el-input v-model="pageData.httpRequest.httpHeaderList[index].value" size="small" placeholder="请输入Header值"
-                          maxlength="20" show-word-limit>
-                </el-input>
-              </el-col>
-              <el-col :span="3">
-                <el-button @click="deleteHeader(index)" size="small">删除</el-button>
-              </el-col>
-            </el-row>
+          <div v-if="pageData.httpRequest.httpHeaderList===null || pageData.httpRequest.httpHeaderList.length===0">
+            暂无自定义请求头，可点+添加
+          </div>
+          <div v-else>
+            <div v-for="(item, index) in pageData.httpRequest.httpHeaderList" :key="index">
+              <el-row :gutter="5">
+                <el-col :span="10">
+                  <el-input v-model="pageData.httpRequest.httpHeaderList[index].name" size="small" placeholder="请输入Header名"
+                            maxlength="20" show-word-limit></el-input>
+                </el-col>
+                <el-col :span="10">
+                  <el-input v-model="pageData.httpRequest.httpHeaderList[index].value" size="small" placeholder="请输入Header值"
+                            maxlength="20" show-word-limit>
+                  </el-input>
+                </el-col>
+                <el-col :span="3">
+                  <el-button @click="deleteHeader(index)" size="small">删除</el-button>
+                </el-col>
+              </el-row>
+            </div>
           </div>
         </el-form-item>
         <el-form-item label="新增Header">
@@ -145,7 +156,7 @@
           </div>
         </el-form-item>
         <el-form-item label="Body">
-          <el-input v-model="pageData.httpBody" :autosize="{ minRows: 4, maxRows: 9}" placeholder="请输入Body" type="textarea"
+          <el-input v-model="pageData.httpRequest.httpBody" :autosize="{ minRows: 4, maxRows: 9}" placeholder="请输入Body" type="textarea"
                     maxlength="500" show-word-limit></el-input>
         </el-form-item>
       </div>
@@ -232,7 +243,11 @@ export default {
   },
   methods: {
     newParam () {
-      this.pageData.paramList.push({name: this.pageControl.paramName, value: ''})
+      if (this.pageData.paramList === null) {
+        this.pageData.paramList = [{name: this.pageControl.paramName, value: null}]
+      } else {
+        this.pageData.paramList.push({name: this.pageControl.paramName, value: ''})
+      }
       this.pageControl.paramName = ''
       this.pageControl.isNewParam = false
     },
@@ -248,12 +263,12 @@ export default {
       this.pageData.jdbc.sqlList.splice(index, 1)
     },
     newHeader () {
-      this.pageData.httpHeaderList.push({name: this.pageControl.httpHeader, value: ''})
+      this.pageData.httpRequest.httpHeaderList.push({name: this.pageControl.httpHeader, value: ''})
       this.pageControl.httpHeader = ''
       this.pageControl.isNewHeader = false
     },
     deleteHeader (index) {
-      this.pageData.httpHeaderList.splice(index, 1)
+      this.pageData.httpRequest.httpHeaderList.splice(index, 1)
       debugger
     },
     save () {

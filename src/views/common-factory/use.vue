@@ -28,7 +28,7 @@
 <!--        </template>-->
 <!--      </el-form-item>-->
       <el-form-item label="使用结果">
-        <div>{{pageControl.respondBody}}</div>
+        <div>{{pageControl.respondData}}</div>
       </el-form-item>
     </el-form>
     <el-input v-model="toolId"></el-input>
@@ -52,6 +52,9 @@ export default {
     toolId: function (newVal, oldVal) {
       this.queryDetail()
     }
+  },
+  created: function () {
+    this.queryDetail()
   },
   data () {
     return {
@@ -93,7 +96,7 @@ export default {
       },
       pageControl: {
         isViewTemplate: false,
-        respondBody: '--'
+        respondData: '--'
       }
     }
   },
@@ -101,7 +104,7 @@ export default {
     use () {
       useAPI(this.pageData).then(response => {
         if (response.data.success === true) {
-          // this.pageControl.respondBody = response.data
+          this.pageControl.respondData = response.data.data
           this.$message.success('使用成功')
         }
       })
