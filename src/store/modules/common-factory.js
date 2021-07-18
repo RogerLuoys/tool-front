@@ -2,17 +2,17 @@
 // initial state
 // shape: [{ id, quantity }]
 const state = () => ({
-  pointId: '0',
-  expendPointCount: 0
+  isSelectDBVisible: false,
+  selectedDeviceId: 0
 })
 
 // mutations
 const mutations = {
-  setPointId (state, pointId) {
-    state.pointId = pointId
+  setSelectDBDialog (state, isSelectDBVisible) {
+    state.isSelectDBVisible = isSelectDBVisible
   },
-  incrementExpendPointCount (state) {
-    state.expendPointCount++
+  selectDataSource (state, deviceId) {
+    state.selectedDeviceId = deviceId
   }
 }
 

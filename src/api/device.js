@@ -8,6 +8,14 @@ export function createAPI (data) {
   })
 }
 
+export function quickCreateAPI (data) {
+  return api({
+    url: 'device/quickCreate',
+    method: 'post',
+    data: data
+  })
+}
+
 export function deleteAPI (params) {
   return api({
     url: 'device/delete',

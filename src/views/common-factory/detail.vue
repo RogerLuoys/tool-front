@@ -172,18 +172,19 @@
       <el-button @click="save()" type="primary" size="small">保存</el-button>
       <el-button v-if="pageControl.isEdit" @click="remove()" size="small">删除</el-button>
     </div>
-    <el-dialog :visible.sync="pageControl.isContactDB" title="请关联数据库">
-      <select-device></select-device>
-    </el-dialog>
+<!--    <el-dialog :visible.sync="pageControl.isContactDB" title="请关联数据库">-->
+<!--      <select-device></select-device>-->
+<!--    </el-dialog>-->
+    <tl-select-data-source :is-visible="pageControl.isContactDB"></tl-select-data-source>
   </div>
 </template>
 
 <script>
 import {createAPI, updateAPI, deleteAPI, queryDetailAPI} from '@/api/commonFactory'
-import SelectDevice from '../../components/selectDevice'
+import tlSelectDataSource from './selectDataSource'
 
 export default {
-  components: {SelectDevice},
+  components: {tlSelectDataSource},
   data () {
     return {
       pageData: {
