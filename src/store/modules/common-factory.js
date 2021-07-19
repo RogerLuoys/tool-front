@@ -2,17 +2,23 @@
 // initial state
 // shape: [{ id, quantity }]
 const state = () => ({
-  isSelectDBVisible: false,
-  selectedDeviceId: 0
+  isSelectDSVisible: false,
+  selectedDeviceId: 0,
+  selectedDataSource: {
+    driver: '',
+    url: '',
+    userName: '',
+    password: ''
+  }
 })
 
 // mutations
 const mutations = {
-  setSelectDBDialog (state, isSelectDBVisible) {
-    state.isSelectDBVisible = isSelectDBVisible
+  setDataSourceDialog (state, isSelectDSVisible) {
+    state.isSelectDSVisible = isSelectDSVisible
   },
-  selectDataSource (state, deviceId) {
-    state.selectedDeviceId = deviceId
+  setDataSource (state, dataSource) {
+    state.selectedDataSource = dataSource
   }
 }
 

@@ -23,7 +23,7 @@
       </el-table-column>
       <el-table-column prop="description" label="说明" width="180">
       </el-table-column>
-      <el-table-column prop="owner" label="归属">
+      <el-table-column prop="ownerName" label="归属">
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
@@ -75,7 +75,8 @@ export default {
           type: 0,
           title: 'title',
           description: 'desc',
-          owner: '',
+          ownerId: '',
+          ownerName: '',
           permission: 0
         }],
         total: 0

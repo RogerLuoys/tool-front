@@ -99,7 +99,27 @@
           </div>
         </el-form-item>
         <el-form-item label="关联数据源">
-          <el-button @click="pageControl.isContactDB=true" type="primary" size="mini" icon="el-icon-plus" circle></el-button>
+          <el-row :gutter="5">
+            <el-col :span="13">
+              <el-input v-model="pageData.jdbc.dataSource.driver" size="small" placeholder="请输入数据库驱动" maxlength="50" show-word-limit>
+              </el-input>
+            </el-col>
+            <el-col :span="10">
+              <el-button @click="$store.commit('setDataSourceDialog', true)" size="small" icon="el-icon-plus">点我可快捷关联</el-button>
+            </el-col>
+          </el-row>
+          <el-input v-model="pageData.jdbc.dataSource.url" size="small" placeholder="请输入数据库URL" maxlength="200" show-word-limit>
+          </el-input>
+          <el-row :gutter="5">
+            <el-col :span="11">
+              <el-input v-model="pageData.jdbc.dataSource.userName" size="small" placeholder="请输入数据库名" maxlength="50" show-word-limit>
+              </el-input>
+            </el-col>
+            <el-col :span="11">
+              <el-input v-model="pageData.jdbc.dataSource.password" size="small" placeholder="请输入数据库密码" maxlength="50" show-word-limit>
+              </el-input>
+            </el-col>
+          </el-row>
         </el-form-item>
       </div>
       <!--HTTP模板-->
@@ -242,6 +262,11 @@ export default {
       this.queryDetail()
     }
   },
+  watch: {
+    '$store.state.commonFactory.selectedDataSource': function (newVal, oldVal) {
+      this.pageData.jdbc.dataSource = this.$store.state.commonFactory.selectedDataSource
+    }
+  },
   methods: {
     newParam () {
       if (this.pageData.paramList === null) {
@@ -291,7 +316,7 @@ export default {
           this.pageData.jdbc = null
           this.pageData.rpc = null
           break
-        // rpcl类型
+        // rpc类型
         case 3:
           this.pageData.jdbc = null
           this.pageData.httpRequest = null

@@ -1,5 +1,5 @@
 <template>
-  <div>case</div>
+  <div></div>
 </template>
 
 <script>

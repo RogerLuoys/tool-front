@@ -23,6 +23,7 @@ api.interceptors.request.use(function (config) {
     config.headers.userId = userId
   } else {
     config.headers.userId = '101'
+    config.headers.userName = 'default'
   }
   return config
 }, function (error) {
