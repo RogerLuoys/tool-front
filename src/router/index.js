@@ -6,7 +6,7 @@ import commonFactory from '@/views/common-factory/index'
 import commonFactoryDetail from '@/views/common-factory/detail'
 import customFactory from '@/views/custom-factory/index'
 import device from '@/views/device/index'
-import testCase from '@/views/test-case/index'
+import automation from '@/views/automation/index'
 
 Vue.use(Router)
 
@@ -43,9 +43,9 @@ export default new Router({
       component: device
     },
     {
-      path: '/testCase',
-      name: 'testCase',
-      component: testCase
+      path: '/automation',
+      name: 'automation',
+      component: automation
     }
   ]
 })

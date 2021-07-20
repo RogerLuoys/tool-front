@@ -18,19 +18,15 @@
               <el-menu-item index="2-1" @click="$router.push('/commonFactory')">通用</el-menu-item>
               <el-menu-item index="2-2" @click="$router.push('/customFactory')">自定义</el-menu-item>
             </el-submenu>
-            <el-submenu index="3">
-              <template slot="title">
-                <i class="el-icon-s-promotion"></i>
-                <span>自动化平台</span>
-              </template>
-              <el-menu-item index="3-1" @click="$router.push('/testCase')">用例管理</el-menu-item>
-              <el-menu-item index="3-2" @click="$router.push('/customFactory')">套件管理</el-menu-item>
-            </el-submenu>
-            <el-menu-item index="3" @click="$router.push('/device')">
+            <el-menu-item index="3" @click="$router.push('/automation')">
+              <i class="el-icon-s-promotion"></i>
+              <span slot="title">自动化测试</span>
+            </el-menu-item>
+            <el-menu-item index="4" @click="$router.push('/device')">
               <i class="el-icon-s-platform"></i>
               <span slot="title">设备与环境</span>
             </el-menu-item>
-            <el-menu-item index="4" @click="$router.push('/config')">
+            <el-menu-item index="5" @click="$router.push('/config')">
               <i class="el-icon-setting"></i>
               <span slot="title">配置管理</span>
             </el-menu-item>

@@ -1,12 +1,11 @@
 <template>
   <div>
-    <el-page-header @back="$router.push('/commonFactory')" title="返回列表">
-      <template #content>
-        <span>{{pageData.title}}</span>
-      </template>
-    </el-page-header>
+<!--    <el-page-header @back="$router.push('/commonFactory')" title="返回列表">-->
+<!--      <template #content>-->
+<!--        <span>{{pageData.title}}</span>-->
+<!--      </template>-->
+<!--    </el-page-header>-->
     <!--基本信息-->
-    <el-divider content-position="right"></el-divider>
     <el-form :model="pageData" label-width="90px">
       <el-form-item label="标题">
         <el-input v-model="pageData.title" placeholder="请输入标题" size="small" maxlength="30" show-word-limit></el-input>
@@ -27,46 +26,6 @@
           <el-radio :label="1">公开</el-radio>
           <el-radio :label="2">自己可见</el-radio>
         </el-radio-group>
-      </el-form-item>
-      <!--参数设置-->
-      <el-divider content-position="right"></el-divider>
-      <el-form-item label="参数">
-        <div v-if="pageData.paramList === null || pageData.paramList.length===0">暂无参数，可点+添加</div>
-        <div v-else>
-          <div v-for="(item, index) in pageData.paramList" :key="index">
-            <el-row :gutter="5">
-              <el-col :span="10">
-                <el-input v-model="pageData.paramList[index].name" size="small" placeholder="请输入参数名"
-                          maxlength="20" show-word-limit></el-input>
-              </el-col>
-              <el-col :span="10">
-                <el-input v-model="pageData.paramList[index].value" size="small" placeholder="请输入参数值"
-                          maxlength="20" show-word-limit>
-                </el-input>
-              </el-col>
-              <el-col :span="3">
-                <el-button @click="deleteParam(index)" size="small">删除</el-button>
-                <el-tooltip class="item" effect="dark" :content="'$$${'+pageData.paramList[index].name+'}'" placement="top-start">
-                  <i class="el-icon-info"></i>
-                </el-tooltip>
-              </el-col>
-            </el-row>
-          </div>
-        </div>
-      </el-form-item>
-      <el-form-item label="新增参数">
-        <div v-if="pageControl.isNewParam">
-          <el-input v-if="pageControl.isNewParam" v-model="pageControl.paramName" size="small" placeholder="请输入新的参数名"
-                    maxlength="20" show-word-limit>
-            <template #append>
-              <el-button @click="newParam()" type="primary" size="small">确认</el-button>
-              <el-button @click="pageControl.isNewParam=false" size="small">取消</el-button>
-            </template>
-          </el-input>
-        </div>
-        <div v-else>
-          <el-button @click="pageControl.isNewParam=true" type="primary" size="mini" icon="el-icon-plus" circle></el-button>
-        </div>
       </el-form-item>
       <!--模板-->
       <el-divider content-position="right"></el-divider>
@@ -192,19 +151,16 @@
       <el-button @click="save()" type="primary" size="small">保存</el-button>
       <el-button v-if="pageControl.isEdit" @click="remove()" size="small">删除</el-button>
     </div>
-<!--    <el-dialog :visible.sync="pageControl.isContactDB" title="请关联数据库">-->
-<!--      <select-device></select-device>-->
-<!--    </el-dialog>-->
-    <tl-select-data-source :is-visible="pageControl.isContactDB"></tl-select-data-source>
+<!--    <tl-select-data-source :is-visible="pageControl.isContactDB"></tl-select-data-source>-->
   </div>
 </template>
 
 <script>
 import {createAPI, updateAPI, deleteAPI, queryDetailAPI} from '@/api/commonFactory'
-import tlSelectDataSource from './selectDataSource'
+// import tlSelectDataSource from './selectDataSource'
 
 export default {
-  components: {tlSelectDataSource},
+  // components: {tlSelectDataSource},
   data () {
     return {
       pageData: {
@@ -214,11 +170,8 @@ export default {
         owner: 'tester',
         permission: 2,
         type: 1,
-        isTestStep: false,
-        paramList: [{
-          name: 'name',
-          value: 'value'
-        }],
+        paramList: null,
+        isTestStep: true,
         jdbc: {
           dataSource: {
             driver: 'com.mysql.cj.jdbc.Driver',
