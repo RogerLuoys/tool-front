@@ -77,6 +77,7 @@ export default {
         selectedToolId: '0',
         search: {
           pageIndex: 1,
+          isTestStep: false,
           type: null,
           name: null
         }

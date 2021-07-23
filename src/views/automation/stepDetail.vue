@@ -161,6 +161,12 @@ import {createAPI, updateAPI, deleteAPI, queryDetailAPI} from '@/api/commonFacto
 
 export default {
   // components: {tlSelectDataSource},
+  props: {
+    toolId: {
+      type: String,
+      default: '0'
+    }
+  },
   data () {
     return {
       pageData: {
@@ -211,7 +217,7 @@ export default {
     }
   },
   created: function () {
-    if (this.$route.params.id !== '0') {
+    if (this.toolId !== '0') {
       this.pageControl.isEdit = true
       this.queryDetail()
     }
