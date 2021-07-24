@@ -1,17 +1,23 @@
 <template>
   <div>
     <!--搜索-->
+    <el-select v-model="pageControl.search.type" clearable size="mini" placeholder="请选择状态"
+               style="width:110px; float:left">
+      <el-option key="1" label="计划中" :value="1"></el-option>
+      <el-option key="2" label="已完成" :value="2"></el-option>
+      <el-option key="3" label="待修复" :value="3"></el-option>
+    </el-select>
     <el-input placeholder="请输入名称" clearable size="mini" v-model="pageControl.search.name"
               style="width:200px; float:left"></el-input>
     <el-button @click="queryList()" icon="el-icon-search" type="primary" size="mini"></el-button>
     <el-checkbox v-model="pageControl.search.isOnlyOwner">仅看自己</el-checkbox>
     <!--新增-->
-    <el-button type="primary" @click="pageControl.isNewStep=true" size="mini" style="float:right">新增</el-button>
+    <el-button type="primary" @click="pageControl.isNewCase=true" size="mini" style="float:right">新增</el-button>
     <!--列表-->
     <el-table border :data="pageData.list" size="mini" style="width: 100%">
-      <el-table-column prop="type" label="类型" width="180">
+      <el-table-column prop="type" label="状态" width="180">
         <template #default="scope">
-          <div>{{ getType(scope.row.type) }}</div>
+          <div>{{ getType(scope.row.status) }}</div>
         </template>
       </el-table-column>
       <el-table-column prop="title" label="标题" width="180">
@@ -20,8 +26,8 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button @click="use(scope.row.toolId)" type="text" size="small">试用</el-button>
-          <el-button @click="pageControl.isEditStep=true" type="text" size="small">编辑</el-button>
+          <el-button @click="use(scope.row.testCaseId)" type="text" size="small">试用</el-button>
+          <el-button @click="edit(scope.row.testCaseId)" type="text" size="small">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -30,15 +36,15 @@
                    :total="pageData.total" style="float: right">
     </el-pagination>
     <!--弹出框-->
-    <el-dialog :visible.sync="pageControl.isNewStep" title="新增用例">
+    <el-dialog :visible.sync="pageControl.isNewCase" title="新增用例">
       <tl-detail></tl-detail>
     </el-dialog>
-    <el-dialog :visible.sync="pageControl.isEditStep" title="编辑用例">
-      <tl-detail></tl-detail>
+    <el-dialog :visible.sync="pageControl.isEditCase" title="编辑用例">
+      <tl-detail :test-case-id="pageControl.selectedTestCaseId"></tl-detail>
     </el-dialog>
-    <el-dialog :visible.sync="pageControl.isUseStep" title="执行用例">
+    <el-dialog :visible.sync="pageControl.isUseCase" title="执行用例">
       <el-card>
-        <tl-use :tool-id="pageControl.selectedToolId"></tl-use>
+        <tl-use :tool-id="pageControl.selectedTestCaseId"></tl-use>
       </el-card>
     </el-dialog>
   </div>
@@ -47,7 +53,7 @@
 <script>
 import tlDetail from './caseDetail'
 import tlUse from './caseUse'
-import {queryAPI} from '@/api/commonFactory'
+import {queryAPI} from '@/api/testCase'
 
 export default {
   components: {tlDetail, tlUse},
@@ -56,13 +62,12 @@ export default {
     return {
       pageData: {
         list: [{
-          toolId: 12345,
+          testCaseId: 12345,
           title: 'title',
           description: 'desc',
           ownerId: 'tester',
           ownerName: '',
-          permission: 2,
-          type: 1
+          status: 1
         }],
         total: 1
       },
@@ -70,11 +75,12 @@ export default {
         totalCount: 1,
         selectIndex: 0,
         visible: false,
-        isNewStep: false,
-        isEditStep: false,
-        isUseStep: false,
-        selectedToolId: '0',
+        isNewCase: false,
+        isEditCase: false,
+        isUseCase: false,
+        selectedTestCaseId: '0',
         search: {
+          status: null,
           pageIndex: 1,
           isOnlyOwner: true,
           name: null
@@ -93,22 +99,25 @@ export default {
     // }
   },
   methods: {
-    getType (type) {
-      switch (type) {
+    getType (status) {
+      switch (status) {
         case 1:
-          return 'SQL'
+          return '计划中'
         case 2:
-          return 'HTTP'
+          return '已完成'
         case 3:
-          return 'RPC'
-        case 4:
-          return 'UNKNOWN'
+          return '待修复'
+        default:
+          return '未知'
       }
-      return type
     },
-    use (toolId) {
-      this.pageControl.selectedToolId = toolId
-      this.pageControl.isUseStep = true
+    edit (testCaseId) {
+      this.pageControl.isEditCase = true
+      this.pageControl.selectedTestCaseId = testCaseId
+    },
+    use (testCaseId) {
+      this.pageControl.selectedTestCaseId = testCaseId
+      this.pageControl.isUseCase = true
     },
     queryList () {
       queryAPI(this.pageControl.search).then(response => {
