@@ -1,10 +1,5 @@
 <template>
   <div>
-<!--    <el-page-header @back="$router.push('/commonFactory')" title="返回列表">-->
-<!--      <template #content>-->
-<!--        <span>{{pageData.title}}</span>-->
-<!--      </template>-->
-<!--    </el-page-header>-->
     <!--基本信息-->
     <el-form :model="pageData" label-width="90px">
       <el-form-item label="标题">
@@ -19,12 +14,6 @@
           <el-radio :label="1">SQL</el-radio>
           <el-radio :label="2">HTTP</el-radio>
           <el-radio :label="3">RPC</el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="权限">
-        <el-radio-group v-model="pageData.permission" size="small">
-          <el-radio :label="1">公开</el-radio>
-          <el-radio :label="2">自己可见</el-radio>
         </el-radio-group>
       </el-form-item>
       <!--模板-->
@@ -43,7 +32,7 @@
             </div>
           </div>
         </el-form-item>
-        <el-form-item label="新增SQL">
+        <el-form-item>
           <div v-if="pageControl.isNewSQL">
             <el-input v-model="pageControl.sql" size="small" placeholder="请输入新的单行SQL模板"
                       maxlength="200" show-word-limit>
@@ -54,7 +43,7 @@
             </el-input>
           </div>
           <div v-else>
-            <el-button @click="pageControl.isNewSQL=true" type="primary" size="mini" icon="el-icon-plus" circle></el-button>
+            <el-button @click="pageControl.isNewSQL=true" size="mini" icon="el-icon-plus" type="primary" plain>新增SQL</el-button>
           </div>
         </el-form-item>
         <el-form-item label="关联数据源">
@@ -217,6 +206,7 @@ export default {
     }
   },
   created: function () {
+    console.info('created')
     if (this.toolId !== '0') {
       this.pageControl.isEdit = true
       this.queryDetail()

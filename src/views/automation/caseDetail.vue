@@ -17,7 +17,7 @@
 <!--      </el-form-item>-->
       <!--前置步骤-->
       <el-divider content-position="right">数据准备</el-divider>
-      <el-form-item label="步骤">
+      <el-form-item label="前置步骤">
         <div v-if="pageData.preStepList === null || pageData.preStepList.length===0">暂无前置步骤，可点+添加</div>
         <div v-else>
           <div v-for="(item, index) in pageData.preStepList" :key="index">
@@ -37,7 +37,7 @@
           </div>
         </div>
       </el-form-item>
-      <el-form-item label="新增步骤">
+      <el-form-item>
         <div v-if="pageControl.isNewPreStep">
           <el-input v-model="pageControl.preStepValue" size="small" placeholder="请输入要关联的步骤编号"
                     maxlength="20" show-word-limit>
@@ -48,14 +48,84 @@
           </el-input>
         </div>
         <div v-else>
-          <el-button @click="pageControl.isNewPreStep=true" size="mini" icon="el-icon-link">关联步骤</el-button>
-          <el-button @click="pageControl.isNewStep=true" size="mini" icon="el-icon-plus" disabled>直接新增</el-button>
+          <el-button @click="pageControl.isNewPreStep=true" size="mini" icon="el-icon-link" type="primary" plain>手动关联</el-button>
+          <el-button @click="pageControl.isNewStep=true" size="mini" icon="el-icon-plus" disabled>快速新增</el-button>
         </div>
       </el-form-item>
-      <!--前置步骤-->
+      <!--调用步骤-->
       <el-divider content-position="right">接口调用</el-divider>
-      <!--前置步骤-->
+      <el-form-item label="调用步骤">
+        <div v-if="pageData.mainStepList === null || pageData.mainStepList.length===0">暂无前置步骤，可点+添加</div>
+        <div v-else>
+          <div v-for="(item, index) in pageData.mainStepList" :key="index">
+            <el-row :gutter="5">
+              <el-col :span="10">
+                <el-input v-model="pageData.mainStepList[index].name" size="small" placeholder="请输入步骤名"
+                          maxlength="20" show-word-limit></el-input>
+              </el-col>
+              <el-col :span="10">
+                <el-input v-model="pageData.mainStepList[index].value" size="small" show-word-limit disabled>
+                </el-input>
+              </el-col>
+              <el-col :span="3">
+                <el-button @click="deleteMainStep(index)" size="small">删除</el-button>
+              </el-col>
+            </el-row>
+          </div>
+        </div>
+      </el-form-item>
+      <el-form-item>
+        <div v-if="pageControl.isNewMainStep">
+          <el-input v-model="pageControl.mainStepValue" size="small" placeholder="请输入要关联的步骤编号"
+                    maxlength="20" show-word-limit>
+            <template #append>
+              <el-button @click="newMainStep()" type="primary" size="small">确认</el-button>
+              <el-button @click="pageControl.isNewMainStep=false" size="small">取消</el-button>
+            </template>
+          </el-input>
+        </div>
+        <div v-else>
+          <el-button @click="pageControl.isNewMainStep=true" size="mini" icon="el-icon-link" type="primary" plain>手动关联</el-button>
+          <el-button @click="pageControl.isNewStep=true" size="mini" icon="el-icon-plus" disabled>快速新增</el-button>
+        </div>
+      </el-form-item>
+      <!--收尾步骤-->
       <el-divider content-position="right">数据还原</el-divider>
+      <el-form-item label="收尾步骤">
+        <div v-if="pageData.afterStepList === null || pageData.afterStepList.length===0">暂无前置步骤，可点+添加</div>
+        <div v-else>
+          <div v-for="(item, index) in pageData.afterStepList" :key="index">
+            <el-row :gutter="5">
+              <el-col :span="10">
+                <el-input v-model="pageData.afterStepList[index].name" size="small" placeholder="请输入步骤名"
+                          maxlength="20" show-word-limit></el-input>
+              </el-col>
+              <el-col :span="10">
+                <el-input v-model="pageData.afterStepList[index].value" size="small" show-word-limit disabled>
+                </el-input>
+              </el-col>
+              <el-col :span="3">
+                <el-button @click="deleteAfterStep(index)" size="small">删除</el-button>
+              </el-col>
+            </el-row>
+          </div>
+        </div>
+      </el-form-item>
+      <el-form-item>
+        <div v-if="pageControl.isNewAfterStep">
+          <el-input v-model="pageControl.afterStepValue" size="small" placeholder="请输入要关联的步骤编号"
+                    maxlength="20" show-word-limit>
+            <template #append>
+              <el-button @click="newAfterStep()" type="primary" size="small">确认</el-button>
+              <el-button @click="pageControl.isNewAfterStep=false" size="small">取消</el-button>
+            </template>
+          </el-input>
+        </div>
+        <div v-else>
+          <el-button @click="pageControl.isNewAfterStep=true" size="mini" icon="el-icon-link" type="primary" plain>手动关联</el-button>
+          <el-button @click="pageControl.isNewStep=true" size="mini" icon="el-icon-plus" disabled>快速新增</el-button>
+        </div>
+      </el-form-item>
     </el-form>
     <div style="text-align: center">
       <el-button type="primary" size="small">试用</el-button>
@@ -102,7 +172,18 @@ export default {
       pageControl: {
         isEdit: false,
         isNewPreStep: false,
-        preStepValue: ''
+        isNewMainStep: false,
+        isNewAfterStep: false,
+        preStepValue: '',
+        mainStepValue: '',
+        afterStepValue: ''
+      }
+    }
+  },
+  watch: {
+    testSuiteId: function (newVal, oldVal) {
+      if (this.testCaseId !== 0) {
+        this.queryDetail()
       }
     }
   },
@@ -123,7 +204,31 @@ export default {
       this.pageControl.isNewPreStep = false
     },
     deletePreStep (index) {
-      this.pageData.paramList.splice(index, 1)
+      this.pageData.preStepList.splice(index, 1)
+    },
+    newMainStep () {
+      if (this.pageData.mainStepList === null) {
+        this.pageData.mainStepList = [{name: '', value: this.pageControl.mainStepValue}]
+      } else {
+        this.pageData.mainStepList.push({name: '', value: this.pageControl.mainStepValue})
+      }
+      this.pageControl.mainStepValue = ''
+      this.pageControl.isNewMainStep = false
+    },
+    deleteMainStep (index) {
+      this.pageData.mainStepList.splice(index, 1)
+    },
+    newAfterStep () {
+      if (this.pageData.afterStepList === null) {
+        this.pageData.afterStepList = [{name: '', value: this.pageControl.afterStepValue}]
+      } else {
+        this.pageData.afterStepList.push({name: '', value: this.pageControl.afterStepValue})
+      }
+      this.pageControl.afterStepValue = ''
+      this.pageControl.isNewAfterStep = false
+    },
+    deleteAfterStep (index) {
+      this.pageData.afterStepList.splice(index, 1)
     },
     save () {
       if (this.pageControl.isEdit) {
