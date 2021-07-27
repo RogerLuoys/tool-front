@@ -54,7 +54,7 @@
           </div>
         </div>
       </el-form-item>
-      <el-form-item label="新增参数">
+      <el-form-item>
         <div v-if="pageControl.isNewParam">
           <el-input v-if="pageControl.isNewParam" v-model="pageControl.paramName" size="small" placeholder="请输入新的参数名"
                     maxlength="20" show-word-limit>
@@ -65,7 +65,7 @@
           </el-input>
         </div>
         <div v-else>
-          <el-button @click="pageControl.isNewParam=true" type="primary" size="mini" icon="el-icon-plus" circle></el-button>
+          <el-button @click="pageControl.isNewParam=true" type="primary" size="mini" icon="el-icon-plus" plain>新增参数</el-button>
         </div>
       </el-form-item>
       <!--模板-->
@@ -84,7 +84,7 @@
             </div>
           </div>
         </el-form-item>
-        <el-form-item label="新增SQL">
+        <el-form-item>
           <div v-if="pageControl.isNewSQL">
             <el-input v-model="pageControl.sql" size="small" placeholder="请输入新的单行SQL模板"
                       maxlength="200" show-word-limit>
@@ -95,7 +95,7 @@
             </el-input>
           </div>
           <div v-else>
-            <el-button @click="pageControl.isNewSQL=true" type="primary" size="mini" icon="el-icon-plus" circle></el-button>
+            <el-button @click="pageControl.isNewSQL=true" type="primary" size="mini" icon="el-icon-plus" plain>新增SQL</el-button>
           </div>
         </el-form-item>
         <el-form-item label="关联数据源">
@@ -161,7 +161,7 @@
             </div>
           </div>
         </el-form-item>
-        <el-form-item label="新增Header">
+        <el-form-item>
           <div v-if="pageControl.isNewHeader">
             <el-input v-if="pageControl.isNewHeader" v-model="pageControl.httpHeader" size="small" placeholder="请输入新的参数名"
                       maxlength="20" show-word-limit>
@@ -172,12 +172,40 @@
             </el-input>
           </div>
           <div v-else>
-            <el-button @click="pageControl.isNewHeader=true" type="primary" size="mini" icon="el-icon-plus" circle></el-button>
+            <el-button @click="pageControl.isNewHeader=true" type="primary" size="mini" icon="el-icon-plus" plain>新增Header</el-button>
           </div>
         </el-form-item>
         <el-form-item label="Body">
           <el-input v-model="pageData.httpRequest.httpBody" :autosize="{ minRows: 4, maxRows: 9}" placeholder="请输入Body" type="textarea"
                     maxlength="500" show-word-limit></el-input>
+        </el-form-item>
+      </div>
+      <div v-else-if="pageData.type===3">
+        <el-form-item label="URL">
+          <el-input v-model="pageData.rpc.url" placeholder="请输入URL(ip:prod)" maxlength="50" show-word-limit></el-input>
+        </el-form-item>
+        <el-form-item label="URL">
+          <el-input v-model="pageData.rpc.interfaceName" placeholder="请输入接口名，class name" maxlength="200" show-word-limit></el-input>
+        </el-form-item>
+        <el-form-item label="URL">
+          <el-input v-model="pageData.rpc.methodName" placeholder="请输入方法名" maxlength="50" show-word-limit></el-input>
+        </el-form-item>
+        <el-form-item label="Rpc入参">
+          <el-input></el-input>
+        </el-form-item>
+        <el-form-item>
+          <div v-if="pageControl.isNewRpcParam">
+            <el-input v-model="pageControl.rpcParam" size="small" placeholder="请输入rpc参数类型(class name)"
+                      maxlength="200" show-word-limit>
+              <template #append>
+                <el-button @click="newRpcParam()" type="primary" size="small">确认</el-button>
+                <el-button @click="pageControl.isNewRpcParam=false" size="small">取消</el-button>
+              </template>
+            </el-input>
+          </div>
+          <div v-else>
+            <el-button @click="pageControl.isNewRpcParam=true" type="primary" size="mini" icon="el-icon-plus" plain>新增rpc入参</el-button>
+          </div>
         </el-form-item>
       </div>
       <div v-else>
@@ -241,19 +269,27 @@ export default {
           httpBody: 'BODY'
         },
         rpc: {
-          provide: ''
+          url: '',
+          interfaceName: '',
+          methodName: '',
+          paramList: [{
+            value: '',
+            comment: ''
+          }]
         }
       },
       pageControl: {
         isNewParam: false,
         isNewSQL: false,
         isNewHeader: false,
+        isNewRpcParam: false,
         isContactDB: false,
         isEdit: false,
         paramType: 'String',
         paramName: '',
         sql: '',
-        httpHeader: ''
+        httpHeader: '',
+        rpcParam: ''
       }
     }
   },

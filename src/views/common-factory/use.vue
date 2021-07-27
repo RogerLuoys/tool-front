@@ -7,12 +7,12 @@
       <el-form-item label="说明">
         <span>{{pageData.description}}</span>
       </el-form-item>
-      <div v-for="(item, index) in pageData.params" :key="index">
+      <div v-for="(item, index) in pageData.paramList" :key="index">
         <el-form-item>
           <template #label>
-            <div>{{ pageData.params[index].name }}</div>
+            <div>{{ pageData.paramList[index].name }}</div>
           </template>
-          <el-input v-model="pageData.params[index].value" placeholder="请输入参数" size="small" maxlength="30"
+          <el-input v-model="pageData.paramList[index].value" placeholder="请输入参数" size="small" maxlength="30"
                     show-word-limit></el-input>
         </el-form-item>
       </div>
@@ -31,7 +31,7 @@
         <div>{{pageControl.respondData}}</div>
       </el-form-item>
     </el-form>
-    <el-input v-model="toolId"></el-input>
+<!--    <el-input v-model="toolId"></el-input>-->
     <div style="text-align: center">
       <el-button @click="use()" type="primary" size="small">确认使用</el-button>
     </div>
