@@ -180,15 +180,16 @@
                     maxlength="500" show-word-limit></el-input>
         </el-form-item>
       </div>
+      <!--RPC模板-->
       <div v-else-if="pageData.type===3">
         <el-form-item label="URL">
-          <el-input v-model="pageData.rpc.url" placeholder="请输入URL(ip:prod)" maxlength="50" show-word-limit></el-input>
+          <el-input v-model="pageData.rpc.url" placeholder="请输入URL(ip:prod)" size="small" maxlength="50" show-word-limit></el-input>
         </el-form-item>
-        <el-form-item label="URL">
-          <el-input v-model="pageData.rpc.interfaceName" placeholder="请输入接口名，class name" maxlength="200" show-word-limit></el-input>
+        <el-form-item label="接口名">
+          <el-input v-model="pageData.rpc.interfaceName" placeholder="请输入接口名，class name" size="small" maxlength="200" show-word-limit></el-input>
         </el-form-item>
-        <el-form-item label="URL">
-          <el-input v-model="pageData.rpc.methodName" placeholder="请输入方法名" maxlength="50" show-word-limit></el-input>
+        <el-form-item label="方法名">
+          <el-input v-model="pageData.rpc.methodName" placeholder="请输入方法名" maxlength="50" size="small" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="Rpc入参">
           <el-input></el-input>
