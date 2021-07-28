@@ -23,23 +23,23 @@ api.interceptors.request.use(function (config) {
     config.headers.userId = userId
   } else {
     config.headers.userId = '101'
-    config.headers.userName = 'default'
   }
   return config
 }, function (error) {
-  // 对请求错误做些什么
   return Promise.reject(error)
 })
 
 // 添加响应拦截器
 api.interceptors.response.use(function (response) {
-  // 对响应数据做点什么
-  if (response.data.success === false) {
-    Message.error(response.data.message)
+  // 当code为-1或1时，将接口返回的message直接提示
+  if (response.data.success === false && response.data.code === -1 && response.data.message !== null) {
+    Message.warning(response.data.message)
+  } else if (response.data.success === true && response.data.code === 1 && response.data.message !== null) {
+    Message.success(response.data.message)
   }
   return response
 }, function (error) {
-  // 对响应错误做点什么
+  // 接口返回异常时，统一错误提示
   Message.error('未知系统错误，请联系管理员')
   return Promise.reject(error)
 })

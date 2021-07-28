@@ -8,9 +8,9 @@ export function createAPI (data) {
   })
 }
 
-export function deleteAPI (params) {
+export function removeAPI (params) {
   return api({
-    url: 'testSuite/delete',
+    url: 'testSuite/remove',
     method: 'delete',
     params: params
   })

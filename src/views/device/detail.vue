@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import {createAPI, updateAPI, deleteAPI, queryDetailAPI} from '@/api/device'
+import {createAPI, updateAPI, removeAPI, queryDetailAPI} from '@/api/device'
 // import SelectDevice from '../../components/selectDevice'
 
 export default {
@@ -170,7 +170,7 @@ export default {
       })
     },
     remove () {
-      deleteAPI({deviceId: this.pageData.deviceId}).then(response => {
+      removeAPI({deviceId: this.pageData.deviceId}).then(response => {
         if (response.data.success === true) {
           this.$message.success('删除成功')
         }

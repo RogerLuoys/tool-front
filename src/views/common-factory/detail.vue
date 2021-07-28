@@ -72,8 +72,9 @@
       <el-divider content-position="right"></el-divider>
       <!--SQL模板-->
       <div v-if="pageData.type===1">
-        <el-form-item label="SQL模板">
-          <div v-if="pageData.jdbc!==null">
+        <el-form-item label="SQL语句">
+          <div v-if="pageData.jdbc.sqlList === null || pageData.jdbc.sqlList.length===0">暂无Sql，可点+添加</div>
+          <div v-else>
             <div v-for="(item, index) in pageData.jdbc.sqlList" :key="index">
               <el-input v-model="pageData.jdbc.sqlList[index].sql" placeholder="请输入单行SQL" size="small"
                         maxlength="200" show-word-limit>
@@ -98,26 +99,24 @@
             <el-button @click="pageControl.isNewSQL=true" type="primary" size="mini" icon="el-icon-plus" plain>新增SQL</el-button>
           </div>
         </el-form-item>
-        <el-form-item label="关联数据源">
-          <el-row :gutter="5">
-            <el-col :span="13">
-              <el-input v-model="pageData.jdbc.dataSource.driver" size="small" placeholder="请输入数据库驱动" maxlength="50" show-word-limit>
-              </el-input>
-            </el-col>
-            <el-col :span="10">
-              <el-button @click="$store.commit('setDataSourceDialog', true)" size="small" icon="el-icon-plus">点我可快捷关联</el-button>
-            </el-col>
-          </el-row>
+        <el-form-item label="数据源">
           <el-input v-model="pageData.jdbc.dataSource.url" size="small" placeholder="请输入数据库URL" maxlength="200" show-word-limit>
           </el-input>
           <el-row :gutter="5">
-            <el-col :span="11">
+            <el-col :span="8">
+              <el-input v-model="pageData.jdbc.dataSource.driver" size="small" placeholder="请输入数据库驱动" maxlength="50" show-word-limit>
+              </el-input>
+            </el-col>
+            <el-col :span="6">
               <el-input v-model="pageData.jdbc.dataSource.userName" size="small" placeholder="请输入数据库名" maxlength="50" show-word-limit>
               </el-input>
             </el-col>
-            <el-col :span="11">
+            <el-col :span="6">
               <el-input v-model="pageData.jdbc.dataSource.password" size="small" placeholder="请输入数据库密码" maxlength="50" show-word-limit>
               </el-input>
+            </el-col>
+            <el-col :span="3">
+              <el-button @click="$store.commit('setDataSourceDialog', true)" size="small" icon="el-icon-plus" type="primary" plain>点我可快捷关联</el-button>
             </el-col>
           </el-row>
         </el-form-item>
@@ -138,6 +137,7 @@
             </template>
           </el-input>
         </el-form-item>
+        <!--请求头-->
         <el-form-item label="Header">
           <div v-if="pageData.httpRequest.httpHeaderList===null || pageData.httpRequest.httpHeaderList.length===0">
             暂无自定义请求头，可点+添加
@@ -182,8 +182,8 @@
       </div>
       <!--RPC模板-->
       <div v-else-if="pageData.type===3">
-        <el-form-item label="URL">
-          <el-input v-model="pageData.rpc.url" placeholder="请输入URL(ip:prod)" size="small" maxlength="50" show-word-limit></el-input>
+        <el-form-item label="RPC地址">
+          <el-input v-model="pageData.rpc.url" placeholder="请输入地址(协议://ip:prod/)" size="small" maxlength="50" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="接口名">
           <el-input v-model="pageData.rpc.interfaceName" placeholder="请输入接口名，class name" size="small" maxlength="200" show-word-limit></el-input>
@@ -191,12 +191,32 @@
         <el-form-item label="方法名">
           <el-input v-model="pageData.rpc.methodName" placeholder="请输入方法名" maxlength="50" size="small" show-word-limit></el-input>
         </el-form-item>
+        <!--Rpc入参列表-->
         <el-form-item label="Rpc入参">
-          <el-input></el-input>
+          <div v-if="pageData.rpc.paramList===null || pageData.rpc.paramList.length===0">
+            暂无入参，可点+添加
+          </div>
+          <div v-else>
+            <div v-for="(item, index) in pageData.rpc.paramList" :key="index">
+              <el-row :gutter="5">
+                <el-col :span="17">
+                  <el-input v-model="pageData.rpc.paramList[index].value" :autosize="{ minRows: 1, maxRows: 5}" placeholder="请输入模板" type="textarea"
+                            maxlength="500" show-word-limit></el-input>
+                </el-col>
+                <el-col :span="6">
+                  <el-input v-model="pageData.rpc.paramList[index].comment" placeholder="请输入rpc参数类型(class name)" maxlength="200" size="small" show-word-limit></el-input>
+                  <el-button @click="deleteRpcParam(index)" size="small">删除</el-button>
+<!--                  <el-tooltip class="item" effect="dark" :content="'入参类型:'+pageData.rpc.paramList[index].comment" placement="top-start">-->
+<!--                    <i class="el-icon-info"></i>-->
+<!--                  </el-tooltip>-->
+                </el-col>
+              </el-row>
+            </div>
+          </div>
         </el-form-item>
         <el-form-item>
           <div v-if="pageControl.isNewRpcParam">
-            <el-input v-model="pageControl.rpcParam" size="small" placeholder="请输入rpc参数类型(class name)"
+            <el-input v-model="pageControl.rpcType" size="small" placeholder="请输入rpc参数类型(class name)"
                       maxlength="200" show-word-limit>
               <template #append>
                 <el-button @click="newRpcParam()" type="primary" size="small">确认</el-button>
@@ -229,7 +249,7 @@
 </template>
 
 <script>
-import {createAPI, updateAPI, deleteAPI, queryDetailAPI} from '@/api/commonFactory'
+import {createAPI, updateAPI, removeAPI, queryDetailAPI} from '@/api/commonFactory'
 import tlSelectDataSource from './selectDataSource'
 
 export default {
@@ -244,10 +264,11 @@ export default {
         permission: 2,
         type: 1,
         isTestStep: false,
-        paramList: [{
-          name: 'name',
-          value: 'value'
-        }],
+        paramList: null,
+        // paramList: [{
+        //   name: 'name',
+        //   value: 'value'
+        // }],
         jdbc: {
           dataSource: {
             driver: 'com.mysql.cj.jdbc.Driver',
@@ -255,18 +276,20 @@ export default {
             userName: 'testerone',
             password: 'testerone'
           },
-          sqlList: [{
-            type: 'UNKNOWN',
-            sql: ''
-          }]
+          sqlList: null
+          // sqlList: [{
+          //   type: 'UNKNOWN',
+          //   sql: ''
+          // }]
         },
         httpRequest: {
           httpType: 'GET',
           httpURL: 'URL',
-          httpHeaderList: [{
-            name: 'header1',
-            value: 'value1'
-          }],
+          httpHeaderList: null,
+          // httpHeaderList: [{
+          //   name: 'header1',
+          //   value: 'value1'
+          // }],
           httpBody: 'BODY'
         },
         rpc: {
@@ -290,7 +313,8 @@ export default {
         paramName: '',
         sql: '',
         httpHeader: '',
-        rpcParam: ''
+        rpcParam: '',
+        rpcType: ''
       }
     }
   },
@@ -319,7 +343,11 @@ export default {
       this.pageData.paramList.splice(index, 1)
     },
     newSQL () {
-      this.pageData.jdbc.sqlList.push({type: 'UNKNOWN', sql: this.pageControl.sql})
+      if (this.pageData.jdbc.sqlList === null) {
+        this.pageData.jdbc.sqlList = [{type: 'UNKNOWN', sql: this.pageControl.sql}]
+      } else {
+        this.pageData.jdbc.sqlList.push({type: 'UNKNOWN', sql: this.pageControl.sql})
+      }
       this.pageControl.sql = ''
       this.pageControl.isNewSQL = false
     },
@@ -327,13 +355,29 @@ export default {
       this.pageData.jdbc.sqlList.splice(index, 1)
     },
     newHeader () {
-      this.pageData.httpRequest.httpHeaderList.push({name: this.pageControl.httpHeader, value: ''})
+      if (this.pageData.httpRequest.httpHeaderList === null) {
+        this.pageData.httpRequest.httpHeaderList = [{name: this.pageControl.httpHeader, value: ''}]
+      } else {
+        this.pageData.httpRequest.httpHeaderList.push({name: this.pageControl.httpHeader, value: ''})
+      }
       this.pageControl.httpHeader = ''
       this.pageControl.isNewHeader = false
     },
     deleteHeader (index) {
       this.pageData.httpRequest.httpHeaderList.splice(index, 1)
       debugger
+    },
+    newRpcParam () {
+      if (this.pageData.rpc.paramList === null) {
+        this.pageData.rpc.paramList = [{value: '', comment: this.pageControl.rpcType}]
+      } else {
+        this.pageData.rpc.paramList.push({value: '', comment: this.pageControl.rpcType})
+      }
+      this.pageControl.rpcType = ''
+      this.pageControl.isNewRpcParam = false
+    },
+    deleteRpcParam (index) {
+      this.pageData.rpc.paramList.splice(index, 1)
     },
     save () {
       if (this.pageControl.isEdit) {
@@ -363,6 +407,7 @@ export default {
       createAPI(this.pageData).then(response => {
         if (response.data.success === true) {
           this.$message.success('创建工具成功')
+          this.$router.push('/commonFactory')
         }
       })
     },
@@ -370,13 +415,15 @@ export default {
       updateAPI(this.pageData).then(response => {
         if (response.data.success === true) {
           this.$message.success('编辑工具成功')
+          this.$router.push('/commonFactory')
         }
       })
     },
     remove () {
-      deleteAPI({toolId: this.pageData.toolId}).then(response => {
+      removeAPI({toolId: this.pageData.toolId}).then(response => {
         if (response.data.success === true) {
           this.$message.success('删除工具成功')
+          this.$router.push('/commonFactory')
         }
       })
     },

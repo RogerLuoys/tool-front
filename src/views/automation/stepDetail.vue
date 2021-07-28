@@ -145,7 +145,7 @@
 </template>
 
 <script>
-import {createAPI, updateAPI, deleteAPI, queryDetailAPI} from '@/api/commonFactory'
+import {createAPI, updateAPI, removeAPI, queryDetailAPI} from '@/api/commonFactory'
 // import tlSelectDataSource from './selectDataSource'
 
 export default {
@@ -286,7 +286,7 @@ export default {
       })
     },
     remove () {
-      deleteAPI({toolId: this.pageData.toolId}).then(response => {
+      removeAPI({toolId: this.pageData.toolId}).then(response => {
         if (response.data.success === true) {
           this.$message.success('删除工具成功')
         }

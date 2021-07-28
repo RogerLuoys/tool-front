@@ -16,9 +16,9 @@ export function quickCreateAPI (data) {
   })
 }
 
-export function deleteAPI (params) {
+export function removeAPI (params) {
   return api({
-    url: 'device/delete',
+    url: 'device/remove',
     method: 'delete',
     params: params
   })
