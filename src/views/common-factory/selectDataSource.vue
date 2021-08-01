@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :visible.sync="$store.state.commonFactory.isSelectDSVisible" title="请关联数据库">
+    <el-dialog :visible.sync="$store.state.isSelectDSVisible" title="请关联数据库">
       <!--搜索-->
       <el-input placeholder="请输入名称" clearable size="mini" v-model="pageControl.search.name"
                 style="width:200px; float:left"></el-input>

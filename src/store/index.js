@@ -1,12 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import commonFactory from './modules/common-factory'
+import factory from './modules/factory'
+import slaveNode from './modules/slaveNode'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   modules: {
-    commonFactory
+    factory,
+    slaveNode
   }
 })
 

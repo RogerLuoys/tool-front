@@ -214,7 +214,7 @@ export default {
   },
   watch: {
     '$store.state.commonFactory.selectedDataSource': function (newVal, oldVal) {
-      this.pageData.jdbc.dataSource = this.$store.state.commonFactory.selectedDataSource
+      this.pageData.jdbc.dataSource = this.$store.state.selectedDataSource
     }
   },
   methods: {

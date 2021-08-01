@@ -3,7 +3,6 @@
 // shape: [{ id, quantity }]
 const state = () => ({
   isSelectDSVisible: false,
-  selectedDeviceId: 0,
   selectedDataSource: {
     driver: '',
     url: '',
