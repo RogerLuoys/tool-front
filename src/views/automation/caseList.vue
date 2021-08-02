@@ -53,7 +53,7 @@
 <script>
 import tlDetail from './caseDetail'
 import tlUse from './caseUse'
-import {queryAPI} from '@/api/testCase'
+import {queryAPI} from '@/api/autoCase'
 
 export default {
   components: {tlDetail, tlUse},

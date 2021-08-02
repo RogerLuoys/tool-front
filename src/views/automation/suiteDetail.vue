@@ -95,7 +95,7 @@
 </template>
 
 <script>
-import {createAPI, updateAPI, removeAPI, queryDetailAPI} from '@/api/testSuite'
+import {createAPI, updateAPI, removeAPI, queryDetailAPI} from '@/api/autoSuite'
 // import tlSelectDataSource from './selectDataSource'
 
 export default {

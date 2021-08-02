@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import {createAPI, updateAPI, removeAPI, queryDetailAPI} from '@/api/device'
+import {createAPI, updateAPI, removeAPI, queryDetailAPI} from '@/api/resource'
 // import SelectDevice from '../../components/selectDevice'
 
 export default {

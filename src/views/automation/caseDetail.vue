@@ -136,7 +136,7 @@
 </template>
 
 <script>
-import {createAPI, updateAPI, removeAPI, queryDetailAPI} from '@/api/testCase'
+import {createAPI, updateAPI, removeAPI, queryDetailAPI} from '@/api/autoCase'
 // import tlSelectDataSource from './selectDataSource'
 
 export default {

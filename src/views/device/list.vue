@@ -52,7 +52,7 @@
 
 <script>
 import tlDetail from './detail'
-import {queryAPI} from '@/api/device'
+import {queryAPI} from '@/api/resource'
 
 export default {
   components: {tlDetail},

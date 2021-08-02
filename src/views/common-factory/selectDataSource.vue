@@ -19,28 +19,28 @@
       <el-pagination layout="prev, pager, next" @current-change="queryList()" :current-page="pageControl.search.pageIndex"
                      :total="pageData.total" style="float: right">
       </el-pagination>
-      <el-dialog :visible.sync="pageControl.isNewDataSource" title="新增数据库" append-to-body>
-        <el-form label-width="80px">
-          <el-form-item label="URL">
-            <el-input></el-input>
-          </el-form-item>
-          <el-form-item label="用户名">
-            <el-input></el-input>
-          </el-form-item>
-          <el-form-item label="密码">
-            <el-input></el-input>
-          </el-form-item>
-        </el-form>
-        <div style="text-align: center">
-          <el-button @click="create()" type="primary" size="small">保存</el-button>
-        </div>
-      </el-dialog>
+<!--      <el-dialog :visible.sync="pageControl.isNewDataSource" title="新增数据库" append-to-body>-->
+<!--        <el-form label-width="80px">-->
+<!--          <el-form-item label="URL">-->
+<!--            <el-input></el-input>-->
+<!--          </el-form-item>-->
+<!--          <el-form-item label="用户名">-->
+<!--            <el-input></el-input>-->
+<!--          </el-form-item>-->
+<!--          <el-form-item label="密码">-->
+<!--            <el-input></el-input>-->
+<!--          </el-form-item>-->
+<!--        </el-form>-->
+<!--        <div style="text-align: center">-->
+<!--          <el-button @click="create()" type="primary" size="small">保存</el-button>-->
+<!--        </div>-->
+<!--      </el-dialog>-->
     </el-dialog>
   </div>
 </template>
 
 <script>
-import {quickCreateAPI, queryAPI, queryDetailAPI} from '../../api/device'
+import {queryAPI, queryDetailAPI} from '@/api/resource'
 
 export default {
   // components: {tlDetail},
@@ -71,11 +71,11 @@ export default {
         pageIndex: 1,
         visible: false,
         isNewDataSource: false,
-        dataSource: {
-          url: '',
-          userName: '',
-          password: ''
-        },
+        // dataSource: {
+        //   url: '',
+        //   userName: '',
+        //   password: ''
+        // },
         search: {
           name: null,
           pageIndex: 1,
@@ -102,9 +102,9 @@ export default {
         }
       })
     },
-    create () {
-      quickCreateAPI(this.pageControl.dataSource).then()
-    },
+    // create () {
+    //   quickCreateAPI(this.pageControl.dataSource).then()
+    // },
     selectDataSource (row) {
       // console.info(row.deviceId)
       queryDetailAPI({

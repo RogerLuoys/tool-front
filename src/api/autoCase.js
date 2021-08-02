@@ -2,7 +2,7 @@ import api from './axios'
 
 export function createAPI (data) {
   return api({
-    url: 'testCase/create',
+    url: 'autoCase/create',
     method: 'post',
     data: data
   })
@@ -10,7 +10,7 @@ export function createAPI (data) {
 
 export function removeAPI (params) {
   return api({
-    url: 'testCase/remove',
+    url: 'autoCase/remove',
     method: 'delete',
     params: params
   })
@@ -18,7 +18,7 @@ export function removeAPI (params) {
 
 export function updateAPI (data) {
   return api({
-    url: 'testCase/update',
+    url: 'autoCase/update',
     method: 'put',
     data: data
   })
@@ -26,7 +26,7 @@ export function updateAPI (data) {
 
 export function queryDetailAPI (params) {
   return api({
-    url: 'testCase/queryDetail',
+    url: 'autoCase/queryDetail',
     method: 'get',
     params: params
   })
@@ -34,7 +34,7 @@ export function queryDetailAPI (params) {
 
 export function queryAPI (params) {
   return api({
-    url: 'testCase/query',
+    url: 'autoCase/query',
     method: 'get',
     params: params
   })

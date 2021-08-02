@@ -45,7 +45,7 @@
 <script>
 import tlDetail from './suiteDetail'
 import tlUse from './suiteUse'
-import {queryAPI} from '@/api/testSuite'
+import {queryAPI} from '@/api/autoSuite'
 
 export default {
   components: {tlDetail, tlUse},
