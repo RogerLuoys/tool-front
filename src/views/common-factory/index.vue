@@ -1,14 +1,14 @@
 <template>
   <div>
-    <list></list>
+    <tl-list></tl-list>
   </div>
 </template>
 
 <script>
-import list from './list'
+import tlList from './list'
 
 export default {
-  components: {list}
+  components: {tlList}
 
 }
 </script>

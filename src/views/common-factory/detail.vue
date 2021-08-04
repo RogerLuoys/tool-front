@@ -2,14 +2,14 @@
   <div>
     <el-page-header @back="$router.push('/commonFactory')" title="返回列表">
       <template #content>
-        <span>{{pageData.title}}</span>
+        <span>{{pageData.name}}</span>
       </template>
     </el-page-header>
     <!--基本信息-->
     <el-divider content-position="right"></el-divider>
     <el-form :model="pageData" label-width="90px">
       <el-form-item label="标题">
-        <el-input v-model="pageData.title" placeholder="请输入标题" size="small" maxlength="30" show-word-limit></el-input>
+        <el-input v-model="pageData.name" placeholder="请输入标题" size="small" maxlength="30" show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="说明">
         <el-input v-model="pageData.description" placeholder="请描述功能和实现方法" type="textarea" maxlength="200"
@@ -31,30 +31,28 @@
       <!--参数设置-->
       <el-divider content-position="right"></el-divider>
       <el-form-item label="参数">
-        <div v-if="pageData.paramList === null || pageData.paramList.length===0">暂无参数，可点+添加</div>
+        <div v-if="pageData.parameterList === null || pageData.parameterList.length===0">暂无参数，可点+添加</div>
         <div v-else>
-          <div v-for="(item, index) in pageData.paramList" :key="index">
+          <div v-for="(item, index) in pageData.parameterList" :key="index">
             <el-row :gutter="5">
               <el-col :span="10">
-                <el-input v-model="pageData.paramList[index].name" size="small" placeholder="请输入参数名"
+                <el-input v-model="pageData.parameterList[index].name" size="small" placeholder="请输入参数名"
                           maxlength="20" show-word-limit></el-input>
               </el-col>
               <el-col :span="10">
-                <el-input v-model="pageData.paramList[index].value" size="small" placeholder="请输入参数值"
+                <el-input v-model="pageData.parameterList[index].value" size="small" placeholder="请输入参数值"
                           maxlength="20" show-word-limit>
                 </el-input>
               </el-col>
               <el-col :span="3">
                 <el-button @click="deleteParam(index)" size="small">删除</el-button>
-                <el-tooltip class="item" effect="dark" :content="'$$${'+pageData.paramList[index].name+'}'" placement="top-start">
+                <el-tooltip class="item" effect="dark" :content="'$$${'+pageData.parameterList[index].name+'}'" placement="top-start">
                   <i class="el-icon-info"></i>
                 </el-tooltip>
               </el-col>
             </el-row>
           </div>
         </div>
-      </el-form-item>
-      <el-form-item>
         <div v-if="pageControl.isNewParam">
           <el-input v-if="pageControl.isNewParam" v-model="pageControl.paramName" size="small" placeholder="请输入新的参数名"
                     maxlength="20" show-word-limit>
@@ -73,6 +71,7 @@
       <!--SQL模板-->
       <div v-if="pageData.type===1">
         <el-form-item label="SQL语句">
+          <!--显示sql，无则返回提示，有则返回列表-->
           <div v-if="pageData.jdbc.sqlList === null || pageData.jdbc.sqlList.length===0">暂无Sql，可点+添加</div>
           <div v-else>
             <div v-for="(item, index) in pageData.jdbc.sqlList" :key="index">
@@ -84,8 +83,7 @@
               </el-input>
             </div>
           </div>
-        </el-form-item>
-        <el-form-item>
+          <!--增加sql控件-->
           <div v-if="pageControl.isNewSQL">
             <el-input v-model="pageControl.sql" size="small" placeholder="请输入新的单行SQL模板"
                       maxlength="200" show-word-limit>
@@ -108,7 +106,7 @@
               </el-input>
             </el-col>
             <el-col :span="6">
-              <el-input v-model="pageData.jdbc.dataSource.userName" size="small" placeholder="请输入数据库名" maxlength="50" show-word-limit>
+              <el-input v-model="pageData.jdbc.dataSource.username" size="small" placeholder="请输入数据库名" maxlength="50" show-word-limit>
               </el-input>
             </el-col>
             <el-col :span="6">
@@ -124,9 +122,8 @@
       <!--HTTP模板-->
       <div v-else-if="pageData.type===2">
         <el-form-item label="URL">
-          <el-input v-model="pageData.httpRequest.httpURL" size="small" placeholder="请输入URL"
-                    maxlength="200" show-word-limit>
-            <template #prepend>
+          <el-row :gutter="5">
+            <el-col :span="3">
               <el-select v-model="pageData.httpRequest.httpType" size="small" placeholder="请求方法"
                          style="float:left; width: 100px">
                 <el-option key="1" label="GET" value="GET"></el-option>
@@ -134,11 +131,16 @@
                 <el-option key="3" label="PUT" value="PUT"></el-option>
                 <el-option key="4" label="DELETE" value="DELETE"></el-option>
               </el-select>
-            </template>
-          </el-input>
+            </el-col>
+            <el-col :span="20">
+              <el-input v-model="pageData.httpRequest.httpURL" size="small" placeholder="请输入URL"
+                        maxlength="200" show-word-limit>
+              </el-input>
+            </el-col>
+          </el-row>
         </el-form-item>
-        <!--请求头-->
         <el-form-item label="Header">
+          <!--请求头显示，无返回提示，有显示列表-->
           <div v-if="pageData.httpRequest.httpHeaderList===null || pageData.httpRequest.httpHeaderList.length===0">
             暂无自定义请求头，可点+添加
           </div>
@@ -160,8 +162,6 @@
               </el-row>
             </div>
           </div>
-        </el-form-item>
-        <el-form-item>
           <div v-if="pageControl.isNewHeader">
             <el-input v-if="pageControl.isNewHeader" v-model="pageControl.httpHeader" size="small" placeholder="请输入新的参数名"
                       maxlength="20" show-word-limit>
@@ -191,30 +191,28 @@
         <el-form-item label="方法名">
           <el-input v-model="pageData.rpc.methodName" placeholder="请输入方法名" maxlength="50" size="small" show-word-limit></el-input>
         </el-form-item>
-        <!--Rpc入参列表-->
         <el-form-item label="Rpc入参">
-          <div v-if="pageData.rpc.paramList===null || pageData.rpc.paramList.length===0">
+          <!--Rpc入参显示，无Rpc入参提示，有显示列表-->
+          <div v-if="pageData.rpc.parameterList===null || pageData.rpc.parameterList.length===0">
             暂无入参，可点+添加
           </div>
           <div v-else>
-            <div v-for="(item, index) in pageData.rpc.paramList" :key="index">
+            <div v-for="(item, index) in pageData.rpc.parameterList" :key="index">
               <el-row :gutter="5">
-                <el-col :span="17">
-                  <el-input v-model="pageData.rpc.paramList[index].value" :autosize="{ minRows: 1, maxRows: 5}" placeholder="请输入模板" type="textarea"
+                <el-col :span="16">
+                  <el-input v-model="pageData.rpc.parameterList[index].value" :autosize="{ minRows: 1, maxRows: 5}" placeholder="请输入rpc入参(json格式)" type="textarea"
                             maxlength="500" show-word-limit></el-input>
                 </el-col>
-                <el-col :span="6">
-                  <el-input v-model="pageData.rpc.paramList[index].comment" placeholder="请输入rpc参数类型(class name)" maxlength="200" size="small" show-word-limit></el-input>
+                <el-col :span="5">
+                  <el-input v-model="pageData.rpc.parameterList[index].comment" placeholder="请输入rpc参数类型(class name)" maxlength="200" size="small" show-word-limit></el-input>
+                </el-col>
+                <el-col :span="2">
                   <el-button @click="deleteRpcParam(index)" size="small">删除</el-button>
-<!--                  <el-tooltip class="item" effect="dark" :content="'入参类型:'+pageData.rpc.paramList[index].comment" placement="top-start">-->
-<!--                    <i class="el-icon-info"></i>-->
-<!--                  </el-tooltip>-->
                 </el-col>
               </el-row>
             </div>
           </div>
-        </el-form-item>
-        <el-form-item>
+          <!--新增rpc入参-->
           <div v-if="pageControl.isNewRpcParam">
             <el-input v-model="pageControl.rpcType" size="small" placeholder="请输入rpc参数类型(class name)"
                       maxlength="200" show-word-limit>
@@ -229,6 +227,7 @@
           </div>
         </el-form-item>
       </div>
+      <!--未知工具类型-->
       <div v-else>
         <el-form-item label="未知类型">
           <el-input :autosize="{ minRows: 4, maxRows: 9}" placeholder="请输入模板" type="textarea"
@@ -258,14 +257,14 @@ export default {
     return {
       pageData: {
         toolId: '0',
-        title: '',
+        name: '',
         description: '',
         owner: 'tester',
         permission: 2,
         type: 1,
         isTestStep: false,
-        paramList: null,
-        // paramList: [{
+        parameterList: null,
+        // parameterList: [{
         //   name: 'name',
         //   value: 'value'
         // }],
@@ -273,7 +272,7 @@ export default {
           dataSource: {
             driver: 'com.mysql.cj.jdbc.Driver',
             url: 'jdbc:mysql://118.24.117.181:3306/onepiece?useUnicode=true&characterEncoding=UTF-8&userSSL=false',
-            userName: 'testerone',
+            username: 'testerone',
             password: 'testerone'
           },
           sqlList: null
@@ -284,19 +283,19 @@ export default {
         },
         httpRequest: {
           httpType: 'GET',
-          httpURL: 'URL',
+          httpURL: null,
           httpHeaderList: null,
           // httpHeaderList: [{
           //   name: 'header1',
           //   value: 'value1'
           // }],
-          httpBody: 'BODY'
+          httpBody: null
         },
         rpc: {
           url: '',
           interfaceName: '',
           methodName: '',
-          paramList: [{
+          parameterList: [{
             value: '',
             comment: ''
           }]
@@ -331,16 +330,16 @@ export default {
   },
   methods: {
     newParam () {
-      if (this.pageData.paramList === null) {
-        this.pageData.paramList = [{name: this.pageControl.paramName, value: null}]
+      if (this.pageData.parameterList === null) {
+        this.pageData.parameterList = [{name: this.pageControl.paramName, value: null}]
       } else {
-        this.pageData.paramList.push({name: this.pageControl.paramName, value: ''})
+        this.pageData.parameterList.push({name: this.pageControl.paramName, value: ''})
       }
       this.pageControl.paramName = ''
       this.pageControl.isNewParam = false
     },
     deleteParam (index) {
-      this.pageData.paramList.splice(index, 1)
+      this.pageData.parameterList.splice(index, 1)
     },
     newSQL () {
       if (this.pageData.jdbc.sqlList === null) {
@@ -368,16 +367,16 @@ export default {
       debugger
     },
     newRpcParam () {
-      if (this.pageData.rpc.paramList === null) {
-        this.pageData.rpc.paramList = [{value: '', comment: this.pageControl.rpcType}]
+      if (this.pageData.rpc.parameterList === null) {
+        this.pageData.rpc.parameterList = [{value: '', comment: this.pageControl.rpcType}]
       } else {
-        this.pageData.rpc.paramList.push({value: '', comment: this.pageControl.rpcType})
+        this.pageData.rpc.parameterList.push({value: '', comment: this.pageControl.rpcType})
       }
       this.pageControl.rpcType = ''
       this.pageControl.isNewRpcParam = false
     },
     deleteRpcParam (index) {
-      this.pageData.rpc.paramList.splice(index, 1)
+      this.pageData.rpc.parameterList.splice(index, 1)
     },
     save () {
       if (this.pageControl.isEdit) {

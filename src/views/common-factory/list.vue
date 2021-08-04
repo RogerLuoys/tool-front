@@ -19,7 +19,7 @@
           <div>{{ getType(scope.row.type) }}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="title" label="标题" width="180">
+      <el-table-column prop="name" label="标题" width="180">
       </el-table-column>
       <el-table-column prop="description" label="说明" width="180">
       </el-table-column>
@@ -58,7 +58,7 @@ export default {
       pageData: {
         list: [{
           toolId: 12345,
-          title: 'title',
+          name: 'name',
           description: 'desc',
           ownerId: 'tester',
           ownerName: '',

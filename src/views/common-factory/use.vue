@@ -2,17 +2,17 @@
   <div>
     <el-form :model="pageData" label-width="2cm">
       <el-form-item label="标题">
-        <span>{{pageData.title}}</span>
+        <span>{{pageData.name}}</span>
       </el-form-item>
       <el-form-item label="说明">
         <span>{{pageData.description}}</span>
       </el-form-item>
-      <div v-for="(item, index) in pageData.paramList" :key="index">
+      <div v-for="(item, index) in pageData.parameterList" :key="index">
         <el-form-item>
           <template #label>
-            <div>{{ pageData.paramList[index].name }}</div>
+            <div>{{ pageData.parameterList[index].name }}</div>
           </template>
-          <el-input v-model="pageData.paramList[index].value" placeholder="请输入参数" size="small" maxlength="30"
+          <el-input v-model="pageData.parameterList[index].value" placeholder="请输入参数" size="small" maxlength="30"
                     show-word-limit></el-input>
         </el-form-item>
       </div>
@@ -31,7 +31,6 @@
         <div>{{pageControl.respondData}}</div>
       </el-form-item>
     </el-form>
-<!--    <el-input v-model="toolId"></el-input>-->
     <div style="text-align: center">
       <el-button @click="use()" type="primary" size="small">确认使用</el-button>
     </div>
@@ -60,12 +59,12 @@ export default {
     return {
       pageData: {
         toolId: '0',
-        title: '123',
+        name: '123',
         description: '',
         owner: 'tester',
         permission: 2,
         type: 1,
-        paramList: [{
+        parameterList: [{
           name: 'name',
           value: 'value'
         }],
