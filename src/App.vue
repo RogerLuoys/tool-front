@@ -22,7 +22,7 @@
               <i class="el-icon-s-promotion"></i>
               <span slot="title">自动化测试</span>
             </el-menu-item>
-            <el-menu-item index="4" @click="$router.push('/device')">
+            <el-menu-item index="4" @click="$router.push('/resource')">
               <i class="el-icon-s-platform"></i>
               <span slot="title">设备与环境</span>
             </el-menu-item>
@@ -31,19 +31,8 @@
               <span slot="title">配置管理</span>
             </el-menu-item>
           </el-menu>
-<!--        <el-col :span="1"  style="background-color: #545c64; height: 60px">-->
-<!--          <el-dropdown @command="dropdownAction">-->
-<!--            <el-avatar style="cursor: pointer">用户A</el-avatar>-->
-<!--            <el-dropdown-menu slot="dropdown">-->
-<!--              <el-dropdown-item command="profile">个人设置</el-dropdown-item>-->
-<!--              <el-dropdown-item command="loginOut">退出登录</el-dropdown-item>-->
-<!--            </el-dropdown-menu>-->
-<!--          </el-dropdown>-->
-<!--        </el-col>-->
       </el-aside>
       <el-main style="background-color: whitesmoke; height: 15cm">
-<!--        <el-card style="height: 15cm;">-->
-<!--        </el-card>-->
         <router-view></router-view>
       </el-main>
     </el-container>

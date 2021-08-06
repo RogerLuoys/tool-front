@@ -4,14 +4,15 @@
     <el-select v-model="pageControl.search.type" clearable size="mini" placeholder="请选择状态"
                style="width:110px; float:left">
       <el-option key="1" label="数据库" :value="1"></el-option>
-      <el-option key="2" label="手机" :value="2"></el-option>
-      <el-option key="3" label="容器" :value="3"></el-option>
+      <el-option key="2" label="设备" :value="2"></el-option>
+      <el-option key="3" label="测试环境" :value="3"></el-option>
+      <el-option key="3" label="从节点" :value="4"></el-option>
     </el-select>
     <el-input placeholder="请输入名称" clearable size="mini" v-model="pageControl.search.name"
               style="width:200px; float:left"></el-input>
     <el-button @click="queryList()" icon="el-icon-search" type="primary" size="mini"></el-button>
     <!--新增-->
-    <el-button type="primary" @click="pageControl.isNewDevice = true" size="mini" style="float:right">新增</el-button>
+    <el-button type="primary" @click="pageControl.isNewResource = true" size="mini" style="float:right">新增</el-button>
     <!--列表-->
     <el-table border :data="pageData.list" style="width: 100%">
       <el-table-column prop="type" label="类型" width="180">
@@ -19,7 +20,7 @@
           <div>{{ getType(scope.row.type) }}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="title" label="标题" width="180">
+      <el-table-column prop="name" label="标题" width="180">
       </el-table-column>
       <el-table-column prop="description" label="说明" width="180">
       </el-table-column>
@@ -28,7 +29,7 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" size="small">领用</el-button>
-          <el-button @click="edit(scope.row.deviceId)" type="text" size="small">编辑</el-button>
+          <el-button @click="edit(scope.row.resourceId)" type="text" size="small">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -37,14 +38,14 @@
                    :total="pageData.total" style="float: right">
     </el-pagination>
     <!--弹窗-->
-    <el-dialog :visible.sync="pageControl.isNewDevice" title="新增设备或环境">
+    <el-dialog :visible.sync="pageControl.isNewResource" title="新增资源">
       <el-card>
         <tl-detail></tl-detail>
       </el-card>
     </el-dialog>
-    <el-dialog :visible.sync="pageControl.isEditDevice" title="编辑设备或环境">
+    <el-dialog :visible.sync="pageControl.isEditResource" title="编辑资源">
       <el-card>
-        <tl-detail :device-id="pageControl.selectedDeviceId"></tl-detail>
+        <tl-detail :resource-id="pageControl.selectedResourceId" :is-edit="true"></tl-detail>
       </el-card>
     </el-dialog>
   </div>
@@ -71,9 +72,9 @@ export default {
     return {
       pageData: {
         list: [{
-          deviceId: 0,
+          resourceId: 0,
           type: 0,
-          title: 'title',
+          name: 'title',
           description: 'desc',
           ownerId: '',
           ownerName: '',
@@ -84,9 +85,9 @@ export default {
       pageControl: {
         totalCount: 1,
         visible: false,
-        isNewDevice: false,
-        isEditDevice: false,
-        selectedDeviceId: 0,
+        isNewResource: false,
+        isEditResource: false,
+        selectedResourceId: 0,
         search: {
           pageIndex: 1,
           type: null,
@@ -111,15 +112,17 @@ export default {
         case 1:
           return '数据库'
         case 2:
-          return '手机'
+          return '设备'
         case 3:
-          return '容器'
+          return '测试环境'
+        case 4:
+          return '从节点'
       }
       return type
     },
-    edit (deviceId) {
-      this.pageControl.selectedDeviceId = deviceId
-      this.pageControl.isEditDevice = true
+    edit (resourceId) {
+      this.pageControl.selectedResourceId = resourceId
+      this.pageControl.isEditResource = true
     },
     queryList () {
       queryAPI(this.pageControl.search).then(response => {

@@ -32,38 +32,27 @@
       <el-divider content-position="right"></el-divider>
       <el-form-item label="参数">
         <div v-if="pageData.parameterList === null || pageData.parameterList.length===0">暂无参数，可点+添加</div>
-        <div v-else>
-          <div v-for="(item, index) in pageData.parameterList" :key="index">
-            <el-row :gutter="5">
-              <el-col :span="10">
-                <el-input v-model="pageData.parameterList[index].name" size="small" placeholder="请输入参数名"
-                          maxlength="20" show-word-limit></el-input>
-              </el-col>
-              <el-col :span="10">
-                <el-input v-model="pageData.parameterList[index].value" size="small" placeholder="请输入参数值"
-                          maxlength="20" show-word-limit>
-                </el-input>
-              </el-col>
-              <el-col :span="3">
-                <el-button @click="deleteParam(index)" size="small">删除</el-button>
-                <el-tooltip class="item" effect="dark" :content="'$$${'+pageData.parameterList[index].name+'}'" placement="top-start">
-                  <i class="el-icon-info"></i>
-                </el-tooltip>
-              </el-col>
-            </el-row>
-          </div>
+        <div v-else v-for="(item, index) in pageData.parameterList" :key="index">
+          <el-row :gutter="5">
+            <el-col :span="10">
+              <el-input v-model="pageData.parameterList[index].name" size="small" placeholder="请输入参数名"
+                        maxlength="20" show-word-limit></el-input>
+            </el-col>
+            <el-col :span="10">
+              <el-input v-model="pageData.parameterList[index].value" size="small" placeholder="请输入参数值"
+                        maxlength="20" show-word-limit>
+              </el-input>
+            </el-col>
+            <el-col :span="3">
+              <el-button @click="deleteParam(index)" size="small">删除</el-button>
+              <el-tooltip class="item" effect="dark" :content="'$$${'+pageData.parameterList[index].name+'}'" placement="top-start">
+                <i class="el-icon-info"></i>
+              </el-tooltip>
+            </el-col>
+          </el-row>
         </div>
-        <div v-if="pageControl.isNewParam">
-          <el-input v-if="pageControl.isNewParam" v-model="pageControl.paramName" size="small" placeholder="请输入新的参数名"
-                    maxlength="20" show-word-limit>
-            <template #append>
-              <el-button @click="newParam()" type="primary" size="small">确认</el-button>
-              <el-button @click="pageControl.isNewParam=false" size="small">取消</el-button>
-            </template>
-          </el-input>
-        </div>
-        <div v-else>
-          <el-button @click="pageControl.isNewParam=true" type="primary" size="mini" icon="el-icon-plus" plain>新增参数</el-button>
+        <div>
+          <el-button @click="newParam()" type="primary" size="mini" icon="el-icon-plus" plain>新增参数</el-button>
         </div>
       </el-form-item>
       <!--模板-->
@@ -84,17 +73,8 @@
             </div>
           </div>
           <!--增加sql控件-->
-          <div v-if="pageControl.isNewSQL">
-            <el-input v-model="pageControl.sql" size="small" placeholder="请输入新的单行SQL模板"
-                      maxlength="200" show-word-limit>
-              <template #append>
-                <el-button @click="newSQL()" type="primary" size="small">确认</el-button>
-                <el-button @click="pageControl.isNewSQL=false" size="small">取消</el-button>
-              </template>
-            </el-input>
-          </div>
-          <div v-else>
-            <el-button @click="pageControl.isNewSQL=true" type="primary" size="mini" icon="el-icon-plus" plain>新增SQL</el-button>
+          <div>
+            <el-button @click="newSQL()" type="primary" size="mini" icon="el-icon-plus" plain>新增SQL</el-button>
           </div>
         </el-form-item>
         <el-form-item label="数据源">
@@ -162,17 +142,8 @@
               </el-row>
             </div>
           </div>
-          <div v-if="pageControl.isNewHeader">
-            <el-input v-if="pageControl.isNewHeader" v-model="pageControl.httpHeader" size="small" placeholder="请输入新的参数名"
-                      maxlength="20" show-word-limit>
-              <template #append>
-                <el-button @click="newHeader()" type="primary" size="small">确认</el-button>
-                <el-button @click="pageControl.isNewHeader=false" size="small">取消</el-button>
-              </template>
-            </el-input>
-          </div>
-          <div v-else>
-            <el-button @click="pageControl.isNewHeader=true" type="primary" size="mini" icon="el-icon-plus" plain>新增Header</el-button>
+          <div>
+            <el-button @click="newHeader()" type="primary" size="mini" icon="el-icon-plus" plain>新增Header</el-button>
           </div>
         </el-form-item>
         <el-form-item label="Body">
@@ -191,7 +162,10 @@
         <el-form-item label="方法名">
           <el-input v-model="pageData.rpc.methodName" placeholder="请输入方法名" maxlength="50" size="small" show-word-limit></el-input>
         </el-form-item>
-        <el-form-item label="Rpc入参">
+        <el-form-item label="入参类型">
+          <el-input v-model="pageData.rpc.parameterType" placeholder="请输入参数类型(class name)" maxlength="100" size="small" show-word-limit></el-input>
+        </el-form-item>
+        <el-form-item label="入参值">
           <!--Rpc入参显示，无Rpc入参提示，有显示列表-->
           <div v-if="pageData.rpc.parameterList===null || pageData.rpc.parameterList.length===0">
             暂无入参，可点+添加
@@ -199,12 +173,15 @@
           <div v-else>
             <div v-for="(item, index) in pageData.rpc.parameterList" :key="index">
               <el-row :gutter="5">
-                <el-col :span="16">
-                  <el-input v-model="pageData.rpc.parameterList[index].value" :autosize="{ minRows: 1, maxRows: 5}" placeholder="请输入rpc入参(json格式)" type="textarea"
-                            maxlength="500" show-word-limit></el-input>
+                <el-col :span="5">
+                  <el-input v-model="pageData.rpc.parameterList[index].comment" placeholder="请输入rpc参数类型(class name)" maxlength="100" size="small" show-word-limit></el-input>
                 </el-col>
                 <el-col :span="5">
-                  <el-input v-model="pageData.rpc.parameterList[index].comment" placeholder="请输入rpc参数类型(class name)" maxlength="200" size="small" show-word-limit></el-input>
+                  <el-input v-model="pageData.rpc.parameterList[index].name" placeholder="请输入rpc参数名" maxlength="50" size="small" show-word-limit></el-input>
+                </el-col>
+                <el-col :span="11">
+                  <el-input v-model="pageData.rpc.parameterList[index].value" placeholder="请输入rpc入参" size="small"
+                            maxlength="100" show-word-limit></el-input>
                 </el-col>
                 <el-col :span="2">
                   <el-button @click="deleteRpcParam(index)" size="small">删除</el-button>
@@ -213,17 +190,8 @@
             </div>
           </div>
           <!--新增rpc入参-->
-          <div v-if="pageControl.isNewRpcParam">
-            <el-input v-model="pageControl.rpcType" size="small" placeholder="请输入rpc参数类型(class name)"
-                      maxlength="200" show-word-limit>
-              <template #append>
-                <el-button @click="newRpcParam()" type="primary" size="small">确认</el-button>
-                <el-button @click="pageControl.isNewRpcParam=false" size="small">取消</el-button>
-              </template>
-            </el-input>
-          </div>
-          <div v-else>
-            <el-button @click="pageControl.isNewRpcParam=true" type="primary" size="mini" icon="el-icon-plus" plain>新增rpc入参</el-button>
+          <div>
+            <el-button @click="newRpcParam()" type="primary" size="mini" icon="el-icon-plus" plain>新增rpc入参</el-button>
           </div>
         </el-form-item>
       </div>
@@ -295,7 +263,9 @@ export default {
           url: '',
           interfaceName: '',
           methodName: '',
+          parameterType: '',
           parameterList: [{
+            name: '',
             value: '',
             comment: ''
           }]
@@ -303,15 +273,10 @@ export default {
       },
       pageControl: {
         isNewParam: false,
-        isNewSQL: false,
-        isNewHeader: false,
-        isNewRpcParam: false,
         isContactDB: false,
         isEdit: false,
         paramType: 'String',
         paramName: '',
-        sql: '',
-        httpHeader: '',
         rpcParam: '',
         rpcType: ''
       }
@@ -331,9 +296,9 @@ export default {
   methods: {
     newParam () {
       if (this.pageData.parameterList === null) {
-        this.pageData.parameterList = [{name: this.pageControl.paramName, value: null}]
+        this.pageData.parameterList = [{name: '', value: ''}]
       } else {
-        this.pageData.parameterList.push({name: this.pageControl.paramName, value: ''})
+        this.pageData.parameterList.push({name: '', value: ''})
       }
       this.pageControl.paramName = ''
       this.pageControl.isNewParam = false
@@ -343,24 +308,20 @@ export default {
     },
     newSQL () {
       if (this.pageData.jdbc.sqlList === null) {
-        this.pageData.jdbc.sqlList = [{type: 'UNKNOWN', sql: this.pageControl.sql}]
+        this.pageData.jdbc.sqlList = [{type: 'UNKNOWN', sql: ''}]
       } else {
-        this.pageData.jdbc.sqlList.push({type: 'UNKNOWN', sql: this.pageControl.sql})
+        this.pageData.jdbc.sqlList.push({type: 'UNKNOWN', sql: ''})
       }
-      this.pageControl.sql = ''
-      this.pageControl.isNewSQL = false
     },
     deleteSQL (index) {
       this.pageData.jdbc.sqlList.splice(index, 1)
     },
     newHeader () {
       if (this.pageData.httpRequest.httpHeaderList === null) {
-        this.pageData.httpRequest.httpHeaderList = [{name: this.pageControl.httpHeader, value: ''}]
+        this.pageData.httpRequest.httpHeaderList = [{name: '', value: ''}]
       } else {
-        this.pageData.httpRequest.httpHeaderList.push({name: this.pageControl.httpHeader, value: ''})
+        this.pageData.httpRequest.httpHeaderList.push({name: '', value: ''})
       }
-      this.pageControl.httpHeader = ''
-      this.pageControl.isNewHeader = false
     },
     deleteHeader (index) {
       this.pageData.httpRequest.httpHeaderList.splice(index, 1)
@@ -368,12 +329,10 @@ export default {
     },
     newRpcParam () {
       if (this.pageData.rpc.parameterList === null) {
-        this.pageData.rpc.parameterList = [{value: '', comment: this.pageControl.rpcType}]
+        this.pageData.rpc.parameterList = [{name: '', value: '', comment: ''}]
       } else {
-        this.pageData.rpc.parameterList.push({value: '', comment: this.pageControl.rpcType})
+        this.pageData.rpc.parameterList.push({name: '', value: '', comment: ''})
       }
-      this.pageControl.rpcType = ''
-      this.pageControl.isNewRpcParam = false
     },
     deleteRpcParam (index) {
       this.pageData.rpc.parameterList.splice(index, 1)

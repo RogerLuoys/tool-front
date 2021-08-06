@@ -5,7 +5,7 @@ import config from '@/views/config/index'
 import commonFactory from '@/views/common-factory/index'
 import commonFactoryDetail from '@/views/common-factory/detail'
 import customFactory from '@/views/custom-factory/index'
-import device from '@/views/device/index'
+import resource from '@/views/resource/index'
 import automation from '@/views/automation/index'
 
 Vue.use(Router)
@@ -38,9 +38,9 @@ export default new Router({
       component: customFactory
     },
     {
-      path: '/device',
-      name: 'device',
-      component: device
+      path: '/resource',
+      name: 'resource',
+      component: resource
     },
     {
       path: '/automation',

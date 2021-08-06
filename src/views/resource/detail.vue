@@ -3,17 +3,18 @@
     <!--基本信息-->
     <el-form :model="pageData" label-width="90px">
       <el-form-item label="标题">
-        <el-input v-model="pageData.title" placeholder="请输入标题" size="small" maxlength="30" show-word-limit></el-input>
+        <el-input v-model="pageData.name" placeholder="请输入标题" size="small" maxlength="30" show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="说明">
         <el-input v-model="pageData.description" placeholder="请描述功能和实现方法" type="textarea" maxlength="200"
                   show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="类型">
-        <el-radio-group v-model="pageData.type" :disabled="deviceId!==0" size="small">
+        <el-radio-group v-model="pageData.type" :disabled="resourceId!==0" size="small">
           <el-radio :label="1">数据库</el-radio>
-          <el-radio :label="2">手机</el-radio>
-          <el-radio :label="3">容器</el-radio>
+          <el-radio :label="2">设备</el-radio>
+          <el-radio :label="3">测试环境</el-radio>
+          <el-radio :label="4">从节点</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="权限">
@@ -28,14 +29,14 @@
       <div v-if="pageData.type===1">
         <el-form-item label="驱动">
           <el-input v-model="pageData.dataSource.driver" size="small" placeholder="请输入驱动"
-                    maxlength="20" show-word-limit></el-input>
+                    maxlength="50" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="URL">
           <el-input v-model="pageData.dataSource.url" size="small" placeholder="请输入URL"
-                    maxlength="100" show-word-limit></el-input>
+                    maxlength="200" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="用户名">
-          <el-input v-model="pageData.dataSource.userName" size="small" placeholder="请输入用户名"
+          <el-input v-model="pageData.dataSource.username" size="small" placeholder="请输入用户名"
                     maxlength="50" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="密码">
@@ -81,7 +82,7 @@
     </el-form>
     <div style="text-align: center">
       <el-button @click="save()" type="primary" size="small">保存</el-button>
-      <el-button v-if="deviceId !== 0" @click="remove()" size="small">删除</el-button>
+      <el-button v-if="resourceId !== 0" @click="remove()" size="small">删除</el-button>
     </div>
   </div>
 </template>
@@ -93,16 +94,20 @@ import {createAPI, updateAPI, removeAPI, queryDetailAPI} from '@/api/resource'
 export default {
   // components: {SelectDevice},
   props: {
-    deviceId: {
+    resourceId: {
       type: Number,
       default: 0
+    },
+    isEdit: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
     return {
       pageData: {
-        deviceId: 0,
-        title: '',
+        resourceId: 0,
+        name: '',
         description: '',
         owner: null,
         permission: 1,
@@ -110,7 +115,7 @@ export default {
         dataSource: {
           driver: '',
           url: '',
-          userName: '',
+          username: '',
           password: ''
         },
         mobilePhone: {
@@ -138,21 +143,16 @@ export default {
     }
   },
   created: function () {
-    if (this.deviceId !== 0) {
-      this.queryDetail()
-    }
-  },
-  mounted: function () {
-    if (this.deviceId !== 0) {
+    if (this.isEdit) {
       this.queryDetail()
     }
   },
   methods: {
     save () {
-      if (this.deviceId === 0) {
-        this.create()
-      } else {
+      if (this.isEdit) {
         this.update()
+      } else {
+        this.create()
       }
     },
     create () {
@@ -170,7 +170,7 @@ export default {
       })
     },
     remove () {
-      removeAPI({deviceId: this.pageData.deviceId}).then(response => {
+      removeAPI({resourceId: this.pageData.resourceId}).then(response => {
         if (response.data.success === true) {
           this.$message.success('删除成功')
         }
@@ -178,7 +178,7 @@ export default {
     },
     queryDetail () {
       queryDetailAPI({
-        deviceId: this.deviceId
+        resourceId: this.resourceId
       }).then(response => {
         if (response.data.success === true) {
           this.pageData = response.data.data
