@@ -6,7 +6,7 @@
       <el-option key="1" label="数据库" :value="1"></el-option>
       <el-option key="2" label="设备" :value="2"></el-option>
       <el-option key="3" label="测试环境" :value="3"></el-option>
-      <el-option key="3" label="从节点" :value="4"></el-option>
+      <el-option key="4" label="从节点" :value="4"></el-option>
     </el-select>
     <el-input placeholder="请输入名称" clearable size="mini" v-model="pageControl.search.name"
               style="width:200px; float:left"></el-input>
@@ -39,14 +39,10 @@
     </el-pagination>
     <!--弹窗-->
     <el-dialog :visible.sync="pageControl.isNewResource" title="新增资源">
-      <el-card>
-        <tl-detail></tl-detail>
-      </el-card>
+      <tl-detail></tl-detail>
     </el-dialog>
-    <el-dialog :visible.sync="pageControl.isEditResource" title="编辑资源">
-      <el-card>
-        <tl-detail :resource-id="pageControl.selectedResourceId" :is-edit="true"></tl-detail>
-      </el-card>
+    <el-dialog v-if="pageControl.isEditResource" :visible.sync="pageControl.isEditResource" title="编辑资源">
+      <tl-detail :resource-id="pageControl.selectedResourceId" :is-edit="true"></tl-detail>
     </el-dialog>
   </div>
 </template>

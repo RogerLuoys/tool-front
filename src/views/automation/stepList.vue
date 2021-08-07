@@ -6,6 +6,7 @@
       <el-option key="1" label="SQL" :value="1"></el-option>
       <el-option key="2" label="HTTP" :value="2"></el-option>
       <el-option key="3" label="RPC" :value="3"></el-option>
+      <el-option key="4" label="UI" :value="4"></el-option>
     </el-select>
     <el-input placeholder="请输入名称" clearable size="mini" v-model="pageControl.search.name"
               style="width:200px; float:left"></el-input>
@@ -19,9 +20,11 @@
           <div>{{ getType(scope.row.type) }}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="title" label="标题" width="180">
+      <el-table-column prop="name" label="标题" width="180">
       </el-table-column>
       <el-table-column prop="description" label="说明" width="180">
+      </el-table-column>
+      <el-table-column prop="expectResult" label="预期结果" width="180">
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
@@ -35,7 +38,7 @@
                    :total="pageData.total" style="float: right">
     </el-pagination>
     <!--弹出框-->
-    <el-dialog :visible.sync="pageControl.isNewStep" title="新增步骤">
+    <el-dialog v-if="pageControl.isNewStep" :visible.sync="pageControl.isNewStep" width="65%" title="新增公共步骤">
       <tl-detail></tl-detail>
     </el-dialog>
     <el-dialog :visible.sync="pageControl.isEditStep" title="编辑步骤">
@@ -52,7 +55,7 @@
 <script>
 import tlDetail from './stepDetail'
 import tlUse from './stepUse'
-import {queryAPI} from '@/api/commonFactory'
+import {queryAPI} from '@/api/autoStep'
 
 export default {
   components: {tlDetail, tlUse},
@@ -61,13 +64,14 @@ export default {
     return {
       pageData: {
         list: [{
-          toolId: 12345,
-          title: 'title',
+          stepId: 12345,
+          name: 'title',
           description: 'desc',
+          type: 1,
+          status: 1,
+          expectResult: '',
           ownerId: 'tester',
-          ownerName: '',
-          permission: 2,
-          type: 1
+          ownerName: ''
         }],
         total: 1
       },
