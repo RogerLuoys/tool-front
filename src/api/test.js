@@ -3,7 +3,7 @@ import apiSlave from './axiosSlave'
 
 export function queryDetailAPI (params) {
   return api({
-    url: 'device/queryDetail',
+    url: 'resource/queryDetail',
     method: 'get',
     params: params
   })
@@ -11,7 +11,7 @@ export function queryDetailAPI (params) {
 
 export function queryDetailAPIS (params, baseURL) {
   return apiSlave({
-    url: 'device/queryDetail',
+    url: 'resource/queryDetail',
     method: 'get',
     params: params,
     baseURL: baseURL

@@ -1,11 +1,11 @@
 const state = () => ({
-  url: ''
+  slaveHost: 'http://192.200.208.16:9011/'
 })
 
 // mutations
 const mutations = {
-  setSlaveUrl (state, url) {
-    state.url = url
+  setSlaveHost (state, url) {
+    state.slaveHost = url
   }
 }
 

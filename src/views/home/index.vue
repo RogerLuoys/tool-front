@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-input v-model="$store.state.url"></el-input>
+    <el-input v-model="$store.state.slaveHost"></el-input>
     <el-button @click="mainNode">调主服务器</el-button>
     <el-button @click="slaveNode">调从服务器</el-button>
   </div>
@@ -18,14 +18,14 @@ export default {
   },
   methods: {
     mainNode () {
-      queryDetailAPI({id: '111'}).then()
+      queryDetailAPI({resourceId: '1'}).then()
       // this.$store.commit('setURL', 'http://118.24.117.181:9991/')
       // console.info(this.$store.state.commonFactory.testURL)
     },
     slaveNode () {
-      queryDetailAPIS({id: '111'}, this.$store.state.url).then()
+      console.info(this.$store.state.slaveHost)
+      queryDetailAPIS({resourceId: '1'}, this.$store.state.slaveHost).then()
       // this.$store.commit('setURL', 'http://118.24.117.181:9991/')
-      // console.info(this.$store.state.commonFactory.testURL)
     }
   }
 }
