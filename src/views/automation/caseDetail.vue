@@ -3,22 +3,25 @@
     <!--基本信息-->
     <el-form :model="pageData" label-width="90px">
       <el-form-item label="标题">
-        <el-input v-model="pageData.title" placeholder="请输入标题" size="small" maxlength="30" show-word-limit></el-input>
+        <el-input v-model="pageData.name" placeholder="请输入标题" size="small" maxlength="30" show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="说明">
         <el-input v-model="pageData.description" placeholder="请描述功能和实现方法" type="textarea" maxlength="200"
                   show-word-limit></el-input>
       </el-form-item>
-<!--      <el-form-item label="类型">-->
-<!--        <el-radio-group v-model="pageData.type" :disabled="pageControl.isEdit" size="small">-->
-<!--          <el-radio :label="1">接口自动化</el-radio>-->
-<!--          <el-radio :label="2">UI自动化</el-radio>-->
-<!--        </el-radio-group>-->
-<!--      </el-form-item>-->
+      <el-form-item label="类型">
+        <el-radio-group v-model="pageData.type" :disabled="isEdit" size="small">
+          <el-radio :label="1">接口自动化</el-radio>
+          <el-radio :label="2">UI自动化</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="最大时间">
+        <el-input-number v-model="pageData.maxTime" :min="1" :max="60" label="用例最大执行时间(分)"></el-input-number>
+      </el-form-item>
       <!--前置步骤-->
-      <el-divider content-position="right">数据准备</el-divider>
-      <el-form-item label="前置步骤">
-        <div v-if="pageData.preStepList === null || pageData.preStepList.length===0">暂无前置步骤，可点+添加</div>
+      <el-divider content-position="right">前置步骤</el-divider>
+      <el-form-item label="步骤列表">
+        <div v-if="pageData.preStepList === null || pageData.preStepList.length===0">暂无步骤，可点+添加</div>
         <div v-else>
           <div v-for="(item, index) in pageData.preStepList" :key="index">
             <el-row :gutter="5">
@@ -27,7 +30,7 @@
                           maxlength="20" show-word-limit></el-input>
               </el-col>
               <el-col :span="10">
-                <el-input v-model="pageData.preStepList[index].value" size="small" show-word-limit disabled>
+                <el-input v-model="pageData.preStepList[index].stepId" size="small" show-word-limit disabled>
                 </el-input>
               </el-col>
               <el-col :span="3">
@@ -39,7 +42,7 @@
       </el-form-item>
       <el-form-item>
         <div v-if="pageControl.isNewPreStep">
-          <el-input v-model="pageControl.preStepValue" size="small" placeholder="请输入要关联的步骤编号"
+          <el-input v-model="pageControl.preStepId" size="small" placeholder="请输入要关联的步骤编号"
                     maxlength="20" show-word-limit>
             <template #append>
               <el-button @click="newPreStep()" type="primary" size="small">确认</el-button>
@@ -52,10 +55,10 @@
           <el-button @click="pageControl.isNewStep=true" size="mini" icon="el-icon-plus" disabled>快速新增</el-button>
         </div>
       </el-form-item>
-      <!--调用步骤-->
-      <el-divider content-position="right">接口调用</el-divider>
-      <el-form-item label="调用步骤">
-        <div v-if="pageData.mainStepList === null || pageData.mainStepList.length===0">暂无前置步骤，可点+添加</div>
+      <!--用例执行-->
+      <el-divider content-position="right">主要步骤</el-divider>
+      <el-form-item label="步骤列表">
+        <div v-if="pageData.mainStepList === null || pageData.mainStepList.length===0">暂无步骤，可点+添加</div>
         <div v-else>
           <div v-for="(item, index) in pageData.mainStepList" :key="index">
             <el-row :gutter="5">
@@ -64,7 +67,7 @@
                           maxlength="20" show-word-limit></el-input>
               </el-col>
               <el-col :span="10">
-                <el-input v-model="pageData.mainStepList[index].value" size="small" show-word-limit disabled>
+                <el-input v-model="pageData.mainStepList[index].stepId" size="small" show-word-limit disabled>
                 </el-input>
               </el-col>
               <el-col :span="3">
@@ -76,7 +79,7 @@
       </el-form-item>
       <el-form-item>
         <div v-if="pageControl.isNewMainStep">
-          <el-input v-model="pageControl.mainStepValue" size="small" placeholder="请输入要关联的步骤编号"
+          <el-input v-model="pageControl.mainStepId" size="small" placeholder="请输入要关联的步骤编号"
                     maxlength="20" show-word-limit>
             <template #append>
               <el-button @click="newMainStep()" type="primary" size="small">确认</el-button>
@@ -90,9 +93,9 @@
         </div>
       </el-form-item>
       <!--收尾步骤-->
-      <el-divider content-position="right">数据还原</el-divider>
-      <el-form-item label="收尾步骤">
-        <div v-if="pageData.afterStepList === null || pageData.afterStepList.length===0">暂无前置步骤，可点+添加</div>
+      <el-divider content-position="right">收尾步骤</el-divider>
+      <el-form-item label="步骤列表">
+        <div v-if="pageData.afterStepList === null || pageData.afterStepList.length===0">暂无步骤，可点+添加</div>
         <div v-else>
           <div v-for="(item, index) in pageData.afterStepList" :key="index">
             <el-row :gutter="5">
@@ -101,7 +104,7 @@
                           maxlength="20" show-word-limit></el-input>
               </el-col>
               <el-col :span="10">
-                <el-input v-model="pageData.afterStepList[index].value" size="small" show-word-limit disabled>
+                <el-input v-model="pageData.afterStepList[index].stepId" size="small" show-word-limit disabled>
                 </el-input>
               </el-col>
               <el-col :span="3">
@@ -113,7 +116,7 @@
       </el-form-item>
       <el-form-item>
         <div v-if="pageControl.isNewAfterStep">
-          <el-input v-model="pageControl.afterStepValue" size="small" placeholder="请输入要关联的步骤编号"
+          <el-input v-model="pageControl.afterStepId" size="small" placeholder="请输入要关联的步骤编号"
                     maxlength="20" show-word-limit>
             <template #append>
               <el-button @click="newAfterStep()" type="primary" size="small">确认</el-button>
@@ -128,45 +131,51 @@
       </el-form-item>
     </el-form>
     <div style="text-align: center">
-      <el-button type="primary" size="small">试用</el-button>
+      <el-button @click="use()" type="primary" size="small">试用</el-button>
       <el-button @click="save()" type="primary" size="small">保存</el-button>
-      <el-button v-if="pageControl.isEdit" @click="remove()" size="small">删除</el-button>
+      <el-button v-if="isEdit" @click="remove()" size="small">删除</el-button>
     </div>
   </div>
 </template>
 
 <script>
-import {createAPI, updateAPI, removeAPI, queryDetailAPI} from '@/api/autoCase'
+import {createAPI, updateAPI, removeAPI, queryDetailAPI, useAPI} from '@/api/autoCase'
 // import tlSelectDataSource from './selectDataSource'
 
 export default {
   // components: {tlSelectDataSource},
   props: {
-    testCaseId: {
+    caseId: {
       type: Number,
       default: 0
+    },
+    isEdit: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
     return {
       pageData: {
-        testCaseId: 0,
-        title: '',
+        caseId: 0,
+        name: 'name',
         description: '',
+        maxTime: 1,
         ownerId: '123',
         ownerName: 'tester',
+        type: 1,
         status: 1,
         preStepList: [{
           name: 'name',
-          value: 'value'
+          stepId: '1'
         }],
         mainStepList: [{
           name: 'name',
-          value: 'value'
+          stepId: '1'
         }],
         afterStepList: [{
           name: 'name',
-          value: 'value'
+          stepId: '1'
         }]
       },
       pageControl: {
@@ -174,33 +183,32 @@ export default {
         isNewPreStep: false,
         isNewMainStep: false,
         isNewAfterStep: false,
-        preStepValue: '',
-        mainStepValue: '',
-        afterStepValue: ''
+        preStepId: '',
+        mainStepId: '',
+        afterStepId: ''
       }
     }
   },
-  watch: {
-    testSuiteId: function (newVal, oldVal) {
-      if (this.testCaseId !== 0) {
-        this.queryDetail()
-      }
-    }
-  },
+  // watch: {
+  //   testSuiteId: function (newVal, oldVal) {
+  //     if (this.caseId !== 0) {
+  //       this.queryDetail()
+  //     }
+  //   }
+  // },
   created: function () {
-    if (this.testCaseId !== 0) {
-      this.pageControl.isEdit = true
+    if (this.isEdit) {
       this.queryDetail()
     }
   },
   methods: {
     newPreStep () {
       if (this.pageData.preStepList === null) {
-        this.pageData.preStepList = [{name: '', value: this.pageControl.preStepValue}]
+        this.pageData.preStepList = [{name: '', stepId: this.pageControl.preStepId}]
       } else {
-        this.pageData.preStepList.push({name: '', value: this.pageControl.preStepValue})
+        this.pageData.preStepList.push({name: '', stepId: this.pageControl.preStepId})
       }
-      this.pageControl.preStepValue = ''
+      this.pageControl.preStepId = ''
       this.pageControl.isNewPreStep = false
     },
     deletePreStep (index) {
@@ -208,11 +216,11 @@ export default {
     },
     newMainStep () {
       if (this.pageData.mainStepList === null) {
-        this.pageData.mainStepList = [{name: '', value: this.pageControl.mainStepValue}]
+        this.pageData.mainStepList = [{name: '', stepId: this.pageControl.mainStepId}]
       } else {
-        this.pageData.mainStepList.push({name: '', value: this.pageControl.mainStepValue})
+        this.pageData.mainStepList.push({name: '', stepId: this.pageControl.mainStepId})
       }
-      this.pageControl.mainStepValue = ''
+      this.pageControl.mainStepId = ''
       this.pageControl.isNewMainStep = false
     },
     deleteMainStep (index) {
@@ -220,18 +228,18 @@ export default {
     },
     newAfterStep () {
       if (this.pageData.afterStepList === null) {
-        this.pageData.afterStepList = [{name: '', value: this.pageControl.afterStepValue}]
+        this.pageData.afterStepList = [{name: '', stepId: this.pageControl.afterStepId}]
       } else {
-        this.pageData.afterStepList.push({name: '', value: this.pageControl.afterStepValue})
+        this.pageData.afterStepList.push({name: '', stepId: this.pageControl.afterStepId})
       }
-      this.pageControl.afterStepValue = ''
+      this.pageControl.afterStepId = ''
       this.pageControl.isNewAfterStep = false
     },
     deleteAfterStep (index) {
       this.pageData.afterStepList.splice(index, 1)
     },
     save () {
-      if (this.pageControl.isEdit) {
+      if (this.isEdit) {
         this.update()
       } else {
         this.create()
@@ -260,10 +268,18 @@ export default {
     },
     queryDetail () {
       queryDetailAPI({
-        testCaseId: this.testCaseId
+        caseId: this.caseId
       }).then(response => {
         if (response.data.success === true) {
           this.pageData = response.data.data
+        }
+      })
+    },
+    use () {
+      useAPI(this.pageData).then(response => {
+        if (response.data.success === true) {
+          this.pageControl.respondData = response.data.data
+          this.$message.success('使用成功')
         }
       })
     }

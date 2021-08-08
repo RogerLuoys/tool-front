@@ -15,6 +15,8 @@
     <el-button type="primary" @click="pageControl.isNewStep=true" size="mini" style="float:right">新增</el-button>
     <!--列表-->
     <el-table border :data="pageData.list" size="mini" style="width: 100%">
+      <el-table-column prop="stepId" label="编号" width="60">
+      </el-table-column>
       <el-table-column prop="type" label="类型" width="180">
         <template #default="scope">
           <div>{{ getType(scope.row.type) }}</div>
@@ -28,8 +30,8 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button @click="use(scope.row.toolId)" type="text" size="small">试用</el-button>
-          <el-button @click="pageControl.isEditStep=true" type="text" size="small">编辑</el-button>
+          <el-button @click="use(scope.row.stepId)" type="text" size="small">试用</el-button>
+          <el-button @click="edit(scope.row.stepId)" type="text" size="small">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -41,13 +43,11 @@
     <el-dialog v-if="pageControl.isNewStep" :visible.sync="pageControl.isNewStep" width="65%" title="新增公共步骤">
       <tl-detail></tl-detail>
     </el-dialog>
-    <el-dialog :visible.sync="pageControl.isEditStep" title="编辑步骤">
-      <tl-detail></tl-detail>
+    <el-dialog v-if="pageControl.isEditStep" :visible.sync="pageControl.isEditStep" width="65%" title="编辑步骤">
+      <tl-detail :step-id="pageControl.selectedStepId" :is-edit="true"></tl-detail>
     </el-dialog>
-    <el-dialog :visible.sync="pageControl.isUseStep" title="使用数据工厂">
-      <el-card>
-        <tl-use :tool-id="pageControl.selectedToolId"></tl-use>
-      </el-card>
+    <el-dialog v-if="pageControl.isUseStep" :visible.sync="pageControl.isUseStep" title="使用数据工厂">
+        <tl-use :step-id="pageControl.selectedStepId"></tl-use>
     </el-dialog>
   </div>
 </template>
@@ -82,7 +82,7 @@ export default {
         isNewStep: false,
         isEditStep: false,
         isUseStep: false,
-        selectedToolId: '0',
+        selectedStepId: '0',
         search: {
           pageIndex: 1,
           isTestStep: true,
@@ -112,13 +112,18 @@ export default {
         case 3:
           return 'RPC'
         case 4:
+          return 'UI'
+        default:
           return 'UNKNOWN'
       }
-      return type
     },
-    use (toolId) {
-      this.pageControl.selectedToolId = toolId
+    use (stepId) {
+      this.pageControl.selectedStepId = stepId
       this.pageControl.isUseStep = true
+    },
+    edit (stepId) {
+      this.pageControl.selectedStepId = stepId
+      this.pageControl.isEditStep = true
     },
     queryList () {
       queryAPI(this.pageControl.search).then(response => {

@@ -39,3 +39,11 @@ export function queryAPI (params) {
     params: params
   })
 }
+
+export function useAPI (data) {
+  return api({
+    url: 'autoStep/use',
+    method: 'post',
+    data: data
+  })
+}

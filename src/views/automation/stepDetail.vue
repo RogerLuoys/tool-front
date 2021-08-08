@@ -10,7 +10,7 @@
                   show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="类型">
-        <el-radio-group v-model="pageData.type" :disabled="pageControl.isEdit" size="small">
+        <el-radio-group v-model="pageData.type" :disabled="isEdit" size="small">
           <el-radio :label="1">SQL</el-radio>
           <el-radio :label="2">HTTP</el-radio>
           <el-radio :label="3">RPC</el-radio>
@@ -202,7 +202,7 @@
     <div style="text-align: center">
       <el-button type="primary" size="small">试用</el-button>
       <el-button @click="save()" type="primary" size="small">保存</el-button>
-      <el-button v-if="pageControl.isEdit" @click="remove()" size="small">删除</el-button>
+      <el-button v-if="isEdit" @click="remove()" size="small">删除</el-button>
     </div>
   </div>
 </template>
@@ -214,9 +214,13 @@ import {createAPI, updateAPI, removeAPI, queryDetailAPI} from '@/api/autoStep'
 export default {
   // components: {tlSelectDataSource},
   props: {
-    toolId: {
+    stepId: {
       type: String,
       default: '0'
+    },
+    isEdit: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -279,8 +283,7 @@ export default {
   },
   created: function () {
     console.info('created')
-    if (this.toolId !== '0') {
-      this.pageControl.isEdit = true
+    if (this.isEdit) {
       this.queryDetail()
     }
   },
@@ -322,7 +325,7 @@ export default {
       this.pageData.rpc.parameterList.splice(index, 1)
     },
     save () {
-      if (this.pageControl.isEdit) {
+      if (this.isEdit) {
         this.update()
       } else {
         this.create()
@@ -360,7 +363,7 @@ export default {
       })
     },
     remove () {
-      removeAPI({toolId: this.pageData.toolId}).then(response => {
+      removeAPI({stepId: this.pageData.stepId}).then(response => {
         if (response.data.success === true) {
           this.$message.success('删除步骤成功')
         }
@@ -368,7 +371,7 @@ export default {
     },
     queryDetail () {
       queryDetailAPI({
-        toolId: this.$route.params.id
+        stepId: this.stepId
       }).then(response => {
         if (response.data.success === true) {
           this.pageData = response.data.data

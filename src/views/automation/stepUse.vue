@@ -2,7 +2,7 @@
   <div>
     <el-form :model="pageData" label-width="2cm">
       <el-form-item label="标题">
-        <span>{{pageData.title}}</span>
+        <span>{{pageData.name}}</span>
       </el-form-item>
       <el-form-item label="说明">
         <span>{{pageData.description}}</span>
@@ -31,7 +31,7 @@
         <div>{{pageControl.respondData}}</div>
       </el-form-item>
     </el-form>
-    <el-input v-model="toolId"></el-input>
+    <el-input v-model="stepId"></el-input>
     <div style="text-align: center">
       <el-button @click="use()" type="primary" size="small">确认使用</el-button>
     </div>
@@ -39,18 +39,13 @@
 </template>
 
 <script>
-import {useAPI, queryDetailAPI} from '@/api/commonFactory'
+import {useAPI, queryDetailAPI} from '@/api/autoStep'
 
 export default {
   props: {
-    toolId: {
+    stepId: {
       type: String,
-      default: 'toolId'
-    }
-  },
-  watch: {
-    toolId: function (newVal, oldVal) {
-      this.queryDetail()
+      default: '0'
     }
   },
   created: function () {
@@ -59,8 +54,8 @@ export default {
   data () {
     return {
       pageData: {
-        toolId: '0',
-        title: '123',
+        stepId: '0',
+        name: '123',
         description: '',
         owner: 'tester',
         permission: 2,
@@ -111,7 +106,7 @@ export default {
     },
     queryDetail () {
       queryDetailAPI({
-        'toolId': this.toolId
+        'stepId': this.stepId
       }).then(response => {
         if (response.data.success === true) {
           this.pageData = response.data.data

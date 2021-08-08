@@ -39,3 +39,11 @@ export function queryAPI (params) {
     params: params
   })
 }
+
+export function useAPI (data) {
+  return api({
+    url: 'autoCase/use',
+    method: 'post',
+    data: data
+  })
+}

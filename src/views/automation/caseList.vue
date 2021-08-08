@@ -20,14 +20,14 @@
           <div>{{ getType(scope.row.status) }}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="title" label="标题" width="180">
+      <el-table-column prop="name" label="标题" width="180">
       </el-table-column>
       <el-table-column prop="description" label="说明" width="180">
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button @click="use(scope.row.testCaseId)" type="text" size="small">试用</el-button>
-          <el-button @click="edit(scope.row.testCaseId)" type="text" size="small">编辑</el-button>
+          <el-button @click="use(scope.row.caseId)" type="text" size="small">试用</el-button>
+          <el-button @click="edit(scope.row.caseId)" type="text" size="small">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -36,15 +36,15 @@
                    :total="pageData.total" style="float: right">
     </el-pagination>
     <!--弹出框-->
-    <el-dialog :visible.sync="pageControl.isNewCase" title="新增用例">
+    <el-dialog v-if="pageControl.isNewCase" :visible.sync="pageControl.isNewCase" title="新增用例">
       <tl-detail></tl-detail>
     </el-dialog>
-    <el-dialog :visible.sync="pageControl.isEditCase" title="编辑用例">
-      <tl-detail :test-case-id="pageControl.selectedTestCaseId"></tl-detail>
+    <el-dialog v-if="pageControl.isEditCase" :visible.sync="pageControl.isEditCase" title="编辑用例">
+      <tl-detail :case-id="pageControl.selectedCaseId" :is-edit="true"></tl-detail>
     </el-dialog>
     <el-dialog :visible.sync="pageControl.isUseCase" title="执行用例">
       <el-card>
-        <tl-use :tool-id="pageControl.selectedTestCaseId"></tl-use>
+        <tl-use :tool-id="pageControl.selectedCaseId"></tl-use>
       </el-card>
     </el-dialog>
   </div>
@@ -62,8 +62,8 @@ export default {
     return {
       pageData: {
         list: [{
-          testCaseId: 12345,
-          title: 'title',
+          caseId: 12345,
+          name: 'name',
           description: 'desc',
           ownerId: 'tester',
           ownerName: '',
@@ -78,7 +78,7 @@ export default {
         isNewCase: false,
         isEditCase: false,
         isUseCase: false,
-        selectedTestCaseId: '0',
+        selectedCaseId: '0',
         search: {
           status: null,
           pageIndex: 1,
@@ -111,12 +111,12 @@ export default {
           return '未知'
       }
     },
-    edit (testCaseId) {
+    edit (caseId) {
       this.pageControl.isEditCase = true
-      this.pageControl.selectedTestCaseId = testCaseId
+      this.pageControl.selectedCaseId = caseId
     },
-    use (testCaseId) {
-      this.pageControl.selectedTestCaseId = testCaseId
+    use (caseId) {
+      this.pageControl.selectedCaseId = caseId
       this.pageControl.isUseCase = true
     },
     queryList () {
