@@ -312,7 +312,6 @@ export default {
     },
     deleteHeader (index) {
       this.pageData.httpRequest.httpHeaderList.splice(index, 1)
-      debugger
     },
     newRpcParam () {
       if (this.pageData.rpc.parameterList === null) {
