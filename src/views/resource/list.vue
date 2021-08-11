@@ -68,7 +68,7 @@ export default {
     return {
       pageData: {
         list: [{
-          resourceId: 0,
+          resourceId: null,
           type: 0,
           name: 'title',
           description: 'desc',

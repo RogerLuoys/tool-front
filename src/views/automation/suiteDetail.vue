@@ -101,9 +101,9 @@ import {createAPI, updateAPI, removeAPI, queryDetailAPI} from '@/api/autoSuite'
 export default {
   // components: {tlSelectDataSource},
   props: {
-    testSuiteId: {
-      type: Number,
-      default: 0
+    suiteId: {
+      type: String,
+      default: ''
     },
     isEdit: {
       type: Boolean,
@@ -113,7 +113,7 @@ export default {
   data () {
     return {
       pageData: {
-        testSuiteId: 0,
+        suiteId: 0,
         title: '',
         description: '',
         passed: 0,
@@ -137,7 +137,7 @@ export default {
     }
   },
   watch: {
-    testSuiteId: function (newVal, oldVal) {
+    suiteId: function (newVal, oldVal) {
       if (this.isEdit) {
         this.queryDetail()
       }
@@ -204,7 +204,7 @@ export default {
     },
     queryDetail () {
       queryDetailAPI({
-        testSuiteId: this.testSuiteId
+        suiteId: this.suiteId
       }).then(response => {
         if (response.data.success === true) {
           this.pageData = response.data.data

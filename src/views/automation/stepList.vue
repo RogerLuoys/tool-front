@@ -64,7 +64,7 @@ export default {
     return {
       pageData: {
         list: [{
-          stepId: 12345,
+          stepId: null,
           name: 'title',
           description: 'desc',
           type: 1,

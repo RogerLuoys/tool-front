@@ -216,7 +216,7 @@ export default {
   props: {
     stepId: {
       type: String,
-      default: '0'
+      default: ''
     },
     isEdit: {
       type: Boolean,
@@ -226,7 +226,7 @@ export default {
   data () {
     return {
       pageData: {
-        stepId: 1,
+        stepId: null,
         name: '',
         description: '',
         ownerId: '12',

@@ -95,8 +95,8 @@ export default {
   // components: {SelectDevice},
   props: {
     resourceId: {
-      type: Number,
-      default: 0
+      type: String,
+      default: ''
     },
     isEdit: {
       type: Boolean,
@@ -106,7 +106,7 @@ export default {
   data () {
     return {
       pageData: {
-        resourceId: 0,
+        resourceId: null,
         name: '',
         description: '',
         owner: null,

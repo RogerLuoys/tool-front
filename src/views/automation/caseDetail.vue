@@ -146,8 +146,8 @@ export default {
   // components: {tlSelectDataSource},
   props: {
     caseId: {
-      type: Number,
-      default: 0
+      type: String,
+      default: ''
     },
     isEdit: {
       type: Boolean,
@@ -157,7 +157,7 @@ export default {
   data () {
     return {
       pageData: {
-        caseId: 0,
+        caseId: null,
         name: 'name',
         description: '',
         maxTime: 1,

@@ -62,7 +62,7 @@ export default {
     return {
       pageData: {
         list: [{
-          caseId: 12345,
+          caseId: null,
           name: 'name',
           description: 'desc',
           ownerId: 'tester',
@@ -78,7 +78,7 @@ export default {
         isNewCase: false,
         isEditCase: false,
         isUseCase: false,
-        selectedCaseId: '0',
+        selectedCaseId: null,
         search: {
           status: null,
           pageIndex: 1,

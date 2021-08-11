@@ -18,8 +18,8 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button @click="use(scope.row.testSuiteId)" type="text" size="small">试用</el-button>
-          <el-button @click="edit(scope.row.testSuiteId)" type="text" size="small">编辑</el-button>
+          <el-button @click="use(scope.row.suiteId)" type="text" size="small">试用</el-button>
+          <el-button @click="edit(scope.row.suiteId)" type="text" size="small">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -32,11 +32,11 @@
       <tl-detail></tl-detail>
     </el-dialog>
     <el-dialog :visible.sync="pageControl.isEditSuite" title="编辑测试集">
-      <tl-detail :test-suite-id="pageControl.selectedTestSuiteId" :is-edit="true"></tl-detail>
+      <tl-detail :suite-id="pageControl.selectedSuiteId" :is-edit="true"></tl-detail>
     </el-dialog>
     <el-dialog :visible.sync="pageControl.isUseSuite" title="执行测试">
       <el-card>
-        <tl-use :tool-id="pageControl.selectedTestSuiteId"></tl-use>
+        <tl-use :tool-id="pageControl.selectedSuiteId"></tl-use>
       </el-card>
     </el-dialog>
   </div>
@@ -54,7 +54,7 @@ export default {
     return {
       pageData: {
         list: [{
-          testSuiteId: 12345,
+          suiteId: 12345,
           title: 'title',
           description: 'desc',
           passed: 0,
@@ -66,7 +66,7 @@ export default {
         isNewSuite: false,
         isEditSuite: false,
         isUseSuite: false,
-        selectedTestSuiteId: '0',
+        selectedSuiteId: '0',
         search: {
           pageIndex: 1,
           name: null
@@ -85,12 +85,12 @@ export default {
     // }
   },
   methods: {
-    use (testSuiteId) {
-      this.pageControl.selectedTestSuiteId = testSuiteId
+    use (suiteId) {
+      this.pageControl.selectedSuiteId = suiteId
       this.pageControl.isUseSuite = true
     },
-    edit (testSuiteId) {
-      this.pageControl.selectedTestSuiteId = testSuiteId
+    edit (suiteId) {
+      this.pageControl.selectedSuiteId = suiteId
       this.pageControl.isEditSuite = true
     },
     queryList () {
