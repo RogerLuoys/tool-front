@@ -27,7 +27,7 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button @click="use(scope.row.caseId)" type="text" size="small">试用</el-button>
-          <el-button @click="edit(scope.row.caseId)" type="text" size="small">编辑</el-button>
+          <el-button @click="$router.push(`caseDetail/${scope.row.caseId}`)" type="text" size="small">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -36,10 +36,20 @@
                    :total="pageData.total" style="float: right">
     </el-pagination>
     <!--弹出框-->
-    <el-dialog v-if="pageControl.isNewCase" :visible.sync="pageControl.isNewCase" title="新增用例">
-      <tl-detail></tl-detail>
+    <el-dialog :visible.sync="pageControl.isNewCase" title="新增用例">
+      <el-form :model="pageControl.quickCreate" label-width="90px">
+        <el-form-item label="标题">
+          <el-input v-model="pageControl.quickCreate.name" placeholder="请输入标题" size="small" maxlength="30" show-word-limit></el-input>
+        </el-form-item>
+        <el-form-item label="类型">
+          <el-radio-group v-model="pageControl.quickCreate.type" size="small">
+            <el-radio :label="1">接口自动化</el-radio>
+            <el-radio :label="2">UI自动化</el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
     </el-dialog>
-    <el-dialog v-if="pageControl.isEditCase" :visible.sync="pageControl.isEditCase" title="编辑用例">
+    <el-dialog v-if="pageControl.isEditCase" :visible.sync="pageControl.isEditCase" title="编辑用例" width="60%">
       <tl-detail :case-id="pageControl.selectedCaseId" :is-edit="true"></tl-detail>
     </el-dialog>
     <el-dialog :visible.sync="pageControl.isUseCase" title="执行用例">
@@ -84,6 +94,10 @@ export default {
           pageIndex: 1,
           isOnlyOwner: true,
           name: null
+        },
+        quickCreate: {
+          name: null,
+          type: 1
         }
       }
     }

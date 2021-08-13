@@ -1,6 +1,12 @@
 <template>
   <div>
+    <el-page-header @back="$router.push('/automation')" title="返回列表">
+      <template #content>
+        <span>{{pageData.name}}</span>
+      </template>
+    </el-page-header>
     <!--基本信息-->
+    <el-divider content-position="right">基本信息</el-divider>
     <el-form :model="pageData" label-width="90px">
       <el-form-item label="标题">
         <el-input v-model="pageData.name" placeholder="请输入标题" size="small" maxlength="30" show-word-limit></el-input>
@@ -16,30 +22,43 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="最大时间">
-        <el-input-number v-model="pageData.maxTime" :min="1" :max="60" label="用例最大执行时间(分)"></el-input-number>
+        <el-input-number v-model="pageData.maxTime" :min="1" :max="60" label="用例最大执行时间(分)" size="small"></el-input-number>
       </el-form-item>
       <!--前置步骤-->
       <el-divider content-position="right">前置步骤</el-divider>
-      <el-form-item label="步骤列表">
-        <div v-if="pageData.preStepList === null || pageData.preStepList.length===0">暂无步骤，可点+添加</div>
-        <div v-else>
-          <div v-for="(item, index) in pageData.preStepList" :key="index">
-            <el-row :gutter="5">
-              <el-col :span="10">
-                <el-input v-model="pageData.preStepList[index].name" size="small" placeholder="请输入步骤名"
-                          maxlength="20" show-word-limit></el-input>
-              </el-col>
-              <el-col :span="10">
-                <el-input v-model="pageData.preStepList[index].stepId" size="small" show-word-limit disabled>
-                </el-input>
-              </el-col>
-              <el-col :span="3">
-                <el-button @click="deletePreStep(index)" size="small">删除</el-button>
-              </el-col>
-            </el-row>
-          </div>
-        </div>
-      </el-form-item>
+      <el-table border :data="pageData.preStepList" size="mini" style="width: 100%">
+        <el-table-column label="编号" width="60">
+          <template slot-scope="scope">
+            {{scope.row.autoStep.stepId}}
+          </template>
+        </el-table-column>
+        <el-table-column label="标题" width="180">
+          <template slot-scope="scope">
+            {{scope.row.autoStep.name}}
+          </template>
+        </el-table-column>
+        <el-table-column label="预期结果" width="180">
+          <template slot-scope="scope">
+            {{scope.row.autoStep.expectResult}}
+          </template>
+        </el-table-column>
+        <el-table-column label="实际结果" width="180">
+          <template slot-scope="scope">
+            {{scope.row.autoStep.actualResult}}
+          </template>
+        </el-table-column>
+        <el-table-column label="执行结果" width="180">
+          <template slot-scope="scope">
+            {{scope.row.autoStep.actualResult}}
+          </template>
+        </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button @click="use(scope.row.stepId)" type="text" size="small">试用</el-button>
+            <el-button @click="edit(scope.row.autoStep)" type="text" size="small">编辑</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
       <el-form-item>
         <div v-if="pageControl.isNewPreStep">
           <el-input v-model="pageControl.preStepId" size="small" placeholder="请输入要关联的步骤编号"
@@ -57,26 +76,40 @@
       </el-form-item>
       <!--用例执行-->
       <el-divider content-position="right">主要步骤</el-divider>
-      <el-form-item label="步骤列表">
-        <div v-if="pageData.mainStepList === null || pageData.mainStepList.length===0">暂无步骤，可点+添加</div>
-        <div v-else>
-          <div v-for="(item, index) in pageData.mainStepList" :key="index">
-            <el-row :gutter="5">
-              <el-col :span="10">
-                <el-input v-model="pageData.mainStepList[index].name" size="small" placeholder="请输入步骤名"
-                          maxlength="20" show-word-limit></el-input>
-              </el-col>
-              <el-col :span="10">
-                <el-input v-model="pageData.mainStepList[index].stepId" size="small" show-word-limit disabled>
-                </el-input>
-              </el-col>
-              <el-col :span="3">
-                <el-button @click="deleteMainStep(index)" size="small">删除</el-button>
-              </el-col>
-            </el-row>
-          </div>
-        </div>
-      </el-form-item>
+      <!--列表-->
+      <el-table border :data="pageData.mainStepList" size="mini" style="width: 100%">
+        <el-table-column label="编号" width="60">
+          <template slot-scope="scope">
+            {{scope.row.autoStep.stepId}}
+          </template>
+        </el-table-column>
+        <el-table-column label="标题" width="180">
+          <template slot-scope="scope">
+            {{scope.row.autoStep.name}}
+          </template>
+        </el-table-column>
+        <el-table-column label="预期结果" width="180">
+          <template slot-scope="scope">
+            {{scope.row.autoStep.expectResult}}
+          </template>
+        </el-table-column>
+        <el-table-column label="实际结果" width="180">
+          <template slot-scope="scope">
+            {{scope.row.autoStep.actualResult}}
+          </template>
+        </el-table-column>
+        <el-table-column label="执行结果" width="180">
+          <template slot-scope="scope">
+            {{scope.row.autoStep.actualResult}}
+          </template>
+        </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button @click="use(scope.row.stepId)" type="text" size="small">试用</el-button>
+            <el-button @click="edit(scope.row.autoStep)" type="text" size="small">编辑</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
       <el-form-item>
         <div v-if="pageControl.isNewMainStep">
           <el-input v-model="pageControl.mainStepId" size="small" placeholder="请输入要关联的步骤编号"
@@ -94,26 +127,39 @@
       </el-form-item>
       <!--收尾步骤-->
       <el-divider content-position="right">收尾步骤</el-divider>
-      <el-form-item label="步骤列表">
-        <div v-if="pageData.afterStepList === null || pageData.afterStepList.length===0">暂无步骤，可点+添加</div>
-        <div v-else>
-          <div v-for="(item, index) in pageData.afterStepList" :key="index">
-            <el-row :gutter="5">
-              <el-col :span="10">
-                <el-input v-model="pageData.afterStepList[index].name" size="small" placeholder="请输入步骤名"
-                          maxlength="20" show-word-limit></el-input>
-              </el-col>
-              <el-col :span="10">
-                <el-input v-model="pageData.afterStepList[index].stepId" size="small" show-word-limit disabled>
-                </el-input>
-              </el-col>
-              <el-col :span="3">
-                <el-button @click="deleteAfterStep(index)" size="small">删除</el-button>
-              </el-col>
-            </el-row>
-          </div>
-        </div>
-      </el-form-item>
+      <el-table border :data="pageData.afterStepList" size="mini" style="width: 100%">
+        <el-table-column label="编号" width="60">
+          <template slot-scope="scope">
+            {{scope.row.autoStep.stepId}}
+          </template>
+        </el-table-column>
+        <el-table-column label="标题" width="180">
+          <template slot-scope="scope">
+            {{scope.row.autoStep.name}}
+          </template>
+        </el-table-column>
+        <el-table-column label="预期结果" width="180">
+          <template slot-scope="scope">
+            {{scope.row.autoStep.expectResult}}
+          </template>
+        </el-table-column>
+        <el-table-column label="实际结果" width="180">
+          <template slot-scope="scope">
+            {{scope.row.autoStep.actualResult}}
+          </template>
+        </el-table-column>
+        <el-table-column label="执行结果" width="180">
+          <template slot-scope="scope">
+            {{scope.row.autoStep.actualResult}}
+          </template>
+        </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button @click="use(scope.row.stepId)" type="text" size="small">试用</el-button>
+            <el-button @click="edit(scope.row.autoStep)" type="text" size="small">编辑</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
       <el-form-item>
         <div v-if="pageControl.isNewAfterStep">
           <el-input v-model="pageControl.afterStepId" size="small" placeholder="请输入要关联的步骤编号"
@@ -135,15 +181,18 @@
       <el-button @click="save()" type="primary" size="small">保存</el-button>
       <el-button v-if="isEdit" @click="remove()" size="small">删除</el-button>
     </div>
+    <el-dialog :visible.sync="pageControl.isEditStep" title="编辑步骤" width="65%">
+      <tl-step-detail :case-step="pageControl.selectedStep" is-case-step></tl-step-detail>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import {createAPI, updateAPI, removeAPI, queryDetailAPI, useAPI} from '@/api/autoCase'
-// import tlSelectDataSource from './selectDataSource'
+import tlStepDetail from './stepDetail'
 
 export default {
-  // components: {tlSelectDataSource},
+  components: {tlStepDetail},
   props: {
     caseId: {
       type: String,
@@ -166,16 +215,103 @@ export default {
         type: 1,
         status: 1,
         preStepList: [{
-          name: 'name',
-          stepId: '1'
+          type: 1,
+          sequence: null,
+          autoStep: {
+            stepId: null,
+            name: 'caseStep',
+            description: 'caseStepdesc',
+            ownerId: '12',
+            ownerName: 'tester',
+            isPublic: false,
+            type: 1,
+            assertType: -1,
+            expectResult: '',
+            jdbc: {
+              dataSource: {
+                driver: 'com.mysql.cj.jdbc.Driver',
+                url: 'jdbc:mysql://118.24.117.181:3306/onepiece?useUnicode=true&characterEncoding=UTF-8&userSSL=false',
+                username: 'testerone',
+                password: 'testerone'
+              },
+              sqlList: null
+            },
+            httpRequest: {
+              httpType: 'GET',
+              httpURL: null,
+              httpHeaderList: null,
+              httpBody: null
+            },
+            rpc: {
+              url: '',
+              interfaceName: '',
+              methodName: '',
+              parameterType: '',
+              parameterList: [{
+                name: '',
+                value: '',
+                comment: ''
+              }]
+            },
+            ui: {
+              type: 1,
+              url: 'url',
+              element: 'element',
+              elementId: 1
+            }
+          }
         }],
         mainStepList: [{
-          name: 'name',
-          stepId: '1'
+          sequence: null,
+          autoStep: {
+            stepId: null,
+            name: 'caseStep',
+            description: 'caseStepdesc',
+            ownerId: '12',
+            ownerName: 'tester',
+            isPublic: false,
+            type: 1,
+            assertType: -1,
+            expectResult: 'expct',
+            actualResult: 'actual',
+            jdbc: {
+              dataSource: {
+                driver: 'com.mysql.cj.jdbc.Driver',
+                url: 'jdbc:mysql://118.24.117.181:3306/onepiece?useUnicode=true&characterEncoding=UTF-8&userSSL=false',
+                username: 'testerone',
+                password: 'testerone'
+              },
+              sqlList: null
+            },
+            httpRequest: {
+              httpType: 'GET',
+              httpURL: null,
+              httpHeaderList: null,
+              httpBody: null
+            },
+            rpc: {
+              url: '',
+              interfaceName: '',
+              methodName: '',
+              parameterType: '',
+              parameterList: [{
+                name: '',
+                value: '',
+                comment: ''
+              }]
+            },
+            ui: {
+              type: 1,
+              url: 'url',
+              element: 'element',
+              elementId: 1
+            }
+          }
         }],
         afterStepList: [{
           name: 'name',
-          stepId: '1'
+          stepId: '1',
+          sequence: null
         }]
       },
       pageControl: {
@@ -183,9 +319,11 @@ export default {
         isNewPreStep: false,
         isNewMainStep: false,
         isNewAfterStep: false,
+        isEditStep: false,
         preStepId: '',
         mainStepId: '',
-        afterStepId: ''
+        afterStepId: '',
+        selectedStep: {}
       }
     }
   },
@@ -282,6 +420,10 @@ export default {
           this.$message.success('使用成功')
         }
       })
+    },
+    edit (autoStep) {
+      this.pageControl.selectedStep = autoStep
+      this.pageControl.isEditStep = true
     }
   }
 }

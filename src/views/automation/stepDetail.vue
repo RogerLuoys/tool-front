@@ -5,7 +5,7 @@
       <el-form-item label="标题">
         <el-input v-model="pageData.name" placeholder="请输入标题" size="small" maxlength="30" show-word-limit></el-input>
       </el-form-item>
-      <el-form-item label="说明">
+      <el-form-item v-if="!isCaseStep" label="说明">
         <el-input v-model="pageData.description" placeholder="请描述步骤" type="textarea" maxlength="200"
                   show-word-limit></el-input>
       </el-form-item>
@@ -221,6 +221,11 @@ export default {
     isEdit: {
       type: Boolean,
       default: false
+    },
+    caseStep: {},
+    isCaseStep: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -231,7 +236,7 @@ export default {
         description: '',
         ownerId: '12',
         ownerName: 'tester',
-        isPublic: 1,
+        isPublic: true,
         type: 1,
         assertType: -1,
         expectResult: '',
@@ -285,6 +290,8 @@ export default {
     console.info('created')
     if (this.isEdit) {
       this.queryDetail()
+    } else if (this.isCaseStep) {
+      this.pageData = this.caseStep
     }
   },
   watch: {

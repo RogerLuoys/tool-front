@@ -1,10 +1,10 @@
 <template>
   <div>
     <el-tabs v-model="pageControl.activeName" @tab-click="handleClick">
-      <el-tab-pane label="步骤管理" name="caseList">
+      <el-tab-pane label="公共步骤" name="stepList">
         <tl-step-list></tl-step-list>
       </el-tab-pane>
-      <el-tab-pane label="用例管理" name="stepList">
+      <el-tab-pane label="用例管理" name="caseList">
         <tl-case-list></tl-case-list>
       </el-tab-pane>
       <el-tab-pane label="套件管理" name="suiteList">
