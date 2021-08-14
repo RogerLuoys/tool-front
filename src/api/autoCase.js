@@ -8,6 +8,22 @@ export function createAPI (data) {
   })
 }
 
+export function quickCreateAPI (data) {
+  return api({
+    url: 'autoCase/quickCreate',
+    method: 'post',
+    data: data
+  })
+}
+
+export function createRelatedStepAPI (data) {
+  return api({
+    url: 'autoCase/createRelatedStep',
+    method: 'post',
+    data: data
+  })
+}
+
 export function removeAPI (params) {
   return api({
     url: 'autoCase/remove',

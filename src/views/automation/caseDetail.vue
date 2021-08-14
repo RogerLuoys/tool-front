@@ -24,10 +24,12 @@
       <el-form-item label="最大时间">
         <el-input-number v-model="pageData.maxTime" :min="1" :max="60" label="用例最大执行时间(分)" size="small"></el-input-number>
       </el-form-item>
-      <!--前置步骤-->
-      <el-divider content-position="right">前置步骤</el-divider>
+      <!--前置步骤******************************-->
+      <el-divider content-position="right">前置步骤:
+        <el-button @click="pageControl.isNewStep=true" size="mini" icon="el-icon-plus" type="text">快速新增</el-button>
+      </el-divider>
       <el-table border :data="pageData.preStepList" size="mini" style="width: 100%">
-        <el-table-column label="编号" width="60">
+        <el-table-column label="编号" width="130">
           <template slot-scope="scope">
             {{scope.row.autoStep.stepId}}
           </template>
@@ -64,14 +66,14 @@
           <el-input v-model="pageControl.preStepId" size="small" placeholder="请输入要关联的步骤编号"
                     maxlength="20" show-word-limit>
             <template #append>
-              <el-button @click="newPreStep()" type="primary" size="small">确认</el-button>
+              <el-button @click="createRelatedStep(pageData.preStepList.length, 1, pageControl.preStepId)" type="primary" size="small">确认</el-button>
               <el-button @click="pageControl.isNewPreStep=false" size="small">取消</el-button>
             </template>
           </el-input>
         </div>
         <div v-else>
           <el-button @click="pageControl.isNewPreStep=true" size="mini" icon="el-icon-link" type="primary" plain>手动关联</el-button>
-          <el-button @click="pageControl.isNewStep=true" size="mini" icon="el-icon-plus" disabled>快速新增</el-button>
+          <el-button @click="createRelatedStep(pageData.preStepList !== null ? pageData.preStepList.length : 1, 1)" size="mini" icon="el-icon-plus">快速新增</el-button>
         </div>
       </el-form-item>
       <!--用例执行-->
@@ -177,8 +179,8 @@
       </el-form-item>
     </el-form>
     <div style="text-align: center">
-      <el-button @click="use()" type="primary" size="small">试用</el-button>
-      <el-button @click="save()" type="primary" size="small">保存</el-button>
+      <el-button @click="use()" type="primary" size="small">执行</el-button>
+      <el-button @click="save()" type="primary" size="small" disabled>即时保存</el-button>
       <el-button v-if="isEdit" @click="remove()" size="small">删除</el-button>
     </div>
     <el-dialog :visible.sync="pageControl.isEditStep" title="编辑步骤" width="65%">
@@ -188,7 +190,7 @@
 </template>
 
 <script>
-import {createAPI, updateAPI, removeAPI, queryDetailAPI, useAPI} from '@/api/autoCase'
+import {createAPI, createRelatedStepAPI, updateAPI, removeAPI, queryDetailAPI, useAPI} from '@/api/autoCase'
 import tlStepDetail from './stepDetail'
 
 export default {
@@ -200,7 +202,7 @@ export default {
     },
     isEdit: {
       type: Boolean,
-      default: false
+      default: true
     }
   },
   data () {
@@ -390,6 +392,22 @@ export default {
         }
       })
     },
+    createRelatedStep (sequence, type, stepId) {
+      createRelatedStepAPI({
+        caseId: this.pageData.caseId,
+        sequence: sequence,
+        type: type,
+        stepId: stepId
+      }).then(response => {
+        if (response.data.success === true) {
+          this.queryDetail()
+          this.$message.success('创建关联步骤成功，请自行编辑')
+        }
+      })
+      this.pageControl.isNewPreStep = false
+      this.pageControl.isNewMainStep = false
+      this.pageControl.isNewAfterStep = false
+    },
     update () {
       updateAPI(this.pageData).then(response => {
         if (response.data.success === true) {
@@ -406,7 +424,7 @@ export default {
     },
     queryDetail () {
       queryDetailAPI({
-        caseId: this.caseId
+        caseId: this.$route.params.id
       }).then(response => {
         if (response.data.success === true) {
           this.pageData = response.data.data

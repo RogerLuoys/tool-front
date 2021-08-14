@@ -48,6 +48,9 @@
           </el-radio-group>
         </el-form-item>
       </el-form>
+      <div style="text-align: center">
+        <el-button @click="quickCreate()" type="primary" size="small">确认</el-button>
+      </div>
     </el-dialog>
     <el-dialog v-if="pageControl.isEditCase" :visible.sync="pageControl.isEditCase" title="编辑用例" width="60%">
       <tl-detail :case-id="pageControl.selectedCaseId" :is-edit="true"></tl-detail>
@@ -63,7 +66,7 @@
 <script>
 import tlDetail from './caseDetail'
 import tlUse from './caseUse'
-import {queryAPI} from '@/api/autoCase'
+import {quickCreateAPI, queryAPI} from '@/api/autoCase'
 
 export default {
   components: {tlDetail, tlUse},
@@ -137,6 +140,13 @@ export default {
       queryAPI(this.pageControl.search).then(response => {
         if (response.data.success === true) {
           this.pageData = response.data.data
+        }
+      })
+    },
+    quickCreate () {
+      quickCreateAPI(this.pageControl.quickCreate).then(response => {
+        if (response.data.success === true) {
+          this.$message.success('创建用例成功')
         }
       })
     }

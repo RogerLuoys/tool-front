@@ -10,7 +10,7 @@
                   show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="类型">
-        <el-radio-group v-model="pageData.type" :disabled="isEdit" size="small">
+        <el-radio-group v-model="pageData.type" @change="changeType()" :disabled="isEdit" size="small">
           <el-radio :label="1">SQL</el-radio>
           <el-radio :label="2">HTTP</el-radio>
           <el-radio :label="3">RPC</el-radio>
@@ -300,6 +300,48 @@ export default {
     }
   },
   methods: {
+    changeType () {
+      switch (this.pageData.type) {
+        case 1:
+          this.pageData.jdbc = {
+            dataSource: {
+              driver: '',
+              url: '',
+              username: '',
+              password: ''
+            },
+            sqlList: null
+          }
+          break
+        case 2:
+          this.pageData.httpRequest = {
+            httpType: 'GET',
+            httpBody: '',
+            httpURL: '',
+            httpHeaderList: ''
+          }
+          break
+        case 3:
+          this.pageData.rpc = {
+            url: '',
+            interfaceName: '',
+            methodName: '',
+            parameterType: '',
+            parameterList: ''
+          }
+          break
+        case 4:
+          this.pageData.ui = {
+            type: 1,
+            url: '',
+            element: '',
+            elementId: 0
+          }
+          break
+        default:
+          console.info('?????')
+      }
+    },
     newSQL () {
       if (this.pageData.jdbc.sqlList === null) {
         this.pageData.jdbc.sqlList = [{type: 'UNKNOWN', sql: ''}]
@@ -331,7 +373,7 @@ export default {
       this.pageData.rpc.parameterList.splice(index, 1)
     },
     save () {
-      if (this.isEdit) {
+      if (this.isEdit || this.isCaseStep) {
         this.update()
       } else {
         this.create()
