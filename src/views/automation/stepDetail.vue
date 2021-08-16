@@ -28,7 +28,7 @@
             </el-select>
           </el-col>
           <el-col :span="19">
-            <el-input v-model="pageData.expectResult" size="small" placeholder="请输入预期值"
+            <el-input v-model="pageData.assertExpect" size="small" placeholder="请输入预期值"
                       maxlength="200" show-word-limit>
             </el-input>
           </el-col>
@@ -239,7 +239,7 @@ export default {
         isPublic: true,
         type: 1,
         assertType: -1,
-        expectResult: '',
+        assertExpect: '',
         jdbc: {
           dataSource: {
             driver: 'com.mysql.cj.jdbc.Driver',

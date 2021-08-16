@@ -45,12 +45,13 @@
         <el-table-column label="预期结果" width="300" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-tag size="small">{{ getAssertType(scope.row.autoStep.assertType) }}</el-tag>
-            <span>{{scope.row.autoStep.expectResult}}</span>
+            <span>{{scope.row.autoStep.assertExpect}}</span>
           </template>
         </el-table-column>
         <el-table-column label="实际结果" show-overflow-tooltip>
           <template slot-scope="scope">
-            {{scope.row.autoStep.actualResult}}
+            <el-tag size="small">{{ scope.row.autoStep.assertResult === null ? '不校验' : scope.row.autoStep.assertResult }}</el-tag>
+            <span>{{scope.row.autoStep.assertActual}}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="80">
@@ -98,12 +99,13 @@
         <el-table-column label="预期结果" width="300" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-tag size="small">{{ getAssertType(scope.row.autoStep.assertType) }}</el-tag>
-            <span>{{scope.row.autoStep.expectResult}}</span>
+            <span>{{scope.row.autoStep.assertExpect}}</span>
           </template>
         </el-table-column>
         <el-table-column label="实际结果" show-overflow-tooltip>
           <template slot-scope="scope">
-            {{scope.row.autoStep.actualResult}}
+            <el-tag size="small">{{ scope.row.autoStep.assertResult === null ? '不校验' : scope.row.autoStep.assertResult }}</el-tag>
+            <span>{{scope.row.autoStep.assertActual}}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="80">
@@ -150,12 +152,12 @@
         <el-table-column label="预期结果" width="300" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-tag size="small">{{ getAssertType(scope.row.autoStep.assertType) }}</el-tag>
-            <span>{{scope.row.autoStep.expectResult}}</span>
+            <span>{{scope.row.autoStep.assertExpect}}</span>
           </template>
         </el-table-column>
         <el-table-column label="实际结果" show-overflow-tooltip>
           <template slot-scope="scope">
-            {{scope.row.autoStep.actualResult}}
+            {{scope.row.autoStep.assertActual}}
           </template>
         </el-table-column>
         <el-table-column label="操作" width="80">
@@ -231,7 +233,8 @@ export default {
             isPublic: false,
             type: 1,
             assertType: -1,
-            expectResult: '',
+            assertExpect: '',
+            assertResult: false,
             jdbc: {
               dataSource: {
                 driver: 'com.mysql.cj.jdbc.Driver',
@@ -277,8 +280,9 @@ export default {
             isPublic: false,
             type: 1,
             assertType: -1,
-            expectResult: 'expct',
-            actualResult: 'actual',
+            assertExpect: 'expct',
+            assertActual: 'actual',
+            assertResult: false,
             jdbc: {
               dataSource: {
                 driver: 'com.mysql.cj.jdbc.Driver',

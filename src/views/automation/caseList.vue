@@ -121,9 +121,9 @@ export default {
         case 1:
           return '计划中'
         case 2:
-          return '已完成'
-        case 3:
           return '待修复'
+        case 3:
+          return '已完成'
         default:
           return '未知'
       }
