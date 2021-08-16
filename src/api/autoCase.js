@@ -32,6 +32,14 @@ export function removeAPI (params) {
   })
 }
 
+export function removeRelatedStepAPI (data) {
+  return api({
+    url: 'autoCase/removeRelatedStep',
+    method: 'delete',
+    data: data
+  })
+}
+
 export function updateAPI (data) {
   return api({
     url: 'autoCase/update',

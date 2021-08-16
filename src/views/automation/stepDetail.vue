@@ -318,7 +318,7 @@ export default {
             httpType: 'GET',
             httpBody: '',
             httpURL: '',
-            httpHeaderList: ''
+            httpHeaderList: null
           }
           break
         case 3:
@@ -327,7 +327,7 @@ export default {
             interfaceName: '',
             methodName: '',
             parameterType: '',
-            parameterList: ''
+            parameterList: null
           }
           break
         case 4:
@@ -373,6 +373,32 @@ export default {
       this.pageData.rpc.parameterList.splice(index, 1)
     },
     save () {
+      // 把无关类型的数据去除
+      switch (this.pageData.type) {
+        // sql类型
+        case 1:
+          this.pageData.httpRequest = null
+          this.pageData.rpc = null
+          this.pageData.ui = null
+          break
+        // http类型
+        case 2:
+          this.pageData.jdbc = null
+          this.pageData.rpc = null
+          this.pageData.ui = null
+          break
+        // rpc类型
+        case 3:
+          this.pageData.jdbc = null
+          this.pageData.httpRequest = null
+          this.pageData.ui = null
+          break
+        case 4:
+          this.pageData.jdbc = null
+          this.pageData.httpRequest = null
+          this.pageData.rpc = null
+          break
+      }
       if (this.isEdit || this.isCaseStep) {
         this.update()
       } else {
@@ -380,23 +406,6 @@ export default {
       }
     },
     create () {
-      switch (this.pageData.type) {
-        // sql类型
-        case 1:
-          this.pageData.httpRequest = null
-          this.pageData.rpc = null
-          break
-        // http类型
-        case 2:
-          this.pageData.jdbc = null
-          this.pageData.rpc = null
-          break
-        // rpc类型
-        case 3:
-          this.pageData.jdbc = null
-          this.pageData.httpRequest = null
-          break
-      }
       createAPI(this.pageData).then(response => {
         if (response.data.success === true) {
           this.$message.success('创建步骤成功')
