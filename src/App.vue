@@ -24,7 +24,7 @@
             </el-menu-item>
             <el-menu-item index="4" @click="$router.push('/resource')">
               <i class="el-icon-s-platform"></i>
-              <span slot="title">设备与环境</span>
+              <span slot="title">资源管理</span>
             </el-menu-item>
             <el-menu-item index="5" @click="$router.push('/config')">
               <i class="el-icon-setting"></i>

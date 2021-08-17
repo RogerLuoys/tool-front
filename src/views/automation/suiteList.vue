@@ -10,11 +10,13 @@
     <el-table border :data="pageData.list" size="mini" style="width: 100%">
       <el-table-column prop="title" label="标题" width="180">
       </el-table-column>
-      <el-table-column prop="description" label="说明" width="180">
+      <el-table-column prop="description" label="说明">
       </el-table-column>
-      <el-table-column prop="passed" label="通过" width="180">
+      <el-table-column prop="total" label="用例总数" width="100">
       </el-table-column>
-      <el-table-column prop="failed" label="失败" width="180">
+      <el-table-column prop="passed" label="通过" width="100">
+      </el-table-column>
+      <el-table-column prop="failed" label="失败" width="100">
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
