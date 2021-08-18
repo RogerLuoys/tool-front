@@ -15,7 +15,7 @@
     <el-button type="primary" @click="pageControl.isNewStep=true" size="mini" style="float:right">新增</el-button>
     <!--列表-->
     <el-table border :data="pageData.list" size="mini" style="width: 100%">
-      <el-table-column prop="stepId" label="编号" width="60">
+      <el-table-column prop="stepId" label="编号" width="120">
       </el-table-column>
       <el-table-column prop="type" label="类型" width="180">
         <template #default="scope">
@@ -26,11 +26,11 @@
       </el-table-column>
       <el-table-column prop="description" label="说明" width="180">
       </el-table-column>
-      <el-table-column prop="expectResult" label="预期结果" width="180">
+      <el-table-column prop="expectResult" label="预期结果">
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="90">
         <template slot-scope="scope">
-          <el-button @click="use(scope.row.stepId)" type="text" size="small">试用</el-button>
+<!--          <el-button @click="use(scope.row.stepId)" type="text" size="small">试用</el-button>-->
           <el-button @click="edit(scope.row.stepId)" type="text" size="small">编辑</el-button>
         </template>
       </el-table-column>
@@ -46,9 +46,9 @@
     <el-dialog v-if="pageControl.isEditStep" :visible.sync="pageControl.isEditStep" width="65%" title="编辑步骤">
       <tl-detail :step-id="pageControl.selectedStepId" :is-edit="true"></tl-detail>
     </el-dialog>
-    <el-dialog v-if="pageControl.isUseStep" :visible.sync="pageControl.isUseStep" title="使用数据工厂">
-        <tl-use :step-id="pageControl.selectedStepId"></tl-use>
-    </el-dialog>
+<!--    <el-dialog v-if="pageControl.isUseStep" :visible.sync="pageControl.isUseStep" title="使用数据工厂">-->
+<!--        <tl-use :step-id="pageControl.selectedStepId"></tl-use>-->
+<!--    </el-dialog>-->
   </div>
 </template>
 
@@ -85,7 +85,7 @@ export default {
         selectedStepId: '0',
         search: {
           pageIndex: 1,
-          isTestStep: true,
+          isPublic: true,
           type: null,
           name: null
         }
@@ -117,10 +117,10 @@ export default {
           return 'UNKNOWN'
       }
     },
-    use (stepId) {
-      this.pageControl.selectedStepId = stepId
-      this.pageControl.isUseStep = true
-    },
+    // use (stepId) {
+    //   this.pageControl.selectedStepId = stepId
+    //   this.pageControl.isUseStep = true
+    // },
     edit (stepId) {
       this.pageControl.selectedStepId = stepId
       this.pageControl.isEditStep = true

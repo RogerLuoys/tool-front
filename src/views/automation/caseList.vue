@@ -15,9 +15,11 @@
     <el-button type="primary" @click="pageControl.isNewCase=true" size="mini" style="float:right">新增</el-button>
     <!--列表-->
     <el-table border :data="pageData.list" size="mini" style="width: 100%">
+      <el-table-column prop="caseId" label="编号" width="120">
+      </el-table-column>
       <el-table-column prop="type" label="状态" width="180">
         <template #default="scope">
-          <div>{{ getType(scope.row.status) }}</div>
+          <div>{{ getStatus(scope.row.status) }}</div>
         </template>
       </el-table-column>
       <el-table-column prop="name" label="标题" width="180">
@@ -116,7 +118,7 @@ export default {
     // }
   },
   methods: {
-    getType (status) {
+    getStatus (status) {
       switch (status) {
         case 1:
           return '计划中'

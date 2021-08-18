@@ -8,7 +8,7 @@
     <el-button type="primary" @click="pageControl.isNewSuite=true" size="mini" style="float:right">新增</el-button>
     <!--列表-->
     <el-table border :data="pageData.list" size="mini" style="width: 100%">
-      <el-table-column prop="title" label="标题" width="180">
+      <el-table-column prop="name" label="标题" width="180">
       </el-table-column>
       <el-table-column prop="description" label="说明">
       </el-table-column>
@@ -20,7 +20,7 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button @click="use(scope.row.suiteId)" type="text" size="small">试用</el-button>
+          <el-button @click="use(scope.row.suiteId)" type="text" size="small">执行</el-button>
           <el-button @click="edit(scope.row.suiteId)" type="text" size="small">编辑</el-button>
         </template>
       </el-table-column>
@@ -31,11 +31,20 @@
     </el-pagination>
     <!--弹出框-->
     <el-dialog :visible.sync="pageControl.isNewSuite" title="新增测试集">
-      <tl-detail></tl-detail>
+      <el-form :model="pageControl.quickCreate" label-width="90px">
+        <el-form-item label="标题">
+          <el-input v-model="pageControl.quickCreate.name" placeholder="请输入标题" size="small" maxlength="30" show-word-limit></el-input>
+        </el-form-item>
+      </el-form>
+      <div style="text-align: center">
+        <el-button @click="quickCreate()" type="primary" size="small">确认</el-button>
+      </div>
     </el-dialog>
-    <el-dialog :visible.sync="pageControl.isEditSuite" title="编辑测试集">
-      <tl-detail :suite-id="pageControl.selectedSuiteId" :is-edit="true"></tl-detail>
-    </el-dialog>
+    <el-drawer v-if="pageControl.isEditSuite" :visible.sync="pageControl.isEditSuite" title="编辑测试集" size="55%">
+      <el-card>
+        <tl-detail :suite-id="pageControl.selectedSuiteId" :is-edit="true"></tl-detail>
+      </el-card>
+    </el-drawer>
     <el-dialog :visible.sync="pageControl.isUseSuite" title="执行测试">
       <el-card>
         <tl-use :tool-id="pageControl.selectedSuiteId"></tl-use>
@@ -47,7 +56,7 @@
 <script>
 import tlDetail from './suiteDetail'
 import tlUse from './suiteUse'
-import {queryAPI} from '@/api/autoSuite'
+import {quickCreateAPI, queryAPI} from '@/api/autoSuite'
 
 export default {
   components: {tlDetail, tlUse},
@@ -57,7 +66,7 @@ export default {
       pageData: {
         list: [{
           suiteId: 12345,
-          title: 'title',
+          name: 'name',
           description: 'desc',
           passed: 0,
           failed: 0
@@ -71,6 +80,9 @@ export default {
         selectedSuiteId: '0',
         search: {
           pageIndex: 1,
+          name: null
+        },
+        quickCreate: {
           name: null
         }
       }
@@ -99,6 +111,14 @@ export default {
       queryAPI(this.pageControl.search).then(response => {
         if (response.data.success === true) {
           this.pageData = response.data.data
+        }
+      })
+    },
+    quickCreate () {
+      quickCreateAPI(this.pageControl.quickCreate).then(response => {
+        if (response.data.success === true) {
+          this.$message.success('创建用例成功')
+          this.pageControl.isNewSuite = false
         }
       })
     }
