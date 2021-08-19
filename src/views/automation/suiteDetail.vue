@@ -1,6 +1,21 @@
 <template>
   <div>
+    <el-row style="height: 15px">
+      <el-col :span="15">
+        <span>编辑测试集</span>
+      </el-col>
+      <el-col :span="8" style="text-align: right">
+        <el-dropdown @click="createRelatedCase(1)" size="mini" split-button type="primary">
+          开始执行
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>批量重试</el-dropdown-item>
+            <el-dropdown-item @click="remove()">删除</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </el-col>
+    </el-row>
     <!--基本信息-->
+    <el-divider content-position="right"></el-divider>
     <el-form :model="pageData" label-width="90px">
       <el-form-item label="标题">
         <el-input v-model="pageData.name" placeholder="请输入标题" size="small" maxlength="30" show-word-limit></el-input>
@@ -11,7 +26,7 @@
       </el-form-item>
       <!--用例列表-->
       <el-divider content-position="right">用例列表</el-divider>
-      <el-table border :data="pageData.caseList" size="mini" style="width: 100%">
+      <el-table :data="pageData.relatedCase.list" size="mini" style="width: 100%">
         <el-table-column label="编号" width="130">
           <template slot-scope="scope">
             {{scope.row.autoCase.caseId}}
@@ -46,19 +61,14 @@
         </el-input>
       </div>
       <div v-else>
-        <el-button size="mini" type="primary" plain>快速新增</el-button>
-        <el-button @click="pageControl.isRelatedCase=true" size="mini" plain>关联用例</el-button>
+        <el-button size="mini" type="primary" plain>批量关联</el-button>
+        <el-button @click="pageControl.isRelatedCase=true" size="mini" plain>单个关联</el-button>
         <!--分页-->
-        <el-pagination layout="prev, pager, next" @current-change="queryList()"
-                       :total="1000" style="float: right">
+        <el-pagination layout="prev, pager, next" @current-change="queryList()" :current-page="pageControl.search.pageIndex"
+                       :total="pageData.relatedCase.total" small style="float: right">
         </el-pagination>
       </div>
     </el-form>
-    <div style="text-align: center">
-      <el-button type="primary" size="small">试用</el-button>
-      <el-button @click="save()" type="primary" size="small">保存</el-button>
-      <el-button v-if="isEdit" @click="remove()" size="small">删除</el-button>
-    </div>
 <!--    <el-dialog :visible.sync="pageControl.isNewCase" title="关联用例" append-to-body>-->
 <!--    </el-dialog>-->
   </div>
@@ -88,19 +98,25 @@ export default {
         description: '',
         passed: 0,
         failed: 0,
-        caseList: [{
-          sequence: null,
-          autoCase: {
-            caseId: null,
-            name: 'name',
-            type: 1,
-            status: 1
-          }
-        }]
+        relatedCase: {
+          list: [{
+            sequence: null,
+            autoCase: {
+              caseId: null,
+              name: 'name',
+              type: 1,
+              status: 1
+            }
+          }],
+          total: 0
+        }
       },
       pageControl: {
         isRelatedCase: false,
-        selectedCaseId: ''
+        selectedCaseId: '',
+        search: {
+          pageIndex: 1
+        }
       }
     }
   },

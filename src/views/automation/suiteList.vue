@@ -40,7 +40,17 @@
         <el-button @click="quickCreate()" type="primary" size="small">确认</el-button>
       </div>
     </el-dialog>
-    <el-drawer v-if="pageControl.isEditSuite" :visible.sync="pageControl.isEditSuite" title="编辑测试集" size="55%">
+    <el-drawer v-if="pageControl.isEditSuite" :visible.sync="pageControl.isEditSuite" title="编辑测试集" :with-header="false" size="55%">
+      <template #title>
+        <el-row :gutter="5" style="height: 10px">
+          <el-col :span="19">
+            <span>编辑测试集</span>
+          </el-col>
+          <el-col :span="4">
+            <el-button size="small">test</el-button>
+          </el-col>
+        </el-row>
+      </template>
       <el-card>
         <tl-detail :suite-id="pageControl.selectedSuiteId" :is-edit="true"></tl-detail>
       </el-card>
