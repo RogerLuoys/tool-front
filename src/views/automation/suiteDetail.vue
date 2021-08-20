@@ -5,7 +5,7 @@
         <span>编辑测试集</span>
       </el-col>
       <el-col :span="8" style="text-align: right">
-        <el-dropdown @click="createRelatedCase(1)" size="mini" split-button type="primary">
+        <el-dropdown @click="use()" size="mini" split-button type="primary">
           开始执行
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>批量重试</el-dropdown-item>
@@ -44,10 +44,7 @@
         </el-table-column>
         <el-table-column label="结果" width="130">
           <template slot-scope="scope">
-            <el-tag size="small">{{ getStatus(scope.row.autoCase.status) }}</el-tag>
-            <span v-if="scope.row.autoCase.status !== 3">
-              <el-button @click="edit(scope.row.autoStep)" type="text" size="small">重试</el-button>
-            </span>
+            <el-tag size="small">{{ getStatus(scope.row.status) }}</el-tag>
           </template>
         </el-table-column>
       </el-table>
@@ -75,7 +72,7 @@
 </template>
 
 <script>
-import {createAPI, createRelatedCaseAPI, updateAPI, removeAPI, queryDetailAPI} from '@/api/autoSuite'
+import {createAPI, createRelatedCaseAPI, updateAPI, removeAPI, queryDetailAPI, useAPI} from '@/api/autoSuite'
 // import tlSelectDataSource from './selectDataSource'
 
 export default {
@@ -156,6 +153,7 @@ export default {
     create () {
       createAPI(this.pageData).then(response => {
         if (response.data.success === true) {
+          this.queryDetail()
           this.$message.success('创建用例成功')
         }
       })
@@ -167,6 +165,7 @@ export default {
       }).then(response => {
         if (response.data.success === true) {
           this.queryDetail()
+          this.pageControl.isRelatedCase = false
           this.$message.success('创建关联用例成功，请自行编辑')
         }
       })
@@ -185,9 +184,20 @@ export default {
         }
       })
     },
+    use (retry) {
+      useAPI({
+        suiteId: this.suiteId,
+        retry: retry
+      }).then(response => {
+        if (response.data.success === true) {
+          this.$message.success('测试集已开始执行')
+        }
+      })
+    },
     queryDetail () {
       queryDetailAPI({
-        suiteId: this.suiteId
+        suiteId: this.suiteId,
+        startIndex: this.pageControl.search.pageIndex
       }).then(response => {
         if (response.data.success === true) {
           this.pageData = response.data.data

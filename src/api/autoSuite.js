@@ -55,3 +55,11 @@ export function queryAPI (params) {
     params: params
   })
 }
+
+export function useAPI (params) {
+  return api({
+    url: 'autoSuite/use',
+    method: 'get',
+    params: params
+  })
+}
