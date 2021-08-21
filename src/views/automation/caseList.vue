@@ -29,7 +29,7 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button @click="use(scope.row.caseId)" type="text" size="small">试用</el-button>
-          <el-button @click="$router.push(`caseDetail/${scope.row.caseId}`)" type="text" size="small">编辑</el-button>
+          <el-button @click="edit(scope.row.caseId)" type="text" size="small">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -38,25 +38,39 @@
                    :total="pageData.total" style="float: right">
     </el-pagination>
     <!--弹出框-->
-    <el-dialog :visible.sync="pageControl.isNewCase" title="新增用例">
-      <el-form :model="pageControl.quickCreate" label-width="90px">
-        <el-form-item label="标题">
-          <el-input v-model="pageControl.quickCreate.name" placeholder="请输入标题" size="small" maxlength="30" show-word-limit></el-input>
-        </el-form-item>
-        <el-form-item label="类型">
-          <el-radio-group v-model="pageControl.quickCreate.type" size="small">
-            <el-radio :label="1">接口自动化</el-radio>
-            <el-radio :label="2">UI自动化</el-radio>
-          </el-radio-group>
-        </el-form-item>
-      </el-form>
-      <div style="text-align: center">
-        <el-button @click="quickCreate()" type="primary" size="small">确认</el-button>
-      </div>
-    </el-dialog>
-    <el-dialog v-if="pageControl.isEditCase" :visible.sync="pageControl.isEditCase" title="编辑用例" width="60%">
-      <tl-detail :case-id="pageControl.selectedCaseId" :is-edit="true"></tl-detail>
-    </el-dialog>
+<!--    <el-dialog :visible.sync="pageControl.isNewCase" title="新增用例">-->
+<!--      <el-form :model="pageControl.quickCreate" label-width="90px">-->
+<!--        <el-form-item label="标题">-->
+<!--          <el-input v-model="pageControl.quickCreate.name" placeholder="请输入标题" size="small" maxlength="30" show-word-limit></el-input>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="类型">-->
+<!--          <el-radio-group v-model="pageControl.quickCreate.type" size="small">-->
+<!--            <el-radio :label="1">接口自动化</el-radio>-->
+<!--            <el-radio :label="2">UI自动化</el-radio>-->
+<!--          </el-radio-group>-->
+<!--        </el-form-item>-->
+<!--      </el-form>-->
+<!--      <div style="text-align: center">-->
+<!--        <el-button @click="quickCreate()" type="primary" size="small">确认</el-button>-->
+<!--      </div>-->
+<!--    </el-dialog>-->
+    <el-drawer :visible.sync="pageControl.isNewCase" title="新增测试用例" size="55%">
+      <el-card shadow="never" style="height: 100%">
+        <el-input v-model="pageControl.quickCreate.name" placeholder="请输入名称后点确认新增" size="small" maxlength="30" show-word-limit>
+          <template #append>
+            <el-button @click="quickCreate()" type="primary" size="small">确认新增</el-button>
+          </template>
+        </el-input>
+      </el-card>
+    </el-drawer>
+<!--    <el-dialog v-if="pageControl.isEditCase" :visible.sync="pageControl.isEditCase" title="编辑用例" width="60%">-->
+<!--      <tl-detail :case-id="pageControl.selectedCaseId" :is-edit="true"></tl-detail>-->
+<!--    </el-dialog>-->
+    <el-drawer v-if="pageControl.isEditCase" :visible.sync="pageControl.isEditCase" title="编辑用例" :with-header="false" size="55%">
+      <el-card style="min-height: 100%">
+        <tl-detail :case-id="pageControl.selectedCaseId" :is-edit="true"></tl-detail>
+      </el-card>
+    </el-drawer>
     <el-dialog :visible.sync="pageControl.isUseCase" title="执行用例">
       <el-card>
         <tl-use :tool-id="pageControl.selectedCaseId"></tl-use>
@@ -111,11 +125,11 @@ export default {
     this.queryList()
   },
   watch: {
-    // '$store.state.point.expendPointCount': function (newVal, oldVal) {
-    //   if (this.type === 2) {
-    //     this.queryPointLogList()
-    //   }
-    // }
+    'pageControl.isEditCase': function () {
+      if (!this.pageControl.isEditCase) {
+        this.queryList()
+      }
+    }
   },
   methods: {
     getStatus (status) {
@@ -148,7 +162,10 @@ export default {
     quickCreate () {
       quickCreateAPI(this.pageControl.quickCreate).then(response => {
         if (response.data.success === true) {
-          this.$message.success('创建用例成功')
+          this.pageControl.selectedCaseId = response.data.data
+          this.pageControl.isNewCase = false
+          this.pageControl.isEditCase = true
+          this.pageControl.quickCreate.name = ''
         }
       })
     }

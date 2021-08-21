@@ -30,28 +30,17 @@
                    :total="pageData.total" style="float: right">
     </el-pagination>
     <!--弹出框-->
-    <el-dialog :visible.sync="pageControl.isNewSuite" title="新增测试集">
-      <el-form :model="pageControl.quickCreate" label-width="90px">
-        <el-form-item label="标题">
-          <el-input v-model="pageControl.quickCreate.name" placeholder="请输入标题" size="small" maxlength="30" show-word-limit></el-input>
-        </el-form-item>
-      </el-form>
-      <div style="text-align: center">
-        <el-button @click="quickCreate()" type="primary" size="small">确认</el-button>
-      </div>
-    </el-dialog>
+    <el-drawer :visible.sync="pageControl.isNewSuite" title="新增测试集" size="55%">
+      <el-card shadow="never" style="height: 100%">
+        <el-input v-model="pageControl.quickCreate.name" placeholder="请输入名称后点确认新增" size="small" maxlength="30" show-word-limit>
+          <template #append>
+            <el-button @click="quickCreate()" type="primary" size="small" plain>确认新增</el-button>
+          </template>
+        </el-input>
+      </el-card>
+    </el-drawer>
     <el-drawer v-if="pageControl.isEditSuite" :visible.sync="pageControl.isEditSuite" title="编辑测试集" :with-header="false" size="55%">
-      <template #title>
-        <el-row :gutter="5" style="height: 10px">
-          <el-col :span="19">
-            <span>编辑测试集</span>
-          </el-col>
-          <el-col :span="4">
-            <el-button size="small">test</el-button>
-          </el-col>
-        </el-row>
-      </template>
-      <el-card>
+      <el-card style="height: 100%">
         <tl-detail :suite-id="pageControl.selectedSuiteId" :is-edit="true"></tl-detail>
       </el-card>
     </el-drawer>
@@ -102,11 +91,11 @@ export default {
     this.queryList()
   },
   watch: {
-    // '$store.state.point.expendPointCount': function (newVal, oldVal) {
-    //   if (this.type === 2) {
-    //     this.queryPointLogList()
-    //   }
-    // }
+    'pageControl.isEditSuite': function () {
+      if (!this.pageControl.isEditSuite) {
+        this.queryList()
+      }
+    }
   },
   methods: {
     use (suiteId) {
@@ -127,8 +116,10 @@ export default {
     quickCreate () {
       quickCreateAPI(this.pageControl.quickCreate).then(response => {
         if (response.data.success === true) {
-          this.$message.success('创建用例成功')
+          this.pageControl.selectedSuiteId = response.data.data
           this.pageControl.isNewSuite = false
+          this.pageControl.isEditSuite = true
+          this.pageControl.quickCreate.name = ''
         }
       })
     }
