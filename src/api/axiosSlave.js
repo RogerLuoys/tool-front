@@ -20,6 +20,7 @@ apiSlave.interceptors.response.use(function (response) {
 }, function (error) {
   // 接口返回异常时，统一错误提示
   Message.error('执行异常，请检查自动化服务器')
+  Message.error('执行异常，请检查自动化服务器')
   return Promise.reject(error)
 })
 

@@ -40,75 +40,56 @@
 </template>
 
 <script>
-// import {loginAPI} from '@/api/user'
-// import {queryPointSummaryAPI} from '@/api/point'
+import {loginAPI} from '@/api/user'
 
 export default {
-  // created: function () {
-  //   // 如有cookie，则自动登录
-  //   if (this.$cookies.get('userId') && this.$cookies.get('loginName')) {
-  //     loginAPI({
-  //       loginName: this.$cookies.get('loginName'),
-  //       password: this.$cookies.get('password')
-  //     }).then(response => {
-  //       if (response.data.success === true) {
-  //         this.$store.commit('setUserName', response.data.data.userName)
-  //         this.$store.commit('setIsLogin', true)
-  //         this.getPointId()
-  //         this.$router.push('/flag')
-  //       } else {
-  //         this.$message.error('账号或密码错误，请重新登录')
-  //         this.$store.commit('setIsLogin', false)
-  //         this.$router.push('/')
-  //       }
-  //     })
-  //   } else {
-  //     this.$message.error('登录过期，请重新登录')
-  //     this.$store.commit('setIsLogin', false)
-  //     this.$router.push('/')
-  //   }
-  // },
-  // methods: {
-  //   getPointId () {
-  //     queryPointSummaryAPI().then(response => {
-  //       if (response.data.success === true) {
-  //         this.$store.commit('setPointId', response.data.data.pointId)
-  //       }
-  //     })
-  //   },
-  //   doLogin () {
-  //     loginAPI({
-  //       loginName: this.pageData.loginName,
-  //       password: this.pageData.password
-  //     }).then(response => {
-  //       if (response.data.success === true) {
-  //         console.info('登录成功')
-  //         this.pageData = response.data.data
-  //         this.setUserCookie()
-  //         this.$store.commit('setUserName', this.pageData.userName)
-  //         this.$router.push('/flag')
-  //       } else {
-  //         this.$message.error('账号或密码错误')
-  //       }
-  //     })
-  //   },
-  //   dropdownAction (command) {
-  //     switch (command) {
-  //       case 'profile':
-  //         this.$router.push('/profile')
-  //         break
-  //       case 'loginOut':
-  //         this.$router.push('/')
-  //         break
-  //     }
-  //   },
-  //   handleOpen (key, keyPath) {
-  //     console.log(key, keyPath)
-  //   },
-  //   handleClose (key, keyPath) {
-  //     console.log(key, keyPath)
-  //   }
-  // }
+  created: function () {
+    console.info('create app')
+    this.$store.state.slaveHost = 'http://localhost:9011/'
+    // 如有cookie，则自动登录
+    if (this.$cookies.get('userId') && this.$cookies.get('loginName')) {
+      loginAPI({
+        loginName: this.$cookies.get('loginName'),
+        password: this.$cookies.get('password')
+      }).then(response => {
+        if (response.data.success === true) {
+          this.$store.commit('setUserName', response.data.data.userName)
+          this.$store.commit('setIsLogin', true)
+        } else {
+          this.$message.error('账号或密码错误，请重新登录')
+          this.$store.commit('setIsLogin', false)
+          this.$router.push('/')
+        }
+      })
+    } else {
+      // this.$store.commit('setUserName', '默认用户')
+      this.$store.state.userName = '默认用户'
+      console.info('默认用户')
+    }
+  },
+  methods: {
+    doLogin () {
+      loginAPI({
+        loginName: this.pageData.loginName,
+        password: this.pageData.password
+      }).then(response => {
+        if (response.data.success === true) {
+          console.info('登录成功')
+          this.pageData = response.data.data
+          this.setUserCookie()
+          this.$store.commit('setUserName', this.pageData.userName)
+          this.$router.push('/flag')
+        } else {
+          this.$message.error('账号或密码错误')
+        }
+      })
+    },
+    setUserCookie () {
+      this.$cookies.set('loginName', this.pageData.loginName)
+      this.$cookies.set('password', this.pageData.password)
+      this.$cookies.set('userId', this.pageData.userId)
+    }
+  }
 }
 </script>
 
