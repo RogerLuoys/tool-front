@@ -17,6 +17,10 @@
           <el-radio :label="4">UI</el-radio>
         </el-radio-group>
       </el-form-item>
+      <el-form-item v-if="pageData.type === 4" label="等待时间">
+        <el-input-number v-model="pageData.afterSleep" :min="0" :max="30" size="mini"></el-input-number>
+        <span>步骤执行完成后的等待时间(单位：秒)</span>
+      </el-form-item>
       <el-form-item label="预期结果">
         <el-row :gutter="5">
           <el-col :span="4">
@@ -92,7 +96,7 @@
               </el-select>
             </el-col>
             <el-col :span="19">
-              <el-input v-model="pageData.httpRequest.httpURL" size="small" placeholder="请输入URL"
+              <el-input v-model="pageData.httpRequest.httpURL" size="small" placeholder="请输入URL(可使用${env}参数)"
                         maxlength="200" show-word-limit>
               </el-input>
             </el-col>
@@ -133,7 +137,7 @@
       <!--RPC类型-->
       <div v-else-if="pageData.type===3">
         <el-form-item label="RPC地址">
-          <el-input v-model="pageData.rpc.url" placeholder="请输入地址(协议://ip:prod/)" size="small" maxlength="50" show-word-limit></el-input>
+          <el-input v-model="pageData.rpc.url" placeholder="请输入地址(协议://ip:prod/)(可使用${env}参数)" size="small" maxlength="50" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="接口名">
           <el-input v-model="pageData.rpc.interfaceName" placeholder="请输入接口名，class name" size="small" maxlength="200" show-word-limit></el-input>
@@ -188,7 +192,7 @@
               </el-select>
             </el-col>
             <el-col :span="19">
-              <el-input v-if="pageData.ui.type===1" v-model="pageData.ui.url" size="small" placeholder="请输入URL"
+              <el-input v-if="pageData.ui.type===1" v-model="pageData.ui.url" size="small" placeholder="请输入URL(可使用${env}参数)"
                         maxlength="200" show-word-limit>
               </el-input>
               <el-input v-else v-model="pageData.ui.element" size="small" placeholder="请输入元素Xpath"
@@ -238,6 +242,7 @@ export default {
         ownerName: 'tester',
         isPublic: true,
         type: 1,
+        afterSleep: 0,
         assertType: -1,
         assertExpect: '',
         jdbc: {

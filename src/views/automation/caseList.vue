@@ -66,9 +66,9 @@
 <!--    <el-dialog v-if="pageControl.isEditCase" :visible.sync="pageControl.isEditCase" title="编辑用例" width="60%">-->
 <!--      <tl-detail :case-id="pageControl.selectedCaseId" :is-edit="true"></tl-detail>-->
 <!--    </el-dialog>-->
-    <el-drawer v-if="pageControl.isEditCase" :visible.sync="pageControl.isEditCase" title="编辑用例" :with-header="false" size="55%">
+    <el-drawer :visible.sync="pageControl.isEditCase" title="编辑用例" :with-header="false" size="55%">
       <el-card style="min-height: 100%">
-        <tl-detail :case-id="pageControl.selectedCaseId" :is-edit="true"></tl-detail>
+        <tl-detail v-if="pageControl.isEditCase" :case-id="pageControl.selectedCaseId" :is-edit="true"></tl-detail>
       </el-card>
     </el-drawer>
     <el-dialog :visible.sync="pageControl.isUseCase" title="执行用例">
