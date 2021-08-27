@@ -2,8 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import home from '@/views/home/index'
 import config from '@/views/config/index'
-import commonFactory from '@/views/common-factory/index'
-import commonFactoryDetail from '@/views/common-factory/detail'
+import factory from '@/views/factory/index'
+import factoryDetail from '@/views/factory/detail'
 import customFactory from '@/views/custom-factory/index'
 import resource from '@/views/resource/index'
 import automation from '@/views/automation/index'
@@ -24,14 +24,14 @@ export default new Router({
       component: config
     },
     {
-      path: '/commonFactory',
-      name: 'commonFactory',
-      component: commonFactory
+      path: '/factory',
+      name: 'factory',
+      component: factory
     },
     {
-      path: '/commonFactoryDetail/:id',
-      name: 'commonFactoryDetail',
-      component: commonFactoryDetail
+      path: '/factoryDetail/:id',
+      name: 'factoryDetail',
+      component: factoryDetail
     },
     {
       path: '/customFactory',

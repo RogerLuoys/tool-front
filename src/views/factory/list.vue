@@ -11,7 +11,7 @@
               style="width:200px; float:left"></el-input>
     <el-button @click="queryList()" icon="el-icon-search" type="primary" size="mini"></el-button>
     <!--新增-->
-    <el-button type="primary" @click="$router.push(`commonFactoryDetail/0`)" size="mini" style="float:right">新增</el-button>
+    <el-button type="primary" @click="$router.push(`factoryDetail/0`)" size="mini" style="float:right">新增</el-button>
     <!--列表-->
     <el-table border :data="pageData.list" size="mini" style="width: 100%">
       <el-table-column prop="type" label="类型" width="180">
@@ -19,16 +19,16 @@
           <div>{{ getType(scope.row.type) }}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="标题" width="180">
+      <el-table-column prop="name" label="标题" width="180" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column prop="description" label="说明" width="180">
+      <el-table-column prop="description" label="说明" width="180" show-overflow-tooltip>
       </el-table-column>
       <el-table-column prop="ownerName" label="归属">
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button @click="use(scope.row.toolId)" type="text" size="small">使用</el-button>
-          <el-button @click="$router.push(`commonFactoryDetail/${scope.row.toolId}`)" type="text" size="small">编辑</el-button>
+          <el-button @click="$router.push(`factoryDetail/${scope.row.toolId}`)" type="text" size="small">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>

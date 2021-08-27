@@ -10,14 +10,18 @@
               <i class="el-icon-s-home"></i>
               <span slot="title">首页</span>
             </el-menu-item>
-            <el-submenu index="2">
-              <template slot="title">
-                <i class="el-icon-s-management"></i>
-                <span>数据工厂</span>
-              </template>
-              <el-menu-item index="2-1" @click="$router.push('/commonFactory')">通用</el-menu-item>
-              <el-menu-item index="2-2" @click="$router.push('/customFactory')">自定义</el-menu-item>
-            </el-submenu>
+            <el-menu-item index="2" @click="$router.push('/factory')">
+              <i class="el-icon-s-management"></i>
+              <span slot="title">数据工厂</span>
+            </el-menu-item>
+<!--            <el-submenu index="2">-->
+<!--              <template slot="title">-->
+<!--                <i class="el-icon-s-management"></i>-->
+<!--                <span>数据工厂</span>-->
+<!--              </template>-->
+<!--              <el-menu-item index="2-1" @click="$router.push('/commonFactory')">通用</el-menu-item>-->
+<!--              <el-menu-item index="2-2" @click="$router.push('/customFactory')">自定义</el-menu-item>-->
+<!--            </el-submenu>-->
             <el-menu-item index="3" @click="$router.push('/automation')">
               <i class="el-icon-s-promotion"></i>
               <span slot="title">自动化测试</span>

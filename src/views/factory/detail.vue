@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-page-header @back="$router.push('/commonFactory')" title="返回列表">
+    <el-page-header @back="$router.push('/factory')" title="返回列表">
       <template #content>
         <span>{{pageData.name}}</span>
       </template>

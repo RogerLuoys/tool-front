@@ -6,9 +6,12 @@
         <el-button @click="test">调主服务器</el-button>
         <el-button @click="slaveNode">调从服务器</el-button>
       </div>
+      <div>
+        <el-button @click="isVisible=true">查看</el-button>
+      </div>
     </el-aside>
     <el-main style="background-color: lightgrey">
-      <el-form ref="pageData" :model="pageData" label-width="3cm" style="max-width: 800px">
+      <el-form ref="pageData" label-width="3cm" style="max-width: 800px">
         <el-form-item label="当前登录">
           <div>
             {{$store.state.userName}}
@@ -21,17 +24,23 @@
         </el-form-item>
       </el-form>
     </el-main>
+    <el-drawer :visible.sync="isVisible" title="test" size="90%">
+      <demo2></demo2>
+    </el-drawer>
   </el-container>
 </template>
 
 <script>
 
 import {queryDetailAPI, queryDetailAPIS} from '@/api/test'
+import demo2 from './demo2'
 
 export default {
+  components: {demo2},
   data () {
     return {
-      customURL: ''
+      customURL: '',
+      isVisible: false
     }
   },
   methods: {
