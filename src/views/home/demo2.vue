@@ -36,8 +36,7 @@
         <el-select clearable size="mini" placeholder="筛选"
                    style="width:110px; float:left">
         </el-select>
-        <el-input placeholder="请输入名称" clearable size="mini" style="width:200px; float:left"></el-input>
-        <el-button icon="el-icon-search" type="primary" size="mini"></el-button>
+        <el-input placeholder="请输入名称" suffix-icon="el-icon-search" size="mini" style="width:200px; float:left"></el-input>
         <el-button type="primary" size="mini" style="float:right">一键关联</el-button>
         <el-table border :data="customer.data" size="mini" style="width: 100%">
           <el-table-column prop="name" label="客户简称">
@@ -61,13 +60,12 @@
         <el-pagination layout="prev, pager, next, jumper" :total="100" style="float: right"></el-pagination>
       </el-tab-pane>
       <el-tab-pane label="群消息备份">
-        <el-input placeholder="请输入名称" clearable size="mini" style="width:200px; float:left"></el-input>
-        <el-button icon="el-icon-search" type="primary" size="mini"></el-button>
+        <el-input placeholder="请输入名称" suffix-icon="el-icon-search" size="mini" style="width:200px; float:left"></el-input>
         <el-checkbox>仅看自己</el-checkbox>
         <el-button type="warning" size="mini" style="float:right">更新数据</el-button>
         <el-tabs>
           <el-tab-pane label="群聊">
-            <el-table border :data="backup.group" size="mini" style="width: 100%">
+            <el-table border :data="backup.group" @row-click="backup.isVisible=true" size="mini" style="width: 100%">
               <el-table-column prop="name" label="群名称">
               </el-table-column>
               <el-table-column prop="customer" label="关联客户">
@@ -80,11 +78,49 @@
               </el-table-column>
             </el-table>
           </el-tab-pane>
-          <el-tab-pane label="单聊">定时任务补偿</el-tab-pane>
+          <el-tab-pane label="单聊">
+            <el-table border :data="backup.person" @row-click="backup.isVisible=true" size="mini" style="width: 100%">
+              <el-table-column prop="name" label="客户昵称/备份">
+              </el-table-column>
+              <el-table-column prop="customer" label="关联客户">
+              </el-table-column>
+              <el-table-column prop="owner" label="备份账号">
+              </el-table-column>
+              <el-table-column prop="time" label="创建时间">
+              </el-table-column>
+            </el-table>
+          </el-tab-pane>
         </el-tabs>
         <el-pagination layout="prev, pager, next, jumper" :total="100" style="float: right"></el-pagination>
       </el-tab-pane>
-      <el-tab-pane label="群发机器人">定时任务补偿</el-tab-pane>
+      <el-tab-pane label="群发机器人">
+        <el-input placeholder="请输入名称" clearable size="mini" suffix-icon="el-icon-search" style="width:200px; float:left"></el-input>
+        <el-dropdown split-button type="warning" @click="message.isTemplate=true" size="mini" style="float:right">
+          模板设置
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>推送速度设置</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <el-button @click="message.isNew=true" type="warning" plain size="mini" style="float:right">新建群发</el-button>
+        <el-table border :data="message.list" size="mini" style="width: 100%">
+          <el-table-column prop="name" label="群发名称">
+          </el-table-column>
+          <el-table-column prop="operator" label="操作人">
+          </el-table-column>
+          <el-table-column prop="data" label="内容预览" show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column prop="time" label="发送时间">
+          </el-table-column>
+          <el-table-column prop="group" label="已选择群聊">
+          </el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button @click="message.isView=true" type="text" size="small">查看</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination layout="prev, pager, next, jumper" :total="100" style="float: right"></el-pagination>
+      </el-tab-pane>
     </el-tabs>
     <el-dialog :visible.sync="config.isStep1" title="开启群消息备份-1" append-to-body>
       <el-tag type="info" style="width: 100%">企业微信后台-创建自建应用，粘贴Secret字段</el-tag>
@@ -152,6 +188,105 @@
       </el-form>
       <el-button type="text" size="small">清空关联客户</el-button>
     </el-dialog>
+    <el-drawer :visible.sync="backup.isVisible" title="备份" append-to-body size="40%">
+      <el-card>
+        <el-form label-width="110px" size="small">
+          <el-form-item label="会话名称">
+            <div>某某某群/某某某客户</div>
+          </el-form-item>
+          <el-form-item label="创建时间">
+            <span>2021-08-27</span>
+          </el-form-item>
+          <el-form-item label="关联客户">
+            <span>某某某公司的代表</span>
+          </el-form-item>
+          <el-form-item label="会话成员">
+            <span>10</span>
+          </el-form-item>
+        </el-form>
+      </el-card>
+      <el-card>
+        <template #header>
+          <span>会话消息备份</span>
+          <el-date-picker type="date" placeholder="选择日期" size="mini" style="width: 150px; float: right"></el-date-picker>
+          <el-input placeholder="请输入" clearable size="mini" style="width:150px; float:right"></el-input>
+        </template>
+        <el-tabs>
+          <el-tab-pane label="全部">
+            <el-row>
+              <el-col :span="3">头像···</el-col>
+              <el-col :span="13">昵称···<br/>正文···</el-col>
+              <el-col :span="8">2021-08-27 10:00:00</el-col>
+            </el-row>
+          </el-tab-pane>
+          <el-tab-pane label="文本"></el-tab-pane>
+          <el-tab-pane label="图片"></el-tab-pane>
+          <el-tab-pane label="文件"></el-tab-pane>
+          <el-tab-pane label="视频"></el-tab-pane>
+          <el-tab-pane label="语音"></el-tab-pane>
+        </el-tabs>
+      </el-card>
+    </el-drawer>
+    <el-dialog :visible.sync="message.isView" title="发消息到客户群" append-to-body>
+      <el-form label-width="110px" size="small">
+        <el-form-item label="群发名称">
+          <div>清卡提醒</div>
+        </el-form-item>
+        <el-form-item label="发送时间">
+          <span>2021-06-24 21:21</span>
+        </el-form-item>
+        <el-form-item label="操作人">
+          <span>机构内的某员工昵称</span>
+        </el-form-item>
+        <el-form-item label="发送客户">
+          <span>单客户/多客户</span>
+        </el-form-item>
+        <el-form-item label="消息1">
+          <span>「客户尊称」，您的企业「企业全称」：请确保完成本月的清卡工作，如已清卡请忽略本消息。感谢您的配合！</span>
+        </el-form-item>
+        <el-form-item label="消息2">
+          <span>这是个图片（如果为空则不线上）</span>
+        </el-form-item>
+      </el-form>
+      <el-button type="text" size="small">清空关联客户</el-button>
+    </el-dialog>
+    <el-dialog :visible.sync="message.isNew" title="群发消息模版" append-to-body>
+      <div>按模板推送</div>
+      <div>
+        <el-row :gutter="5">
+          <el-col span="6">
+            <el-card style="width: 130px">清卡提醒</el-card>
+          </el-col>
+          <el-col span="6">
+            <el-card style="width: 130px">社保变更核对</el-card>
+          </el-col>
+          <el-col span="6">
+            <el-card style="width: 130px">个税变更核对</el-card>
+          </el-col>
+          <el-col span="5">
+            <el-card style="width: 130px">交票提醒</el-card>
+          </el-col>
+        </el-row>
+        <el-card style="width: 130px">抄税提醒</el-card>
+      </div>
+      <div>其它</div>
+      <span @click="message.isNewMessage=true">
+        <el-card style="width: 130px">自定义推送</el-card>
+      </span>
+    </el-dialog>
+    <el-dialog :visible.sync="message.isTemplate" title="模板设置" append-to-body style="height: 800px">
+      <el-tabs type="border-card" tab-position="left">
+        <el-tab-pane label="用户管理">用户管理</el-tab-pane>
+        <el-tab-pane label="配置管理">配置管理</el-tab-pane>
+        <el-tab-pane label="角色管理">角色管理</el-tab-pane>
+        <el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane>
+        <el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane>
+        <el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane>
+        <el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane>
+        <el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane>
+        <el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane>
+      </el-tabs>
+    </el-dialog>
   </div>
 </template>
 
@@ -179,6 +314,7 @@ export default {
         }]
       },
       backup: {
+        isVisible: false,
         group: [{
           name: '与代表沟通的客户群',
           customer: '某某某公司的代表',
@@ -186,7 +322,26 @@ export default {
           member: '10',
           time: '2021-08-08'
         }],
-        person: []
+        person: [{
+          name: '对应的外部客户',
+          customer: '某某某公司的代表',
+          owner: '可备份的内部成员',
+          time: '2021-08-08'
+        }]
+      },
+      message: {
+        isNew: false,
+        isNewMessage: false,
+        isTemplate: false,
+        isSpeed: false,
+        isView: false,
+        list: [{
+          name: '清卡提醒',
+          operator: '机构内部员工某某',
+          data: '尊敬的老板，您的企业「企业全称」：请确保完成本月的清卡工作，如已清卡请忽略本消息。感谢您的配合！',
+          time: '2021-08-30 12:00:00',
+          group: '100'
+        }]
       }
     }
   }
