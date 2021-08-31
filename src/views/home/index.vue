@@ -24,19 +24,14 @@
         </el-form-item>
       </el-form>
     </el-main>
-    <el-drawer :visible.sync="isVisible" title="test" size="90%">
-      <demo2></demo2>
-    </el-drawer>
   </el-container>
 </template>
 
 <script>
 
 import {queryDetailAPI, queryDetailAPIS} from '@/api/test'
-import demo2 from './demo2'
 
 export default {
-  components: {demo2},
   data () {
     return {
       customURL: '',
