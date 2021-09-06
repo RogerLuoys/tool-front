@@ -13,6 +13,7 @@
     <!--新增-->
     <el-button type="primary" @click="$router.push(`factoryDetail/0`)" size="mini" style="float:right">新增</el-button>
     <!--列表-->
+    <div style="height: 5px"></div>
     <el-table border :data="pageData.list" size="mini" style="width: 100%">
       <el-table-column prop="type" label="类型" width="180">
         <template #default="scope">
@@ -27,8 +28,8 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button @click="use(scope.row.toolId)" type="text" size="small">使用</el-button>
-          <el-button @click="$router.push(`factoryDetail/${scope.row.toolId}`)" type="text" size="small">编辑</el-button>
+          <el-button @click="use(scope.row.toolId)" type="text" size="mini">使用</el-button>
+          <el-button @click="$router.push(`factoryDetail/${scope.row.toolId}`)" type="text" size="mini">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>

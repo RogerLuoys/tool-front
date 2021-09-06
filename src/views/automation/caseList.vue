@@ -14,6 +14,7 @@
     <!--新增-->
     <el-button type="primary" @click="pageControl.isNewCase=true" size="mini" style="float:right">新增</el-button>
     <!--列表-->
+    <div style="height: 5px"></div>
     <el-table border :data="pageData.list" size="mini" style="width: 100%">
       <el-table-column prop="caseId" label="编号" width="120">
       </el-table-column>
@@ -22,14 +23,17 @@
           <div>{{ getStatus(scope.row.status) }}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="标题" width="180">
+      <el-table-column prop="name" label="标题" width="180" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column prop="description" label="说明" width="180">
+      <el-table-column prop="description" label="说明" width="180" show-overflow-tooltip>
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button @click="use(scope.row.caseId)" type="text" size="small">试用</el-button>
-          <el-button @click="edit(scope.row.caseId)" type="text" size="small">编辑</el-button>
+          <el-link @click="use(scope.row.caseId)" :underline="false" type="primary">试用</el-link>
+          <span style="width: 20px"></span>
+          <el-link @click="edit(scope.row.caseId)" :underline="false" type="primary">编辑</el-link>
+<!--          <el-button @click="use(scope.row.caseId)" type="text" size="mini">试用</el-button>-->
+<!--          <el-button @click="edit(scope.row.caseId)" type="text" size="mini">编辑</el-button>-->
         </template>
       </el-table-column>
     </el-table>

@@ -9,6 +9,9 @@
       <div>
         <el-button @click="isVisible=true">查看</el-button>
       </div>
+      <div style="cursor: pointer">
+        测试
+      </div>
     </el-aside>
     <el-main style="background-color: lightgrey">
       <el-form ref="pageData" label-width="3cm" style="max-width: 800px">

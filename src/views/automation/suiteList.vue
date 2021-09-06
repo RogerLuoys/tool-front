@@ -7,10 +7,11 @@
     <!--新增-->
     <el-button type="primary" @click="pageControl.isNewSuite=true" size="mini" style="float:right">新增</el-button>
     <!--列表-->
+    <div style="height: 5px"></div>
     <el-table border :data="pageData.list" size="mini" style="width: 100%">
-      <el-table-column prop="name" label="标题" width="180">
+      <el-table-column prop="name" label="标题" width="180" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column prop="description" label="说明">
+      <el-table-column prop="description" label="说明" show-overflow-tooltip>
       </el-table-column>
       <el-table-column prop="total" label="用例总数" width="100">
       </el-table-column>
@@ -20,8 +21,8 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button @click="use(scope.row.suiteId)" type="text" size="small">执行</el-button>
-          <el-button @click="edit(scope.row.suiteId)" type="text" size="small">编辑</el-button>
+          <el-button @click="use(scope.row.suiteId)" type="text" size="mini">执行</el-button>
+          <el-button @click="edit(scope.row.suiteId)" type="text" size="mini">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
