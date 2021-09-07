@@ -88,7 +88,7 @@ export default {
   //   this.queryList()
   // },
   watch: {
-    '$store.state.commonFactory.isSelectDSVisible': function (newVal, oldVal) {
+    '$store.state.isSelectDSVisible': function (newVal, oldVal) {
       if (newVal === true) {
         this.queryList()
       }

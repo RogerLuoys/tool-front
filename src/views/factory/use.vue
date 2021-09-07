@@ -38,18 +38,13 @@
 </template>
 
 <script>
-import {useAPI, queryDetailAPI} from '@/api/commonFactory'
+import {useAPI, queryDetailAPI} from '@/api/factory'
 
 export default {
   props: {
     toolId: {
       type: String,
       default: 'toolId'
-    }
-  },
-  watch: {
-    toolId: function (newVal, oldVal) {
-      this.queryDetail()
     }
   },
   created: function () {

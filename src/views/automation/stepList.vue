@@ -15,7 +15,7 @@
     <el-button type="primary" @click="pageControl.isNewStep=true" size="mini" style="float:right">新增</el-button>
     <!--列表-->
     <div style="height: 5px"></div>
-    <el-table border :data="pageData.list" size="mini" style="width: 100%">
+    <el-table border :data="pageData.list" size="mini" style="width: 100%;height: 411px">
       <el-table-column prop="stepId" label="编号" width="120">
       </el-table-column>
       <el-table-column prop="type" label="类型" width="180">
@@ -32,20 +32,21 @@
       <el-table-column label="操作" width="90">
         <template slot-scope="scope">
 <!--          <el-button @click="use(scope.row.stepId)" type="text" size="small">试用</el-button>-->
-          <el-button @click="edit(scope.row.stepId)" type="text" size="mini">编辑</el-button>
+          <el-link @click="edit(scope.row.stepId)" :underline="false" type="primary">编辑</el-link>
+<!--          <el-button @click="edit(scope.row.stepId)" type="text" size="mini">编辑</el-button>-->
         </template>
       </el-table-column>
     </el-table>
     <!--分页-->
-    <el-pagination layout="prev, pager, next" @current-change="queryList()" :current-page="pageControl.search.pageIndex"
+    <el-pagination layout="total, prev, pager, next" @current-change="queryList()" :current-page.sync="pageControl.search.pageIndex"
                    :total="pageData.total" style="float: right">
     </el-pagination>
     <!--弹出框-->
     <el-dialog v-if="pageControl.isNewStep" :visible.sync="pageControl.isNewStep" width="65%" title="新增公共步骤">
-      <tl-detail></tl-detail>
+      <tl-detail :visible.sync="pageControl.isNewStep"></tl-detail>
     </el-dialog>
     <el-dialog v-if="pageControl.isEditStep" :visible.sync="pageControl.isEditStep" width="65%" title="编辑步骤">
-      <tl-detail :step-id="pageControl.selectedStepId" :is-edit="true"></tl-detail>
+      <tl-detail :step-id="pageControl.selectedStepId" :is-edit="true" :visible.sync="pageControl.isEditStep"></tl-detail>
     </el-dialog>
 <!--    <el-dialog v-if="pageControl.isUseStep" :visible.sync="pageControl.isUseStep" title="使用数据工厂">-->
 <!--        <tl-use :step-id="pageControl.selectedStepId"></tl-use>-->
@@ -97,11 +98,16 @@ export default {
     this.queryList()
   },
   watch: {
-    // '$store.state.point.expendPointCount': function (newVal, oldVal) {
-    //   if (this.type === 2) {
-    //     this.queryPointLogList()
-    //   }
-    // }
+    'pageControl.isNewStep': function () {
+      if (this.pageControl.isNewStep === false) {
+        this.queryList()
+      }
+    },
+    'pageControl.isEditStep': function () {
+      if (this.pageControl.isEditStep === false) {
+        this.queryList()
+      }
+    }
   },
   methods: {
     getType (type) {

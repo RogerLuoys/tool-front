@@ -216,7 +216,7 @@
 </template>
 
 <script>
-import {createAPI, updateAPI, removeAPI, queryDetailAPI} from '@/api/commonFactory'
+import {createAPI, updateAPI, removeAPI, queryDetailAPI} from '@/api/factory'
 import tlSelectDataSource from './selectDataSource'
 
 export default {
@@ -289,7 +289,7 @@ export default {
     }
   },
   watch: {
-    '$store.state.commonFactory.selectedDataSource': function (newVal, oldVal) {
+    '$store.state.selectedDataSource': function (newVal, oldVal) {
       this.pageData.jdbc.dataSource = this.$store.state.selectedDataSource
     }
   },
@@ -364,7 +364,7 @@ export default {
       createAPI(this.pageData).then(response => {
         if (response.data.success === true) {
           this.$message.success('创建工具成功')
-          this.$router.push('/commonFactory')
+          this.$router.push('/factory')
         }
       })
     },
@@ -372,7 +372,7 @@ export default {
       updateAPI(this.pageData).then(response => {
         if (response.data.success === true) {
           this.$message.success('编辑工具成功')
-          this.$router.push('/commonFactory')
+          this.$router.push('/factory')
         }
       })
     },
@@ -380,7 +380,7 @@ export default {
       removeAPI({toolId: this.pageData.toolId}).then(response => {
         if (response.data.success === true) {
           this.$message.success('删除工具成功')
-          this.$router.push('/commonFactory')
+          this.$router.push('/factory')
         }
       })
     },

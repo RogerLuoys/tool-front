@@ -4,7 +4,6 @@ import home from '@/views/home/index'
 import config from '@/views/config/index'
 import factory from '@/views/factory/index'
 import factoryDetail from '@/views/factory/detail'
-import customFactory from '@/views/custom-factory/index'
 import resource from '@/views/resource/index'
 import automation from '@/views/automation/index'
 import caseDetail from '@/views/automation/caseDetail'
@@ -32,11 +31,6 @@ export default new Router({
       path: '/factoryDetail/:id',
       name: 'factoryDetail',
       component: factoryDetail
-    },
-    {
-      path: '/customFactory',
-      name: 'customFactory',
-      component: customFactory
     },
     {
       path: '/resource',

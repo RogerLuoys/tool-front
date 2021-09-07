@@ -194,7 +194,7 @@
     </el-form>
     <!--弹窗-->
     <el-dialog v-if="pageControl.isEditStep" :visible.sync="pageControl.isEditStep" title="编辑步骤" width="65%" append-to-body>
-      <tl-step-detail :case-step="pageControl.selectedStep" is-case-step></tl-step-detail>
+      <tl-step-detail :case-step="pageControl.selectedStep" :visible.sync="pageControl.isEditStep" is-case-step></tl-step-detail>
     </el-dialog>
   </div>
 </template>
@@ -343,7 +343,7 @@ export default {
     }
   },
   // watch: {
-  //   testSuiteId: function (newVal, oldVal) {
+  //   'pageControl.': function () {
   //     if (this.caseId !== 0) {
   //       this.queryDetail()
   //     }

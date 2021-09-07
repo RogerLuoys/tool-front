@@ -8,7 +8,7 @@
     <el-button type="primary" @click="pageControl.isNewSuite=true" size="mini" style="float:right">新增</el-button>
     <!--列表-->
     <div style="height: 5px"></div>
-    <el-table border :data="pageData.list" size="mini" style="width: 100%">
+    <el-table border :data="pageData.list" size="mini" style="width: 100%; height: 411px">
       <el-table-column prop="name" label="标题" width="180" show-overflow-tooltip>
       </el-table-column>
       <el-table-column prop="description" label="说明" show-overflow-tooltip>
@@ -21,19 +21,21 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button @click="use(scope.row.suiteId)" type="text" size="mini">执行</el-button>
-          <el-button @click="edit(scope.row.suiteId)" type="text" size="mini">编辑</el-button>
+          <el-link @click="use(scope.row.suiteId)" :underline="false" type="primary">执行</el-link>
+          <el-link @click="edit(scope.row.suiteId)" :underline="false" type="primary">编辑</el-link>
+<!--          <el-button @click="use(scope.row.suiteId)" type="text" size="mini">执行</el-button>-->
+<!--          <el-button @click="edit(scope.row.suiteId)" type="text" size="mini">编辑</el-button>-->
         </template>
       </el-table-column>
     </el-table>
     <!--分页-->
-    <el-pagination layout="prev, pager, next" @current-change="queryList()" :current-page="pageControl.search.pageIndex"
+    <el-pagination layout="total, prev, pager, next" @current-change="queryList()" :current-page.sync="pageControl.search.pageIndex"
                    :total="pageData.total" style="float: right">
     </el-pagination>
     <!--弹出框-->
     <el-drawer :visible.sync="pageControl.isNewSuite" title="新增测试集" size="55%">
       <el-card shadow="never" style="height: 100%">
-        <el-input v-model="pageControl.quickCreate.name" placeholder="请输入名称后点确认新增" size="small" maxlength="30" show-word-limit>
+        <el-input v-model="pageControl.quickCreate.name" @keyup.enter.native="quickCreate()" placeholder="请输入名称后回车，或点确认新增" size="small" maxlength="30" show-word-limit>
           <template #append>
             <el-button @click="quickCreate()" type="primary" size="small" plain>确认新增</el-button>
           </template>

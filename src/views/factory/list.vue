@@ -14,7 +14,7 @@
     <el-button type="primary" @click="$router.push(`factoryDetail/0`)" size="mini" style="float:right">新增</el-button>
     <!--列表-->
     <div style="height: 5px"></div>
-    <el-table border :data="pageData.list" size="mini" style="width: 100%">
+    <el-table border :data="pageData.list" size="mini" style="width: 100%;height: 411px">
       <el-table-column prop="type" label="类型" width="180">
         <template #default="scope">
           <div>{{ getType(scope.row.type) }}</div>
@@ -24,24 +24,24 @@
       </el-table-column>
       <el-table-column prop="description" label="说明" width="180" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column prop="ownerName" label="归属">
+      <el-table-column prop="ownerName" label="归属" show-overflow-tooltip>
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button @click="use(scope.row.toolId)" type="text" size="mini">使用</el-button>
-          <el-button @click="$router.push(`factoryDetail/${scope.row.toolId}`)" type="text" size="mini">编辑</el-button>
+          <el-link @click="use(scope.row.toolId)" :underline="false" type="primary">使用</el-link>
+          <el-link @click="$router.push(`factoryDetail/${scope.row.toolId}`)" :underline="false" type="primary">编辑</el-link>
+<!--          <el-button @click="use(scope.row.toolId)" type="text" size="mini">使用</el-button>-->
+<!--          <el-button @click="$router.push(`factoryDetail/${scope.row.toolId}`)" type="text" size="mini">编辑</el-button>-->
         </template>
       </el-table-column>
     </el-table>
     <!--分页-->
-    <el-pagination layout="prev, pager, next" @current-change="queryList()" :current-page="pageControl.search.pageIndex"
+    <el-pagination layout="total, prev, pager, next" @current-change="queryList()" :current-page.sync="pageControl.search.pageIndex"
                    :total="pageData.total" style="float: right">
     </el-pagination>
     <!--弹出框-->
-    <el-dialog :visible.sync="pageControl.isUseTool" title="使用数据工厂">
-      <el-card>
-        <tl-use :tool-id="pageControl.selectedToolId"></tl-use>
-      </el-card>
+    <el-dialog v-if="pageControl.isUseTool" :visible.sync="pageControl.isUseTool" title="使用数据工厂">
+      <tl-use :tool-id="pageControl.selectedToolId"></tl-use>
     </el-dialog>
   </div>
 </template>
@@ -49,7 +49,7 @@
 <script>
 import tlDetail from './detail'
 import tlUse from './use'
-import {queryAPI} from '@/api/commonFactory'
+import {queryAPI} from '@/api/factory'
 
 export default {
   components: {tlDetail, tlUse},

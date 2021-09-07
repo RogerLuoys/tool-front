@@ -15,7 +15,7 @@
     <el-button type="primary" @click="pageControl.isNewCase=true" size="mini" style="float:right">新增</el-button>
     <!--列表-->
     <div style="height: 5px"></div>
-    <el-table border :data="pageData.list" size="mini" style="width: 100%">
+    <el-table border :data="pageData.list" size="mini" style="width: 100%;height: 411px">
       <el-table-column prop="caseId" label="编号" width="120">
       </el-table-column>
       <el-table-column prop="type" label="状态" width="180">
@@ -30,46 +30,24 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-link @click="use(scope.row.caseId)" :underline="false" type="primary">试用</el-link>
-          <span style="width: 20px"></span>
           <el-link @click="edit(scope.row.caseId)" :underline="false" type="primary">编辑</el-link>
-<!--          <el-button @click="use(scope.row.caseId)" type="text" size="mini">试用</el-button>-->
-<!--          <el-button @click="edit(scope.row.caseId)" type="text" size="mini">编辑</el-button>-->
         </template>
       </el-table-column>
     </el-table>
     <!--分页-->
-    <el-pagination layout="prev, pager, next" @current-change="queryList()" :current-page="pageControl.search.pageIndex"
+    <el-pagination layout="total, prev, pager, next" @current-change="queryList()" :current-page.sync="pageControl.search.pageIndex"
                    :total="pageData.total" style="float: right">
     </el-pagination>
     <!--弹出框-->
-<!--    <el-dialog :visible.sync="pageControl.isNewCase" title="新增用例">-->
-<!--      <el-form :model="pageControl.quickCreate" label-width="90px">-->
-<!--        <el-form-item label="标题">-->
-<!--          <el-input v-model="pageControl.quickCreate.name" placeholder="请输入标题" size="small" maxlength="30" show-word-limit></el-input>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="类型">-->
-<!--          <el-radio-group v-model="pageControl.quickCreate.type" size="small">-->
-<!--            <el-radio :label="1">接口自动化</el-radio>-->
-<!--            <el-radio :label="2">UI自动化</el-radio>-->
-<!--          </el-radio-group>-->
-<!--        </el-form-item>-->
-<!--      </el-form>-->
-<!--      <div style="text-align: center">-->
-<!--        <el-button @click="quickCreate()" type="primary" size="small">确认</el-button>-->
-<!--      </div>-->
-<!--    </el-dialog>-->
     <el-drawer :visible.sync="pageControl.isNewCase" title="新增测试用例" size="55%">
       <el-card shadow="never" style="height: 100%">
-        <el-input v-model="pageControl.quickCreate.name" placeholder="请输入名称后点确认新增" size="small" maxlength="30" show-word-limit>
+        <el-input v-model="pageControl.quickCreate.name" @keyup.enter.native="quickCreate()" placeholder="请输入名称后回车，或点确认新增" size="small" maxlength="30" show-word-limit>
           <template #append>
             <el-button @click="quickCreate()" type="primary" size="small">确认新增</el-button>
           </template>
         </el-input>
       </el-card>
     </el-drawer>
-<!--    <el-dialog v-if="pageControl.isEditCase" :visible.sync="pageControl.isEditCase" title="编辑用例" width="60%">-->
-<!--      <tl-detail :case-id="pageControl.selectedCaseId" :is-edit="true"></tl-detail>-->
-<!--    </el-dialog>-->
     <el-drawer :visible.sync="pageControl.isEditCase" title="编辑用例" :with-header="false" size="55%">
       <el-card style="min-height: 100%">
         <tl-detail v-if="pageControl.isEditCase" :case-id="pageControl.selectedCaseId" :is-edit="true"></tl-detail>

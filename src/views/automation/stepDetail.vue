@@ -1,16 +1,16 @@
 <template>
   <div>
     <!--基本信息-->
-    <el-form :model="pageData" label-width="90px">
+    <el-form :model="pageData" label-width="90px" size="small">
       <el-form-item label="标题">
-        <el-input v-model="pageData.name" placeholder="请输入标题" size="small" maxlength="30" show-word-limit></el-input>
+        <el-input v-model="pageData.name" placeholder="请输入标题" maxlength="30" show-word-limit></el-input>
       </el-form-item>
       <el-form-item v-if="!isCaseStep" label="说明">
         <el-input v-model="pageData.description" placeholder="请描述步骤" type="textarea" maxlength="200"
                   show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="类型">
-        <el-radio-group v-model="pageData.type" @change="changeType()" :disabled="isEdit" size="small">
+        <el-radio-group v-model="pageData.type" @change="changeType()" :disabled="isEdit">
           <el-radio :label="1">SQL</el-radio>
           <el-radio :label="2">HTTP</el-radio>
           <el-radio :label="3">RPC</el-radio>
@@ -24,7 +24,7 @@
       <el-form-item label="预期结果">
         <el-row :gutter="5">
           <el-col :span="4">
-            <el-select v-model="pageData.assertType" size="small" placeholder="校验类型"
+            <el-select v-model="pageData.assertType" placeholder="校验类型"
                        style="float:left; width: 100px">
               <el-option :key="-1" label="不校验" :value="-1"></el-option>
               <el-option :key="1" label="equals" :value="1"></el-option>
@@ -32,7 +32,7 @@
             </el-select>
           </el-col>
           <el-col :span="19">
-            <el-input v-model="pageData.assertExpect" size="small" placeholder="请输入预期值"
+            <el-input v-model="pageData.assertExpect" placeholder="请输入预期值"
                       maxlength="200" show-word-limit>
             </el-input>
           </el-col>
@@ -47,10 +47,10 @@
           <div v-if="pageData.jdbc.sqlList === null || pageData.jdbc.sqlList.length===0">暂无Sql，可点+添加</div>
           <div v-else>
             <div v-for="(item, index) in pageData.jdbc.sqlList" :key="index">
-              <el-input v-model="pageData.jdbc.sqlList[index].sql" placeholder="请输入单行SQL" size="small"
+              <el-input v-model="pageData.jdbc.sqlList[index].sql" placeholder="请输入单行SQL"
                         maxlength="200" show-word-limit>
                 <template #append>
-                  <el-button @click="deleteSQL(index)" type="primary" size="small">删除</el-button>
+                  <el-button @click="deleteSQL(index)" type="primary">删除</el-button>
                 </template>
               </el-input>
             </div>
@@ -61,23 +61,23 @@
           </div>
         </el-form-item>
         <el-form-item label="数据源">
-          <el-input v-model="pageData.jdbc.dataSource.url" size="small" placeholder="请输入数据库URL" maxlength="200" show-word-limit>
+          <el-input v-model="pageData.jdbc.dataSource.url" placeholder="请输入数据库URL" maxlength="200" show-word-limit>
           </el-input>
           <el-row :gutter="5">
             <el-col :span="8">
-              <el-input v-model="pageData.jdbc.dataSource.driver" size="small" placeholder="请输入数据库驱动" maxlength="50" show-word-limit>
+              <el-input v-model="pageData.jdbc.dataSource.driver" placeholder="请输入数据库驱动" maxlength="50" show-word-limit>
               </el-input>
             </el-col>
             <el-col :span="6">
-              <el-input v-model="pageData.jdbc.dataSource.username" size="small" placeholder="请输入数据库名" maxlength="50" show-word-limit>
+              <el-input v-model="pageData.jdbc.dataSource.username" placeholder="请输入数据库名" maxlength="50" show-word-limit>
               </el-input>
             </el-col>
             <el-col :span="6">
-              <el-input v-model="pageData.jdbc.dataSource.password" size="small" placeholder="请输入数据库密码" maxlength="50" show-word-limit>
+              <el-input v-model="pageData.jdbc.dataSource.password" placeholder="请输入数据库密码" maxlength="50" show-word-limit>
               </el-input>
             </el-col>
             <el-col :span="3">
-              <el-button @click="$store.commit('setDataSourceDialog', true)" size="small" icon="el-icon-plus" type="primary" plain>点我可快捷关联</el-button>
+              <el-button @click="$store.commit('setDataSourceDialog', true)" icon="el-icon-plus" type="primary" plain>点我可快捷关联</el-button>
             </el-col>
           </el-row>
         </el-form-item>
@@ -87,7 +87,7 @@
         <el-form-item label="URL">
           <el-row :gutter="5">
             <el-col :span="4">
-              <el-select v-model="pageData.httpRequest.httpType" size="small" placeholder="请求方法"
+              <el-select v-model="pageData.httpRequest.httpType" placeholder="请求方法"
                          style="float:left; width: 100px">
                 <el-option key="1" label="GET" value="GET"></el-option>
                 <el-option key="2" label="POST" value="POST"></el-option>
@@ -96,7 +96,7 @@
               </el-select>
             </el-col>
             <el-col :span="19">
-              <el-input v-model="pageData.httpRequest.httpURL" size="small" placeholder="请输入URL(可使用${env}参数)"
+              <el-input v-model="pageData.httpRequest.httpURL" placeholder="请输入URL(可使用${env}参数)"
                         maxlength="200" show-word-limit>
               </el-input>
             </el-col>
@@ -111,16 +111,16 @@
             <div v-for="(item, index) in pageData.httpRequest.httpHeaderList" :key="index">
               <el-row :gutter="5">
                 <el-col :span="10">
-                  <el-input v-model="pageData.httpRequest.httpHeaderList[index].name" size="small" placeholder="请输入Header名"
+                  <el-input v-model="pageData.httpRequest.httpHeaderList[index].name" placeholder="请输入Header名"
                             maxlength="20" show-word-limit></el-input>
                 </el-col>
                 <el-col :span="10">
-                  <el-input v-model="pageData.httpRequest.httpHeaderList[index].value" size="small" placeholder="请输入Header值"
+                  <el-input v-model="pageData.httpRequest.httpHeaderList[index].value" placeholder="请输入Header值"
                             maxlength="20" show-word-limit>
                   </el-input>
                 </el-col>
                 <el-col :span="3">
-                  <el-button @click="deleteHeader(index)" size="small">删除</el-button>
+                  <el-button @click="deleteHeader(index)">删除</el-button>
                 </el-col>
               </el-row>
             </div>
@@ -140,13 +140,13 @@
           <el-input v-model="pageData.rpc.url" placeholder="请输入地址(协议://ip:prod/)(可使用${env}参数)" size="small" maxlength="50" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="接口名">
-          <el-input v-model="pageData.rpc.interfaceName" placeholder="请输入接口名，class name" size="small" maxlength="200" show-word-limit></el-input>
+          <el-input v-model="pageData.rpc.interfaceName" placeholder="请输入接口名，class name" maxlength="200" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="方法名">
-          <el-input v-model="pageData.rpc.methodName" placeholder="请输入方法名" maxlength="50" size="small" show-word-limit></el-input>
+          <el-input v-model="pageData.rpc.methodName" placeholder="请输入方法名" maxlength="50" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="入参类型">
-          <el-input v-model="pageData.rpc.parameterType" placeholder="请输入参数类型(class name)" maxlength="100" size="small" show-word-limit></el-input>
+          <el-input v-model="pageData.rpc.parameterType" placeholder="请输入参数类型(class name)" maxlength="100" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="入参值">
           <!--Rpc入参显示，无Rpc入参提示，有显示列表-->
@@ -157,17 +157,17 @@
             <div v-for="(item, index) in pageData.rpc.parameterList" :key="index">
               <el-row :gutter="5">
                 <el-col :span="5">
-                  <el-input v-model="pageData.rpc.parameterList[index].comment" placeholder="请输入rpc参数类型(class name)" maxlength="100" size="small" show-word-limit></el-input>
+                  <el-input v-model="pageData.rpc.parameterList[index].comment" placeholder="请输入rpc参数类型(class name)" maxlength="100" show-word-limit></el-input>
                 </el-col>
                 <el-col :span="5">
-                  <el-input v-model="pageData.rpc.parameterList[index].name" placeholder="请输入rpc参数名" maxlength="50" size="small" show-word-limit></el-input>
+                  <el-input v-model="pageData.rpc.parameterList[index].name" placeholder="请输入rpc参数名" maxlength="50" show-word-limit></el-input>
                 </el-col>
                 <el-col :span="11">
-                  <el-input v-model="pageData.rpc.parameterList[index].value" placeholder="请输入rpc入参" size="small"
+                  <el-input v-model="pageData.rpc.parameterList[index].value" placeholder="请输入rpc入参"
                             maxlength="100" show-word-limit></el-input>
                 </el-col>
                 <el-col :span="2">
-                  <el-button @click="deleteRpcParam(index)" size="small">删除</el-button>
+                  <el-button @click="deleteRpcParam(index)">删除</el-button>
                 </el-col>
               </el-row>
             </div>
@@ -183,7 +183,7 @@
         <el-form-item label="UI操作">
           <el-row :gutter="5">
             <el-col :span="4">
-              <el-select v-model="pageData.ui.type" size="small" placeholder="操作类型"
+              <el-select v-model="pageData.ui.type" placeholder="操作类型"
                          style="float:left; width: 100px">
                 <el-option key="1" label="openUrl" :value="1"></el-option>
                 <el-option key="2" label="click" :value="2"></el-option>
@@ -192,10 +192,10 @@
               </el-select>
             </el-col>
             <el-col :span="19">
-              <el-input v-if="pageData.ui.type===1" v-model="pageData.ui.url" size="small" placeholder="请输入URL(可使用${env}参数)"
+              <el-input v-if="pageData.ui.type===1" v-model="pageData.ui.url" placeholder="请输入URL(可使用${env}参数)"
                         maxlength="200" show-word-limit>
               </el-input>
-              <el-input v-else v-model="pageData.ui.element" size="small" placeholder="请输入元素Xpath"
+              <el-input v-else v-model="pageData.ui.element" placeholder="请输入元素Xpath"
                         maxlength="200" show-word-limit>
               </el-input>
             </el-col>
@@ -218,6 +218,10 @@ import {createAPI, updateAPI, removeAPI, queryDetailAPI} from '@/api/autoStep'
 export default {
   // components: {tlSelectDataSource},
   props: {
+    visible: {
+      type: Boolean,
+      default: true
+    },
     stepId: {
       type: String,
       default: ''
@@ -414,6 +418,7 @@ export default {
       createAPI(this.pageData).then(response => {
         if (response.data.success === true) {
           this.$message.success('创建步骤成功')
+          this.$emit('update:visible', false)
         }
       })
     },
@@ -421,6 +426,7 @@ export default {
       updateAPI(this.pageData).then(response => {
         if (response.data.success === true) {
           this.$message.success('编辑步骤成功')
+          this.$emit('update:visible', false)
         }
       })
     },
@@ -428,6 +434,7 @@ export default {
       removeAPI({stepId: this.pageData.stepId}).then(response => {
         if (response.data.success === true) {
           this.$message.success('删除步骤成功')
+          this.$emit('update:visible', false)
         }
       })
     },
