@@ -14,18 +14,19 @@
       </div>
     </el-aside>
     <el-main style="background-color: lightgrey">
-      <el-form ref="pageData" label-width="3cm" style="max-width: 800px">
-        <el-form-item label="当前登录">
-          <div>
-            {{$store.state.userName}}
-          </div>
-        </el-form-item>
-        <el-form-item label="当前从节点">
-          <div>
-            {{$store.state.slaveHost}}
-          </div>
-        </el-form-item>
-      </el-form>
+      <tl-profile></tl-profile>
+<!--      <el-form ref="pageData" label-width="3cm" style="max-width: 800px">-->
+<!--        <el-form-item label="当前登录">-->
+<!--          <div>-->
+<!--            {{$store.state.userName}}-->
+<!--          </div>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="当前从节点">-->
+<!--          <div>-->
+<!--            {{$store.state.slaveHost}}-->
+<!--          </div>-->
+<!--        </el-form-item>-->
+<!--      </el-form>-->
     </el-main>
   </el-container>
 </template>
@@ -33,8 +34,10 @@
 <script>
 
 import {queryDetailAPI, queryDetailAPIS} from '@/api/test'
+import tlProfile from './profile'
 
 export default {
+  components: {tlProfile},
   data () {
     return {
       customURL: '',

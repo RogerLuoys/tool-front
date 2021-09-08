@@ -31,7 +31,8 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-link :underline="false" type="primary">领用</el-link>
+          <el-link v-if="scope.row.type===2 || scope.row.type===3" :underline="false" type="primary">领用</el-link>
+          <el-link v-if="scope.row.type===4" :underline="false" type="primary">领用</el-link>
           <el-link @click="edit(scope.row.resourceId)" :underline="false" type="primary">编辑</el-link>
 <!--          <el-button type="text" size="small">领用</el-button>-->
 <!--          <el-button @click="edit(scope.row.resourceId)" type="text" size="small">编辑</el-button>-->
@@ -43,11 +44,11 @@
                    :total="pageData.total" style="float: right">
     </el-pagination>
     <!--弹窗-->
-    <el-dialog :visible.sync="pageControl.isNewResource" title="新增资源">
-      <tl-detail></tl-detail>
+    <el-dialog v-if="pageControl.isNewResource" :visible.sync="pageControl.isNewResource" title="新增资源">
+      <tl-detail :visible.sync="pageControl.isNewResource"></tl-detail>
     </el-dialog>
     <el-dialog v-if="pageControl.isEditResource" :visible.sync="pageControl.isEditResource" title="编辑资源">
-      <tl-detail :resource-id="pageControl.selectedResourceId" :is-edit="true"></tl-detail>
+      <tl-detail :resource-id="pageControl.selectedResourceId" :visible.sync="pageControl.isEditResource" :is-edit="true"></tl-detail>
     </el-dialog>
   </div>
 </template>
@@ -101,11 +102,16 @@ export default {
     this.queryList()
   },
   watch: {
-    // '$store.state.point.expendPointCount': function (newVal, oldVal) {
-    //   if (this.type === 2) {
-    //     this.queryPointLogList()
-    //   }
-    // }
+    'pageControl.isNewResource': function () {
+      if (this.pageControl.isNewResource === false) {
+        this.queryList()
+      }
+    },
+    'pageControl.isEditResource': function () {
+      if (this.pageControl.isEditResource === false) {
+        this.queryList()
+      }
+    }
   },
   methods: {
     getType (type) {

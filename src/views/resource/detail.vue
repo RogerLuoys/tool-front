@@ -44,39 +44,35 @@
                     maxlength="50" show-word-limit></el-input>
         </el-form-item>
       </div>
-      <!--手机模板-->
+      <!--设备表单-->
       <div v-else-if="pageData.type===2">
         <el-form-item label="型号">
-          <el-input v-model="pageData.mobilePhone.model" placeholder="请输入型号"
+          <el-input v-model="pageData.device.model" placeholder="请输入型号"
                     maxlength="20" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="屏幕尺寸">
-          <el-input v-model="pageData.mobilePhone.size" placeholder="请输入屏幕尺寸"
+          <el-input v-model="pageData.device.size" placeholder="请输入屏幕尺寸"
                     maxlength="100" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="分辨率">
-          <el-input v-model="pageData.mobilePhone.dpi" placeholder="请输入分辨率"
+          <el-input v-model="pageData.device.dpi" placeholder="请输入分辨率"
                     maxlength="50" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="操作系统">
-          <el-input v-model="pageData.mobilePhone.os" placeholder="请输入操作系统类型"
+          <el-input v-model="pageData.device.os" placeholder="请输入操作系统类型"
                     maxlength="10" show-word-limit></el-input>
         </el-form-item>
       </div>
       <div v-else-if="pageData.type===3">
-        <el-form-item label="域名">
-          <el-input v-model="pageData.container.ip" placeholder="请输入IP或域名"
+        <el-form-item label="地址">
+          <el-input v-model="pageData.envUrl" placeholder="请输入ip端口，或域名"
                     maxlength="100" show-word-limit></el-input>
         </el-form-item>
-        <el-form-item label="端口">
-          <el-input v-model="pageData.container.port" placeholder="请输入端口"
-                    maxlength="10" show-word-limit></el-input>
-        </el-form-item>
       </div>
-      <div v-else>
-        <el-form-item label="未知类型">
-          <el-input :autosize="{ minRows: 4, maxRows: 9}" placeholder="请输入模板" type="textarea"
-                    maxlength="500" show-word-limit></el-input>
+      <div v-else-if="pageData.type===4">
+        <el-form-item label="地址">
+          <el-input v-model="pageData.slaveUrl" placeholder="请输入ip端口，或域名"
+                    maxlength="100" show-word-limit></el-input>
         </el-form-item>
       </div>
     </el-form>
@@ -94,6 +90,10 @@ import {createAPI, updateAPI, removeAPI, queryDetailAPI} from '@/api/resource'
 export default {
   // components: {SelectDevice},
   props: {
+    visible: {
+      type: Boolean,
+      default: false
+    },
     resourceId: {
       type: String,
       default: ''
@@ -118,16 +118,14 @@ export default {
           username: '',
           password: ''
         },
-        mobilePhone: {
+        device: {
           model: '',
           size: '',
-          cpu: '',
+          dpi: '',
           os: ''
         },
-        container: {
-          ip: '',
-          port: ''
-        }
+        envUrl: '',
+        slaveUrl: ''
       },
       pageControl: {
         isNewParam: false,
@@ -159,6 +157,7 @@ export default {
       createAPI(this.pageData).then(response => {
         if (response.data.success === true) {
           this.$message.success('创建成功')
+          this.$emit('update:visible', false)
         }
       })
     },
@@ -166,6 +165,7 @@ export default {
       updateAPI(this.pageData).then(response => {
         if (response.data.success === true) {
           this.$message.success('编辑成功')
+          this.$emit('update:visible', false)
         }
       })
     },
@@ -173,6 +173,7 @@ export default {
       removeAPI({resourceId: this.pageData.resourceId}).then(response => {
         if (response.data.success === true) {
           this.$message.success('删除成功')
+          this.$emit('update:visible', false)
         }
       })
     },
