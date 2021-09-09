@@ -1,48 +1,75 @@
 <template>
-  <el-container style="height: 100%;">
-    <el-aside width="800px">
-      <div>
-        <el-input v-model="$store.state.slaveHost"></el-input>
-        <el-button @click="test">调主服务器</el-button>
-        <el-button @click="slaveNode">调从服务器</el-button>
-      </div>
-      <div>
-        <el-button @click="isVisible=true">查看</el-button>
-      </div>
-      <div style="cursor: pointer">
-        测试
-      </div>
-    </el-aside>
-    <el-main style="background-color: lightgrey">
-      <tl-profile></tl-profile>
-<!--      <el-form ref="pageData" label-width="3cm" style="max-width: 800px">-->
-<!--        <el-form-item label="当前登录">-->
-<!--          <div>-->
-<!--            {{$store.state.userName}}-->
-<!--          </div>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="当前从节点">-->
-<!--          <div>-->
-<!--            {{$store.state.slaveHost}}-->
-<!--          </div>-->
-<!--        </el-form-item>-->
-<!--      </el-form>-->
-    </el-main>
-  </el-container>
+  <div>
+    <el-row>
+      <el-col :span="20">
+        <el-descriptions>
+          <el-descriptions-item label="登录账号ID">{{pageData.userId}}</el-descriptions-item>
+          <el-descriptions-item label="昵称">{{pageData.userName}}</el-descriptions-item>
+        </el-descriptions>
+      </el-col>
+      <el-col :span="4">
+        <el-link :underline="false" type="primary">更新</el-link>
+        <el-link @click="$router.push('/login')" :underline="false" type="primary">切换账号</el-link>
+        <el-link v-if="pageControl.isCalendarVisible" @click="pageControl.isCalendarVisible = false" :underline="false" type="primary">切换至周历</el-link>
+        <el-link v-else @click="pageControl.isCalendarVisible = true" :underline="false" type="primary">切换至日历</el-link>
+      </el-col>
+    </el-row>
+    <div style="height: 10px"></div>
+    <div v-if="pageControl.isCalendarVisible">
+      <el-calendar></el-calendar>
+    </div>
+    <div v-else>
+      <tl-task-weekly-list></tl-task-weekly-list>
+    </div>
+  </div>
+<!--  <el-container style="height: 100%;">-->
+<!--    <el-aside width="800px">-->
+<!--      <div>-->
+<!--        <el-input v-model="$store.state.slaveHost"></el-input>-->
+<!--        <el-button @click="test">调主服务器</el-button>-->
+<!--        <el-button @click="slaveNode">调从服务器</el-button>-->
+<!--      </div>-->
+<!--      <div>-->
+<!--        <el-button @click="isVisible=true">查看</el-button>-->
+<!--      </div>-->
+<!--      <div style="cursor: pointer">-->
+<!--        测试-->
+<!--      </div>-->
+<!--    </el-aside>-->
+<!--    <el-main style="background-color: lightgrey">-->
+<!--      <tl-profile></tl-profile>-->
+<!--    </el-main>-->
+<!--  </el-container>-->
 </template>
 
 <script>
 
 import {queryDetailAPI, queryDetailAPIS} from '@/api/test'
+import {queryUserProfileAPI} from '@/api/user'
 import tlProfile from './profile'
+import tlTaskWeeklyList from './taskWeeklyList'
 
 export default {
-  components: {tlProfile},
+  components: {tlProfile, tlTaskWeeklyList},
   data () {
     return {
       customURL: '',
-      isVisible: false
+      isVisible: false,
+      pageData: {
+        userId: '--',
+        loginName: '--',
+        password: '',
+        userName: '--',
+        phone: '',
+        type: ''
+      },
+      pageControl: {
+        isCalendarVisible: false
+      }
     }
+  },
+  created: function () {
+    this.queryUserProfile()
   },
   methods: {
     mainNode () {
@@ -60,6 +87,14 @@ export default {
       console.info(this.$store.state.userName)
       console.info(users)
       debugger
+    },
+    queryUserProfile () {
+      queryUserProfileAPI().then(response => {
+        if (response.data.success === true) {
+          this.pageData = response.data.data
+        }
+      })
+      console.info('profile')
     }
   }
 }

@@ -2,7 +2,7 @@ import api from './axios'
 
 export function loginAPI (params) {
   return api({
-    url: 'api/user/login',
+    url: 'user/login',
     method: 'get',
     headers: {
       'loginName': params.loginName,
@@ -13,14 +13,14 @@ export function loginAPI (params) {
 
 export function queryUserProfileAPI () {
   return api({
-    url: 'api/user/queryUserProfile',
+    url: 'user/queryUserProfile',
     method: 'get'
   })
 }
 
 export function registerAPI (data) {
   return api({
-    url: 'api/user/register',
+    url: 'user/register',
     method: 'post',
     data: data
   })
@@ -28,7 +28,7 @@ export function registerAPI (data) {
 
 export function modifyUserAPI (data) {
   return api({
-    url: 'api/user/modifyUser',
+    url: 'user/modifyUser',
     method: 'put',
     data: data
   })
@@ -36,7 +36,7 @@ export function modifyUserAPI (data) {
 
 export function queryUserInfoAPI (params) {
   return api({
-    url: 'api/user/queryUserInfo',
+    url: 'user/queryUserInfo',
     method: 'get',
     params: params
   })
