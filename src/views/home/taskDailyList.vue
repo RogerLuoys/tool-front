@@ -104,17 +104,17 @@
       </div>
     </el-dialog>
     <el-dialog title="新增临时任务" :visible.sync="$store.state.taskDaily.isTaskDailyVisible">
-      <task-daily-detail :selectedDay="pageControl.selectedDay"></task-daily-detail>
+      <tl-task-daily-detail :selectedDay="pageControl.selectedDay"></tl-task-daily-detail>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import taskDailyDetail from './task-daily-detail'
+import tlTaskDailyDetail from './taskDailyDetail'
 import {queryTaskDailyListAPI, modifyTaskDailyStatusAPI, modifyTaskDailyCommentAPI} from '@/api/taskDaily'
 
 export default {
-  components: {taskDailyDetail},
+  components: {tlTaskDailyDetail},
   data () {
     return {
       pageData: [],

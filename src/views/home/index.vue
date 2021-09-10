@@ -16,7 +16,7 @@
     </el-row>
     <div style="height: 10px"></div>
     <div v-if="pageControl.isCalendarVisible">
-      <el-calendar></el-calendar>
+      <tl-task-daily-list></tl-task-daily-list>
     </div>
     <div v-else>
       <tl-task-weekly-list></tl-task-weekly-list>
@@ -44,13 +44,12 @@
 
 <script>
 
-import {queryDetailAPI, queryDetailAPIS} from '@/api/test'
-import {queryUserProfileAPI} from '@/api/user'
-import tlProfile from './profile'
+import {queryDetailAPI} from '@/api/user'
+import tlTaskDailyList from './taskDailyList'
 import tlTaskWeeklyList from './taskWeeklyList'
 
 export default {
-  components: {tlProfile, tlTaskWeeklyList},
+  components: {tlTaskDailyList, tlTaskWeeklyList},
   data () {
     return {
       customURL: '',
@@ -69,32 +68,31 @@ export default {
     }
   },
   created: function () {
-    this.queryUserProfile()
+    this.queryDetail()
   },
   methods: {
-    mainNode () {
-      queryDetailAPI({resourceId: '1'}).then()
-      // this.$store.commit('setURL', 'http://118.24.117.181:9991/')
-      // console.info(this.$store.state.commonFactory.testURL)
-    },
-    slaveNode () {
-      console.info(this.$store.state.slaveHost)
-      queryDetailAPIS({resourceId: '1'}, this.$store.state.slaveHost).then()
-      // this.$store.commit('setURL', 'http://118.24.117.181:9991/')
-    },
+    // mainNode () {
+    //   queryDetailAPI({resourceId: '1'}).then()
+    //   // this.$store.commit('setURL', 'http://118.24.117.181:9991/')
+    //   // console.info(this.$store.state.commonFactory.testURL)
+    // },
+    // slaveNode () {
+    //   console.info(this.$store.state.slaveHost)
+    //   queryDetailAPIS({resourceId: '1'}, this.$store.state.slaveHost).then()
+    //   // this.$store.commit('setURL', 'http://118.24.117.181:9991/')
+    // },
     test () {
       let users = this.$store.state.userName
       console.info(this.$store.state.userName)
       console.info(users)
       debugger
     },
-    queryUserProfile () {
-      queryUserProfileAPI().then(response => {
+    queryDetail () {
+      queryDetailAPI().then(response => {
         if (response.data.success === true) {
           this.pageData = response.data.data
         }
       })
-      console.info('profile')
     }
   }
 }

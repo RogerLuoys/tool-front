@@ -11,9 +11,9 @@ export function loginAPI (params) {
   })
 }
 
-export function queryUserProfileAPI () {
+export function queryDetailAPI () {
   return api({
-    url: 'user/queryUserProfile',
+    url: 'user/queryDetail',
     method: 'get'
   })
 }

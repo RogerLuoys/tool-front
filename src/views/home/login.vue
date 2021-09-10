@@ -13,10 +13,6 @@
           <el-row>
             <el-input v-model="pageData.password" type="password" placeholder="请输入登录密码" @keydown.enter.native="doLogin"></el-input>
           </el-row>
-<!--          <el-row>-->
-<!--            <el-checkbox v-model="pageControl.remember" disabled>自动登录</el-checkbox>-->
-<!--            <el-button type="text" size="mini" @click="$message.error('联系作者或再注册一个')" style="float: right">忘记密码？</el-button>-->
-<!--          </el-row>-->
           <el-row>
             <el-button style="width: 360px" type="primary" @click="doLogin">登录</el-button>
             <el-button style="width: 360px" @click="$router.push('/')">取消</el-button>
