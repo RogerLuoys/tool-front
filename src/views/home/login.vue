@@ -11,7 +11,7 @@
             <el-input v-model="pageData.loginName" placeholder="请输入登录账号"></el-input>
           </el-row>
           <el-row>
-            <el-input v-model="pageData.password" type="password" placeholder="请输入登录密码" @keydown.enter.native="doLogin"></el-input>
+            <el-input v-model="pageData.passWord" type="password" placeholder="请输入登录密码" @keydown.enter.native="doLogin"></el-input>
           </el-row>
           <el-row>
             <el-button style="width: 360px" type="primary" @click="doLogin">登录</el-button>
@@ -21,12 +21,15 @@
       </el-card>
     </div>
     <el-dialog title="注册新用户" :visible.sync="pageControl.registerDialogVisible">
-      <el-form :model="pageData" label-width="2cm">
+      <el-form :model="pageData" label-width="2cm" size="small">
+        <el-form-item label="昵称">
+          <el-input v-model="pageData.userName" placeholder="请输入昵称" maxlength="20" show-word-limit></el-input>
+        </el-form-item>
         <el-form-item label="登录账号">
-          <el-input v-model="pageData.loginName" placeholder="请输入数字或字母" size="small" maxlength="20" show-word-limit></el-input>
+          <el-input v-model="pageData.loginName" placeholder="请输入数字或字母" maxlength="20" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="登录密码">
-          <el-input v-model="pageData.password" placeholder="请输入数字或字母" size="small" maxlength="10" show-word-limit></el-input>
+          <el-input v-model="pageData.passWord" placeholder="请输入数字或字母" maxlength="10" show-word-limit></el-input>
         </el-form-item>
         <div style="text-align: center">
           <el-button type="primary" @click="registerUser">注册</el-button>
@@ -46,7 +49,7 @@ export default {
         userId: '',
         userName: '',
         loginName: 'guest',
-        password: '123456'
+        passWord: '123456'
       },
       pageControl: {
         remember: true,
@@ -66,26 +69,27 @@ export default {
   methods: {
     registerUser () {
       registerAPI({
+        userName: this.pageData.userName,
         loginName: this.pageData.loginName,
-        password: this.pageData.password
+        passWord: this.pageData.passWord
       }).then(response => {
         if (response.data.success === true) {
           this.$message.success('注册成功')
           this.pageControl.registerDialogVisible = false
         } else {
-          this.$message.error(response.data.message)
+          this.$message.error('注册失败')
         }
       })
     },
     setUserCookie () {
       this.$cookies.set('loginName', this.pageData.loginName)
-      this.$cookies.set('password', this.pageData.password)
+      this.$cookies.set('passWord', this.pageData.passWord)
       this.$cookies.set('userId', this.pageData.userId)
     },
     doLogin () {
       loginAPI({
         loginName: this.pageData.loginName,
-        password: this.pageData.password
+        passWord: this.pageData.passWord
       }).then(response => {
         if (response.data.success === true) {
           this.pageData = response.data.data

@@ -4,10 +4,7 @@ export function loginAPI (params) {
   return api({
     url: 'user/login',
     method: 'get',
-    headers: {
-      'loginName': params.loginName,
-      'password': params.password
-    }
+    params: params
   })
 }
 
