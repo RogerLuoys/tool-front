@@ -73,6 +73,19 @@
 
 <script>
 export default {
+  data () {
+    return {
+      pageData: {
+        monTaskList: [],
+        tueTaskList: [],
+        wedTaskList: [],
+        thuTaskList: [],
+        friTaskList: [],
+        satTaskList: [],
+        sunTaskList: []
+      }
+    }
+  }
 }
 </script>
 

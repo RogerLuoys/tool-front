@@ -1,6 +1,9 @@
 <template>
   <div>
-    <el-calendar>
+    <span>{{pageControl.displayedMonth}}</span>
+    <span>----当前月：{{pageControl.displayedMonth.getMonth()+1}}</span>
+    <span>----下个月：{{pageControl.displayedMonth.getMonth()+1}}</span>
+    <el-calendar v-model="pageControl.displayedMonth">
       <template #dateCell="{data}">
         <!--先判断是否当前选中月份-->
         <div v-if="data.type === 'current-month'">
@@ -11,7 +14,7 @@
               <template #content>
                 <div v-for="(item, index) in pageData" :key="index">
                   <div v-if="item.startTime === data.day">
-                    {{item.taskDailyName}}
+                    {{item.name}}
                   </div>
                 </div>
               </template>
@@ -57,7 +60,7 @@
             <el-collapse-item>
               <template #title>
                 <div>
-                  <span>{{item.taskDailyName}}</span>
+                  <span>{{item.name}}</span>
                   <el-tag size="small" :type="getTagType(item.status)">{{getStatus(item.status)}}</el-tag>
                 </div>
               </template>
@@ -80,19 +83,12 @@
                   <span v-else>{{item.comment}}</span>
                 </el-col>
               </el-row>
-              <el-row>
-                <el-col :span="2" style="text-align: right">积分：</el-col>
-                <el-col :span="22">{{item.point}}</el-col>
-              </el-row>
               <div v-if="item.status === 2" style="text-align: center">
                 <el-button type="primary" size="mini" @click="selectComment(item.comment)" plain>更改备注</el-button>
               </div>
-              <div v-else-if="item.status === 1 && item.bindType === 1" style="text-align: center">
+              <div v-else-if="item.status === 1" style="text-align: center">
                 <el-button type="primary" size="mini" @click="completeTaskDaily(item.taskDailyId)" plain>完成</el-button>
                 <el-button type="primary" size="mini" @click="selectComment(item.comment)" plain>更改备注</el-button>
-              </div>
-              <div v-else-if="item.status === 1 && item.bindType === 2" style="text-align: center">
-                <el-button type="primary" size="mini" plain>提醒</el-button>
               </div>
               <div v-else>异常状态</div>
             </el-collapse-item>
@@ -103,8 +99,8 @@
         <el-button @click="pageControl.listDialogVisible = false" type="primary" plain>知道了</el-button>
       </div>
     </el-dialog>
-    <el-dialog title="新增临时任务" :visible.sync="$store.state.taskDaily.isTaskDailyVisible">
-      <tl-task-daily-detail :selectedDay="pageControl.selectedDay"></tl-task-daily-detail>
+    <el-dialog title="新增临时任务" :visible.sync="pageControl.isTaskDailyVisible">
+      <tl-task-daily-detail :selectedDay="pageControl.selectedDay" :visible.sync="pageControl.isTaskDailyVisible"></tl-task-daily-detail>
     </el-dialog>
   </div>
 </template>
@@ -121,16 +117,23 @@ export default {
       pageControl: {
         selectedComment: '',
         isCommentInputVisible: false,
+        isTaskDailyVisible: false,
         listDialogVisible: false,
         disable: false,
         selectedDay: '',
+        displayedMonth: new Date(),
         activeName: '-1'
       }
     }
   },
   watch: {
-    '$store.state.taskDaily.isTaskDailyVisible': function (newVal, oldVal) {
-      if (newVal === false) {
+    'pageControl.isTaskDailyVisible': function () {
+      if (!this.pageControl.isTaskDailyVisible) {
+        this.queryTaskDailyList()
+      }
+    },
+    'pageControl.displayedMonth': function (oldVal, newVal) {
+      if (oldVal.getMonth() !== newVal.getMonth()) {
         this.queryTaskDailyList()
       }
     }
@@ -204,7 +207,7 @@ export default {
     },
     checkIsPastDate (day) {
       let today = new Date()
-      let yesterday = today.setTime(today.getTime() - 24 * 60 * 60 * 1000 * 3)
+      let yesterday = today.setTime(today.getTime() - 24 * 60 * 60 * 1000)
       let dateCellDay = new Date(day)
       if (dateCellDay < yesterday) {
         return true
@@ -215,7 +218,6 @@ export default {
     completeTaskDaily (taskDailyId) {
       modifyTaskDailyStatusAPI({
         taskDailyId: taskDailyId,
-        pointId: this.$store.state.point.pointId,
         status: 2
       }).then(response => {
         if (response.data.success === true) {
@@ -224,9 +226,18 @@ export default {
       })
     },
     queryTaskDailyList () {
-      let today = new Date()
+      let monthStart = new Date(this.pageControl.displayedMonth)
+      let monthEnd = new Date(this.pageControl.displayedMonth)
+      // 设置页面显示月份的起始时间
+      monthStart.setDate(1)
+      monthStart.setHours(23, 23, 30)
+      // 设置页面显示月份的终止时间
+      monthEnd.setMonth(this.pageControl.displayedMonth.getMonth() + 1)
+      monthEnd.setDate(1)
+      monthEnd.setHours(23, 23, 30)
       queryTaskDailyListAPI({
-        currentYear: today.getFullYear()
+        startTime: monthStart,
+        endTime: monthEnd
       }).then(response => {
         if (response.data.success === true) {
           this.pageData = response.data.data
@@ -247,7 +258,7 @@ export default {
     },
     newTaskDaily (selectedDay) {
       this.pageControl.selectedDay = selectedDay
-      this.$store.commit('setTaskDailyVisible', true)
+      this.pageControl.isTaskDailyVisible = true
     }
   }
 }
