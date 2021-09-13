@@ -1,8 +1,6 @@
 <template>
   <div>
     <span>{{pageControl.displayedMonth}}</span>
-    <span>----当前月：{{pageControl.displayedMonth.getMonth()+1}}</span>
-    <span>----下个月：{{pageControl.displayedMonth.getMonth()+1}}</span>
     <el-calendar v-model="pageControl.displayedMonth">
       <template #dateCell="{data}">
         <!--先判断是否当前选中月份-->
@@ -100,17 +98,17 @@
       </div>
     </el-dialog>
     <el-dialog title="新增临时任务" :visible.sync="pageControl.isTaskDailyVisible">
-      <tl-task-daily-detail :selectedDay="pageControl.selectedDay" :visible.sync="pageControl.isTaskDailyVisible"></tl-task-daily-detail>
+      <tl-task-detail :selectedDay="pageControl.selectedDay" :visible.sync="pageControl.isTaskDailyVisible"></tl-task-detail>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import tlTaskDailyDetail from './taskDailyDetail'
-import {queryTaskDailyListAPI, modifyTaskDailyStatusAPI, modifyTaskDailyCommentAPI} from '@/api/taskDaily'
+import tlTaskDetail from './taskDetail'
+import {queryAPI, updateStatusAPI, updateCommentAPI} from '@/api/task'
 
 export default {
-  components: {tlTaskDailyDetail},
+  components: {tlTaskDetail},
   data () {
     return {
       pageData: [],
@@ -143,7 +141,7 @@ export default {
   },
   methods: {
     changeComment (taskDailyId) {
-      modifyTaskDailyCommentAPI({
+      updateCommentAPI({
         comment: this.pageControl.selectedComment,
         taskDailyId: taskDailyId
       }).then(response => {
@@ -216,7 +214,7 @@ export default {
       }
     },
     completeTaskDaily (taskDailyId) {
-      modifyTaskDailyStatusAPI({
+      updateStatusAPI({
         taskDailyId: taskDailyId,
         status: 2
       }).then(response => {
@@ -235,7 +233,7 @@ export default {
       monthEnd.setMonth(this.pageControl.displayedMonth.getMonth() + 1)
       monthEnd.setDate(1)
       monthEnd.setHours(23, 23, 30)
-      queryTaskDailyListAPI({
+      queryAPI({
         startTime: monthStart,
         endTime: monthEnd
       }).then(response => {

@@ -1,8 +1,8 @@
 import api from './axios'
 
-export function newTaskDailyAPI (data) {
+export function createAPI (data) {
   return api({
-    url: 'taskDaily/newTaskDaily',
+    url: 'task/create',
     method: 'post',
     data: data
   })
@@ -10,31 +10,31 @@ export function newTaskDailyAPI (data) {
 
 export function removeAPI (params) {
   return api({
-    url: 'taskDaily/remove',
+    url: 'task/remove',
     method: 'delete',
     params: params
   })
 }
 
-export function modifyTaskDailyStatusAPI (params) {
+export function updateStatusAPI (params) {
   return api({
-    url: 'taskDaily/modifyTaskDailyStatus',
+    url: 'task/updateStatus',
     method: 'put',
     params: params
   })
 }
 
-export function modifyTaskDailyCommentAPI (params) {
+export function updateCommentAPI (params) {
   return api({
-    url: 'taskDaily/modifyTaskDailyComment',
+    url: 'task/updateComment',
     method: 'put',
     params: params
   })
 }
 
-export function queryTaskDailyListAPI (params) {
+export function queryAPI (params) {
   return api({
-    url: 'taskDaily/queryTaskDailyList',
+    url: 'task/query',
     method: 'get',
     params: params
   })
@@ -42,7 +42,7 @@ export function queryTaskDailyListAPI (params) {
 
 export function queryByWeeklyAPI (params) {
   return api({
-    url: 'taskDaily/queryByWeekly',
+    url: 'task/queryByWeekly',
     method: 'get',
     params: params
   })
