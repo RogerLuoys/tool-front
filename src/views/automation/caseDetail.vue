@@ -8,6 +8,9 @@
     <el-row style="height: 15px">
       <el-col :span="15">
         <span>编辑测试用例</span>
+        <el-tooltip v-if="pageData.type === 2" content="此用例包含ui步骤，将视为ui用例">
+          <el-tag size="small">ui</el-tag>
+        </el-tooltip>
       </el-col>
       <el-col :span="8" style="text-align: right">
         <el-button @click="use()" type="primary" size="small">执行用例</el-button>
@@ -18,23 +21,23 @@
     <el-divider content-position="right"></el-divider>
     <el-form :model="pageData" label-width="90px" size="small">
       <el-form-item label="标题">
-        <el-input v-model="pageData.name" placeholder="请输入标题" maxlength="30" show-word-limit></el-input>
+        <el-input v-model="pageData.name" @change="update" placeholder="请输入标题" maxlength="30" show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="说明">
-        <el-input v-model="pageData.description" placeholder="请描述功能和实现方法" type="textarea" maxlength="200"
+        <el-input v-model="pageData.description" @change="update" placeholder="请描述功能和实现方法" type="textarea" maxlength="200"
                   show-word-limit></el-input>
       </el-form-item>
-      <el-form-item label="类型">
-        <el-radio-group v-model="pageData.type">
-          <el-radio :label="1">接口自动化</el-radio>
-          <el-radio :label="2">UI自动化</el-radio>
-        </el-radio-group>
-      </el-form-item>
+<!--      <el-form-item label="类型">-->
+<!--        <el-radio-group v-model="pageData.type">-->
+<!--          <el-radio :label="1">接口自动化</el-radio>-->
+<!--          <el-radio :label="2">UI自动化</el-radio>-->
+<!--        </el-radio-group>-->
+<!--      </el-form-item>-->
       <el-form-item label="执行环境">
-        <el-input v-model="pageData.environment" placeholder="请输入默认域名或ip端口，可在步骤中通过${env}使用此参数" maxlength="30" show-word-limit></el-input>
+        <el-input v-model="pageData.environment" @change="update" placeholder="请输入默认域名或ip端口，可在步骤中通过${env}使用此参数" maxlength="30" show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="最大时间">
-        <el-input-number v-model="pageData.maxTime" :min="1" :max="60" label="用例最大执行时间(分)" size="mini"></el-input-number>
+        <el-input-number v-model="pageData.maxTime" @change="update" :min="1" :max="60" label="用例最大执行时间(分)" size="mini"></el-input-number>
         <span>分钟</span>
       </el-form-item>
       <!--前置步骤******************************-->
@@ -342,13 +345,13 @@ export default {
       }
     }
   },
-  // watch: {
-  //   'pageControl.': function () {
-  //     if (this.caseId !== 0) {
-  //       this.queryDetail()
-  //     }
-  //   }
-  // },
+  watch: {
+    'pageControl.isEditStep': function () {
+      if (!this.pageControl.isEditStep) {
+        this.checkCaseType()
+      }
+    }
+  },
   created: function () {
     if (this.isEdit) {
       this.queryDetail()
@@ -367,9 +370,39 @@ export default {
           return '未知类型'
       }
     },
-    rowStyle ({row, rowIndex}) {
-      console.info(row)
-      return 'cursor: "pointer"'
+    checkCaseType () {
+      console.info('自动校验用例类型，只要存在ui类型步骤，则是ui用例')
+      console.info(this.pageData.preStepList)
+      let caseType = 1
+      for (let i = 0; i < this.pageData.preStepList.length; i++) {
+        console.info(this.pageData.preStepList[i].autoStep.type)
+        if (this.pageData.preStepList[i].autoStep.type === 4) {
+          caseType = 2
+          break
+        }
+      }
+      for (let i = 0; i < this.pageData.mainStepList.length; i++) {
+        if (this.pageData.mainStepList[i].autoStep.type === 4) {
+          caseType = 2
+          break
+        }
+      }
+      for (let i = 0; i < this.pageData.afterStepList.length; i++) {
+        if (this.pageData.afterStepList[i].autoStep.type === 4) {
+          caseType = 2
+          break
+        }
+      }
+      // for (const step in this.pageData.preStepList) {
+      //   if (step.caseStep.type === 4) {
+      //     this.pageData.type = 2
+      //     break
+      //   }
+      // }
+      if (caseType !== this.pageData.type) {
+        this.pageData.type = caseType
+        this.update()
+      }
     },
     // newPreStep () {
     //   if (this.pageData.preStepList === null) {
