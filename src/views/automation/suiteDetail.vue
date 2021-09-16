@@ -188,7 +188,7 @@ export default {
       useAPI({
         suiteId: this.suiteId,
         retry: retry
-      }).then(response => {
+      }, this.$store.state.slaveHost).then(response => {
         if (response.data.success === true) {
           this.$message.success('测试集已开始执行')
         }

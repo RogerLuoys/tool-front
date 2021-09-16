@@ -1,4 +1,5 @@
 import api from './axios'
+import apiSlave from './axiosSlave'
 
 export function createAPI (data) {
   return api({
@@ -56,10 +57,11 @@ export function queryAPI (params) {
   })
 }
 
-export function useAPI (params) {
-  return api({
+export function useAPI (data, baseURL) {
+  return apiSlave({
     url: 'autoSuite/use',
-    method: 'get',
-    params: params
+    method: 'post',
+    data: data,
+    baseURL: baseURL
   })
 }

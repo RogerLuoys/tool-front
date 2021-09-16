@@ -501,7 +501,7 @@ export default {
       })
     },
     use () {
-      useAPI(this.pageData).then(response => {
+      useAPI(this.pageData, this.$store.state.slaveHost).then(response => {
         if (response.data.success === true) {
           this.pageControl.respondData = response.data.data
           this.$message.success('使用成功')
