@@ -191,14 +191,51 @@
                 <el-option key="4" label="isExist" :value="4"></el-option>
               </el-select>
             </el-col>
-            <el-col :span="19">
-              <el-input v-if="pageData.ui.type===1" v-model="pageData.ui.url" placeholder="请输入URL(可使用${env}参数)"
-                        maxlength="200" show-word-limit>
-              </el-input>
-              <el-input v-else v-model="pageData.ui.element" placeholder="请输入元素Xpath"
-                        maxlength="200" show-word-limit>
-              </el-input>
-            </el-col>
+            <template v-if="pageData.ui.type===1">
+              <el-col :span="19">
+                <el-input v-model="pageData.ui.url" placeholder="请输入URL(可使用${env}参数)" maxlength="200" show-word-limit>
+                </el-input>
+              </el-col>
+            </template>
+            <template v-else-if="pageData.ui.type===2 || pageData.ui.type===4">
+              <el-col :span="14">
+                <el-input v-model="pageData.ui.element" placeholder="请输入元素Xpath"
+                          maxlength="200" show-word-limit>
+                </el-input>
+              </el-col>
+              <el-col :span="5">
+                <el-input-number v-model="pageData.ui.elementId" :min="1" :max="20"></el-input-number>
+                <el-tooltip content="如xpath查到多个元素，通过此序号定位，默认为1">
+                  <i class="el-icon-info"></i>
+                </el-tooltip>
+              </el-col>
+            </template>
+            <template v-else-if="pageData.ui.type===2 || pageData.ui.type===3">
+              <el-col :span="7">
+                <el-input v-model="pageData.ui.element" placeholder="请输入元素Xpath"
+                          maxlength="200" show-word-limit>
+                </el-input>
+              </el-col>
+              <el-col :span="7">
+                <el-input v-model="pageData.ui.key" placeholder="请输入要发送的值"
+                          maxlength="500" show-word-limit>
+                </el-input>
+              </el-col>
+              <el-col :span="5">
+                <el-input-number v-model="pageData.ui.elementId" controls-position="right" :min="1" :max="20"></el-input-number>
+                <el-tooltip content="如xpath查到多个元素，通过此序号定位，默认为1">
+                  <i class="el-icon-info"></i>
+                </el-tooltip>
+              </el-col>
+            </template>
+<!--            <el-col :span="19">-->
+<!--              <el-input v-if="pageData.ui.type===1" v-model="pageData.ui.url" placeholder="请输入URL(可使用${env}参数)"-->
+<!--                        maxlength="200" show-word-limit>-->
+<!--              </el-input>-->
+<!--              <el-input v-else v-model="pageData.ui.element" placeholder="请输入元素Xpath"-->
+<!--                        maxlength="200" show-word-limit>-->
+<!--              </el-input>-->
+<!--            </el-col>-->
           </el-row>
         </el-form-item>
       </div>

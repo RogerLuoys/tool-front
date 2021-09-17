@@ -14,6 +14,12 @@
         <el-tooltip effect="dark" content="步骤、用例、套件的执行将由当前从节点完成，可在资源管理中切换选择" placement="top">
           <i class="el-icon-info"></i>
         </el-tooltip>
+        <el-tooltip effect="dark" placement="top">
+          <template #content>
+            <div>1、点击下载可下载服务jar包<br/>2、通过java -jar命令可启动<br/>3、执行ui用例需要配置webdriver</div>
+          </template>
+          <a href="http://8.140.8.45/resources/tool-service.jar" download="service.jar">下载</a>
+        </el-tooltip>
       </el-col>
     </el-row>
     <div style="height: 10px"></div>
