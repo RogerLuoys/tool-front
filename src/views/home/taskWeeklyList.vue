@@ -41,7 +41,7 @@ export default {
         weekName: '周一',
         weekDate: '2021-09-13',
         taskList: [{
-          taskDailyId: '',
+          taskId: '',
           name: 'taskName1'
         }]
       }],
@@ -56,6 +56,11 @@ export default {
   watch: {
     'pageControl.isNewTask': function () {
       if (!this.pageControl.isNewTask) {
+        this.query()
+      }
+    },
+    'pageControl.isEditTask': function () {
+      if (!this.pageControl.isEditTask) {
         this.query()
       }
     }

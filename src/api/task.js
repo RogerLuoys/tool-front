@@ -16,6 +16,14 @@ export function removeAPI (params) {
   })
 }
 
+export function updateAPI (data) {
+  return api({
+    url: 'task/update',
+    method: 'put',
+    data: data
+  })
+}
+
 export function updateStatusAPI (params) {
   return api({
     url: 'task/updateStatus',

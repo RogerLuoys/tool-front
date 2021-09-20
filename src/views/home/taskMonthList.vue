@@ -1,6 +1,5 @@
 <template>
   <div>
-    <span>{{pageControl.displayedMonth}}</span>
     <el-calendar v-model="pageControl.displayedMonth">
       <template #dateCell="{data}">
         <!--先判断是否当前选中月份-->
@@ -75,8 +74,8 @@
                     ref="saveTagInput"
                     type="textarea"
                     placeholder="请输入备注"
-                    @keyup.enter.native="changeComment(item.taskDailyId)"
-                    @blur="changeComment(item.taskDailyId)">
+                    @keyup.enter.native="changeComment(item.taskId)"
+                    @blur="changeComment(item.taskId)">
                   </el-input>
                   <span v-else>{{item.comment}}</span>
                 </el-col>
@@ -85,7 +84,7 @@
                 <el-button type="primary" size="mini" @click="selectComment(item.comment)" plain>更改备注</el-button>
               </div>
               <div v-else-if="item.status === 1" style="text-align: center">
-                <el-button type="primary" size="mini" @click="completeTaskDaily(item.taskDailyId)" plain>完成</el-button>
+                <el-button type="primary" size="mini" @click="completeTaskDaily(item.taskId)" plain>完成</el-button>
                 <el-button type="primary" size="mini" @click="selectComment(item.comment)" plain>更改备注</el-button>
               </div>
               <div v-else>异常状态</div>
@@ -140,10 +139,10 @@ export default {
     this.queryTaskDailyList()
   },
   methods: {
-    changeComment (taskDailyId) {
+    changeComment (taskId) {
       updateCommentAPI({
         comment: this.pageControl.selectedComment,
-        taskDailyId: taskDailyId
+        taskId: taskId
       }).then(response => {
         if (response.data.success === true) {
           this.queryTaskDailyList()
@@ -213,9 +212,9 @@ export default {
         return false
       }
     },
-    completeTaskDaily (taskDailyId) {
+    completeTaskDaily (taskId) {
       updateStatusAPI({
-        taskDailyId: taskDailyId,
+        taskId: taskId,
         status: 2
       }).then(response => {
         if (response.data.success === true) {

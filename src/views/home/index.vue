@@ -3,8 +3,8 @@
     <el-row>
       <el-col :span="20">
         <el-descriptions>
-          <el-descriptions-item label="登录账号ID">{{pageData.userId}}</el-descriptions-item>
-          <el-descriptions-item label="昵称">{{pageData.userName}}</el-descriptions-item>
+          <el-descriptions-item label="登录账号ID">{{$store.state.userId}}</el-descriptions-item>
+          <el-descriptions-item label="昵称">{{$store.state.userName}}</el-descriptions-item>
         </el-descriptions>
       </el-col>
       <el-col :span="4">
@@ -16,7 +16,7 @@
     </el-row>
     <div style="height: 10px"></div>
     <div v-if="pageControl.isCalendarVisible">
-      <tl-task-daily-list></tl-task-daily-list>
+      <tl-task-month-list></tl-task-month-list>
     </div>
     <div v-else>
       <tl-task-weekly-list></tl-task-weekly-list>
@@ -45,15 +45,13 @@
 <script>
 
 import {queryDetailAPI} from '@/api/user'
-import tlTaskDailyList from './taskDailyList'
+import tlTaskMonthList from './taskMonthList'
 import tlTaskWeeklyList from './taskWeeklyList'
 
 export default {
-  components: {tlTaskDailyList, tlTaskWeeklyList},
+  components: {tlTaskMonthList, tlTaskWeeklyList},
   data () {
     return {
-      customURL: '',
-      isVisible: false,
       pageData: {
         userId: '--',
         loginName: '--',
@@ -81,12 +79,12 @@ export default {
     //   queryDetailAPIS({resourceId: '1'}, this.$store.state.slaveHost).then()
     //   // this.$store.commit('setURL', 'http://118.24.117.181:9991/')
     // },
-    test () {
-      let users = this.$store.state.userName
-      console.info(this.$store.state.userName)
-      console.info(users)
-      debugger
-    },
+    // test () {
+    //   let users = this.$store.state.userName
+    //   console.info(this.$store.state.userName)
+    //   console.info(users)
+    //   debugger
+    // },
     queryDetail () {
       queryDetailAPI().then(response => {
         if (response.data.success === true) {

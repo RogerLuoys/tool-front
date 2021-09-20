@@ -14,14 +14,6 @@
               <i class="el-icon-s-management"></i>
               <span slot="title">数据工厂</span>
             </el-menu-item>
-<!--            <el-submenu index="2">-->
-<!--              <template slot="title">-->
-<!--                <i class="el-icon-s-management"></i>-->
-<!--                <span>数据工厂</span>-->
-<!--              </template>-->
-<!--              <el-menu-item index="2-1" @click="$router.push('/commonFactory')">通用</el-menu-item>-->
-<!--              <el-menu-item index="2-2" @click="$router.push('/customFactory')">自定义</el-menu-item>-->
-<!--            </el-submenu>-->
             <el-menu-item index="3" @click="$router.push('/automation')">
               <i class="el-icon-s-promotion"></i>
               <span slot="title">自动化测试</span>
@@ -30,10 +22,10 @@
               <i class="el-icon-s-platform"></i>
               <span slot="title">资源管理</span>
             </el-menu-item>
-            <el-menu-item index="5" @click="$router.push('/config')">
-              <i class="el-icon-setting"></i>
-              <span slot="title">配置管理</span>
-            </el-menu-item>
+<!--            <el-menu-item index="5" @click="$router.push('/config')">-->
+<!--              <i class="el-icon-setting"></i>-->
+<!--              <span slot="title">配置管理</span>-->
+<!--            </el-menu-item>-->
           </el-menu>
       </el-aside>
       <el-main style="background-color: whitesmoke; height: 15cm">
@@ -48,28 +40,38 @@ import {loginAPI} from '@/api/user'
 
 export default {
   created: function () {
-    console.info('create app')
+    console.info('创建实例')
+    // 默认从服务器为localhost
     this.$store.state.slaveHost = 'http://localhost:9011/'
     // 如有cookie，则自动登录
     if (this.$cookies.get('userId') && this.$cookies.get('loginName')) {
+      console.info('登录')
       loginAPI({
         loginName: this.$cookies.get('loginName'),
         password: this.$cookies.get('password')
       }).then(response => {
         if (response.data.success === true) {
-          this.$store.commit('setUserName', response.data.data.userName)
-          this.$store.commit('setIsLogin', true)
+          // this.$store.commit('setUserName', response.data.data.userName)
+          // this.$store.commit('setUserId', response.data.data.userId)
+          this.$store.state.userId = response.data.data.userId
+          this.$store.state.userName = response.data.data.userName
         } else {
-          this.$message.error('账号或密码错误，请重新登录')
-          this.$store.commit('setIsLogin', false)
-          this.$router.push('/')
+          // this.$store.commit('setUserName', '默认用户')
+          // this.$store.commit('setUserId', '101')
+          this.$store.state.userId = '101'
+          this.$store.state.userName = '默认用户'
         }
       })
     } else {
-      // this.$store.commit('setUserName', '默认用户')
-      this.$store.state.userName = '默认用户'
       console.info('默认用户')
+      // this.$store.commit('setUserName', '默认用户')
+      // this.$store.commit('setUserId', '101')
+      this.$store.state.userId = '101'
+      this.$store.state.userName = '默认用户'
     }
+    console.info(this.$store.state.userId)
+    console.info(this.$store.state.userName)
+    console.info(this.$store.state.slaveHost)
   },
   methods: {
     doLogin () {

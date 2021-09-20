@@ -9,7 +9,7 @@
       </el-form-item>
     </el-form>
     <div style="text-align: center">
-      <el-button type="primary" @click="save"  size="small">保存</el-button>
+      <el-button type="primary" @click="save" size="small">保存</el-button>
       <el-button v-if="isEdit" @click="complete" size="small">完成</el-button>
       <el-button v-if="isEdit" @click="remove" size="small">删除</el-button>
     </div>
@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import {createAPI, removeAPI, updateStatusAPI} from '@/api/task'
+import {createAPI, removeAPI, updateAPI, updateStatusAPI} from '@/api/task'
 
 export default {
   props: {
@@ -38,7 +38,7 @@ export default {
   data () {
     return {
       pageData: {
-        taskDailyId: '',
+        taskId: '',
         name: '',
         description: '',
         status: 1,
@@ -75,20 +75,26 @@ export default {
       })
     },
     update () {
-      console.info('update')
+      updateAPI(this.pageData).then(response => {
+        if (response.data.success === true) {
+          this.$message.success('更新任务成功')
+          this.$emit('update:visible', false)
+        }
+      })
     },
     complete () {
       updateStatusAPI({
-        taskDailyId: this.pageData.taskDailyId,
+        taskId: this.pageData.taskId,
         status: 2
       }).then(response => {
         if (response.data.success === true) {
-          this.queryTaskDailyList()
+          this.$message.success('完成任务成功')
+          this.$emit('update:visible', false)
         }
       })
     },
     remove () {
-      removeAPI({taskDailyId: this.pageData.taskDailyId}).then(response => {
+      removeAPI({taskId: this.pageData.taskId}).then(response => {
         if (response.data.success === true) {
           this.$message.success('删除任务成功')
           this.$emit('update:visible', false)

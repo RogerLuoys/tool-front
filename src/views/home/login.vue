@@ -15,6 +15,8 @@
           </el-row>
           <el-row>
             <el-button style="width: 360px" type="primary" @click="doLogin">登录</el-button>
+          </el-row>
+          <el-row>
             <el-button style="width: 360px" @click="$router.push('/')">取消</el-button>
           </el-row>
         </div>
@@ -58,14 +60,14 @@ export default {
       }
     }
   },
-  created: function () {
-    this.$store.commit('setIsLogin', false)
-  },
-  destroyed: function () {
-    if (this.$cookies.get('userId')) {
-      this.$store.commit('setIsLogin', true)
-    }
-  },
+  // created: function () {
+  //   this.$store.commit('setIsLogin', false)
+  // },
+  // destroyed: function () {
+  //   if (this.$cookies.get('userId')) {
+  //     this.$store.commit('setIsLogin', true)
+  //   }
+  // },
   methods: {
     registerUser () {
       registerAPI({
@@ -95,6 +97,7 @@ export default {
           this.pageData = response.data.data
           this.setUserCookie()
           this.$store.commit('setUserName', this.pageData.userName)
+          this.$store.commit('setUserId', this.pageData.userId)
           this.$router.push('/')
         } else {
           this.$message.error('账号或密码错误')
