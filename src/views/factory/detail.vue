@@ -45,7 +45,7 @@
             </el-col>
             <el-col :span="3">
               <el-button @click="deleteParam(index)" size="small">删除</el-button>
-              <el-tooltip class="item" effect="dark" :content="'$$${'+pageData.parameterList[index].name+'}'" placement="top-start">
+              <el-tooltip class="item" effect="dark" :content="'${'+pageData.parameterList[index].name+'}'" placement="top-start">
                 <i class="el-icon-info"></i>
               </el-tooltip>
             </el-col>
