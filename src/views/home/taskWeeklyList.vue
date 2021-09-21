@@ -2,7 +2,7 @@
   <div>
     <el-row>
       <el-col v-for="(item, index) in pageData" :key="index" :span="4">
-        <el-card style="width: 160px; height: 480px">
+        <el-card style="width: 170px; height: 480px">
           <template #header>
             <span>{{item.weekName}}</span>
             <el-tooltip x-placement="top">
@@ -13,7 +13,7 @@
             </el-tooltip>
           </template>
           <div v-for="(sonItem, sonIndex) in item.taskList" :key="sonIndex">
-            <el-link @click="openDetail(sonItem)" type="primary">{{sonItem.name}}</el-link>
+            <el-link v-if="sonItem.status === 1" @click="openDetail(sonItem)" type="primary">{{sonItem.name}}</el-link>
           </div>
           <el-button v-if="item.taskList.length <= 15" @click="newTask(item.weekDate)" type="text" icon="el-icon-plus"></el-button>
         </el-card>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row>
+    <el-row style="background-color: #FFFFFF; height: 35px">
       <el-col :span="20">
         <el-descriptions>
           <el-descriptions-item label="登录账号ID">{{$store.state.userId}}</el-descriptions-item>
