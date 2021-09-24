@@ -177,10 +177,10 @@
 <!--                  <el-input v-model="pageData.rpc.parameterList[index].comment" placeholder="请输入rpc参数类型(class name)" maxlength="100" size="small" show-word-limit></el-input>-->
                   <el-select v-model="pageData.rpc.parameterList[index].comment" clearable size="small" placeholder="请选择类型"
                              style="width:110px; float:left">
-                    <el-option key="1" label="String" value="1"></el-option>
-                    <el-option key="2" label="Integer" value="2"></el-option>
-                    <el-option key="3" label="Date" value="3"></el-option>
-                    <el-option key="4" label="Long" value="4"></el-option>
+                    <el-option key="1" label="String" value="java.lang.String"></el-option>
+                    <el-option key="2" label="Integer" value="java.lang.Integer"></el-option>
+                    <el-option key="3" label="Date" value="java.util.Date"></el-option>
+                    <el-option key="4" label="Long" value="java.lang.Long"></el-option>
                   </el-select>
                 </el-col>
                 <el-col :span="5">
