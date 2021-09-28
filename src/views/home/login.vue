@@ -50,8 +50,8 @@ export default {
       pageData: {
         userId: '',
         userName: '',
-        loginName: 'guest',
-        passWord: '123456'
+        loginName: '',
+        passWord: ''
       },
       pageControl: {
         remember: true,
@@ -60,14 +60,6 @@ export default {
       }
     }
   },
-  // created: function () {
-  //   this.$store.commit('setIsLogin', false)
-  // },
-  // destroyed: function () {
-  //   if (this.$cookies.get('userId')) {
-  //     this.$store.commit('setIsLogin', true)
-  //   }
-  // },
   methods: {
     registerUser () {
       registerAPI({
@@ -96,8 +88,10 @@ export default {
         if (response.data.success === true) {
           this.pageData = response.data.data
           this.setUserCookie()
-          this.$store.commit('setUserName', this.pageData.userName)
-          this.$store.commit('setUserId', this.pageData.userId)
+          // this.$store.commit('setUserName', this.pageData.userName)
+          // this.$store.commit('setUserId', this.pageData.userId)
+          this.$store.state.userId = this.pageData.userId
+          this.$store.state.userName = this.pageData.userName
           this.$router.push('/')
         } else {
           this.$message.error('账号或密码错误')

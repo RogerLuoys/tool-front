@@ -157,7 +157,19 @@
             <div v-for="(item, index) in pageData.rpc.parameterList" :key="index">
               <el-row :gutter="5">
                 <el-col :span="5">
-                  <el-input v-model="pageData.rpc.parameterList[index].comment" placeholder="请输入rpc参数类型(class name)" maxlength="100" show-word-limit></el-input>
+                  <el-select v-model="pageData.rpc.parameterList[index].comment" clearable size="small" placeholder="请选择类型"
+                             style="width:110px; float:left">
+                    <el-option key="1" label="String" value="java.lang.String"></el-option>
+                    <el-option key="2" label="Integer" value="java.lang.Integer"></el-option>
+                    <el-option key="3" label="Date" value="java.util.Date"></el-option>
+                    <el-option key="4" label="Long" value="java.lang.Long"></el-option>
+                  </el-select>
+                  <el-tooltip placement="top-start">
+                    <template #content>
+                      <span>{{pageData.rpc.parameterList[index].comment}}</span>
+                    </template>
+                    <i class="el-icon-info"></i>
+                  </el-tooltip>
                 </el-col>
                 <el-col :span="5">
                   <el-input v-model="pageData.rpc.parameterList[index].name" placeholder="请输入rpc参数名" maxlength="50" show-word-limit></el-input>
@@ -189,6 +201,8 @@
                 <el-option key="2" label="click" :value="2"></el-option>
                 <el-option key="3" label="sendKey" :value="3"></el-option>
                 <el-option key="4" label="isExist" :value="4"></el-option>
+                <el-option key="5" label="switchFrame" :value="5"></el-option>
+                <el-option key="6" label="hover" :value="6"></el-option>
               </el-select>
             </el-col>
             <template v-if="pageData.ui.type===1">
@@ -228,22 +242,31 @@
                 </el-tooltip>
               </el-col>
             </template>
-<!--            <el-col :span="19">-->
-<!--              <el-input v-if="pageData.ui.type===1" v-model="pageData.ui.url" placeholder="请输入URL(可使用${env}参数)"-->
-<!--                        maxlength="200" show-word-limit>-->
-<!--              </el-input>-->
-<!--              <el-input v-else v-model="pageData.ui.element" placeholder="请输入元素Xpath"-->
-<!--                        maxlength="200" show-word-limit>-->
-<!--              </el-input>-->
-<!--            </el-col>-->
+            <template v-if="pageData.ui.type===5">
+              <el-col :span="19">
+                <el-input v-model="pageData.ui.element" placeholder="请输入iframe的id、name或xpath" maxlength="200" show-word-limit>
+                </el-input>
+              </el-col>
+            </template>
+            <template v-if="pageData.ui.type===6">
+              <el-col :span="19">
+                <el-input v-model="pageData.ui.element" placeholder="请输入xpath" maxlength="200" show-word-limit>
+                </el-input>
+              </el-col>
+            </template>
           </el-row>
         </el-form-item>
       </div>
     </el-form>
     <div style="text-align: center">
-      <el-button type="primary" size="small">试用</el-button>
+<!--      <el-button type="primary" size="small">试用</el-button>-->
       <el-button @click="save()" type="primary" size="small">保存</el-button>
-      <el-button v-if="isEdit" @click="remove()" size="small">删除</el-button>
+<!--      <el-button v-if="isEdit" @click="remove()" size="small">删除</el-button>-->
+      <el-popconfirm v-if="isEdit" title="确定删除吗？" @confirm="remove">
+        <template #reference>
+          <el-button size="small">删除</el-button>
+        </template>
+      </el-popconfirm>
     </div>
   </div>
 </template>

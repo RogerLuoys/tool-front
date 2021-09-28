@@ -57,11 +57,11 @@ export function queryAPI (params) {
   })
 }
 
-export function useAPI (data, baseURL) {
+export function useAPI (params, baseURL) {
   return apiSlave({
     url: 'autoSuite/use',
-    method: 'post',
-    data: data,
+    method: 'get',
+    params: params,
     baseURL: baseURL
   })
 }

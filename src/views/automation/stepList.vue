@@ -29,11 +29,10 @@
       </el-table-column>
       <el-table-column prop="expectResult" label="预期结果" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column label="操作" width="90">
+      <el-table-column label="操作" width="110">
         <template slot-scope="scope">
 <!--          <el-button @click="use(scope.row.stepId)" type="text" size="small">试用</el-button>-->
           <el-link @click="edit(scope.row.stepId)" :underline="false" type="primary">编辑</el-link>
-<!--          <el-button @click="edit(scope.row.stepId)" type="text" size="mini">编辑</el-button>-->
         </template>
       </el-table-column>
     </el-table>

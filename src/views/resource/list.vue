@@ -29,13 +29,11 @@
       </el-table-column>
       <el-table-column prop="userName" label="借用人">
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="110">
         <template slot-scope="scope">
+          <el-link @click="edit(scope.row.resourceId)" :underline="false" type="primary">编辑</el-link>
           <el-link v-if="scope.row.type===2 || scope.row.type===3" :underline="false" type="primary">领用</el-link>
           <el-link v-if="scope.row.type===4" :underline="false" type="primary">领用</el-link>
-          <el-link @click="edit(scope.row.resourceId)" :underline="false" type="primary">编辑</el-link>
-<!--          <el-button type="text" size="small">领用</el-button>-->
-<!--          <el-button @click="edit(scope.row.resourceId)" type="text" size="small">编辑</el-button>-->
         </template>
       </el-table-column>
     </el-table>

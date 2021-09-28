@@ -9,6 +9,8 @@
     <!--列表-->
     <div style="height: 5px"></div>
     <el-table border :data="pageData.list" size="mini" style="width: 100%; height: 411px">
+      <el-table-column prop="suiteId" label="编号" width="120">
+      </el-table-column>
       <el-table-column prop="name" label="标题" width="180" show-overflow-tooltip>
       </el-table-column>
       <el-table-column prop="description" label="说明" show-overflow-tooltip>
@@ -19,12 +21,10 @@
       </el-table-column>
       <el-table-column prop="failed" label="失败" width="100">
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="110">
         <template slot-scope="scope">
-          <el-link @click="use(scope.row.suiteId)" :underline="false" type="primary">执行</el-link>
           <el-link @click="edit(scope.row.suiteId)" :underline="false" type="primary">编辑</el-link>
-<!--          <el-button @click="use(scope.row.suiteId)" type="text" size="mini">执行</el-button>-->
-<!--          <el-button @click="edit(scope.row.suiteId)" type="text" size="mini">编辑</el-button>-->
+          <el-link @click="use(scope.row.suiteId)" :underline="false" type="primary">执行</el-link>
         </template>
       </el-table-column>
     </el-table>

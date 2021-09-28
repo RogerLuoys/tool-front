@@ -48,7 +48,7 @@ export default {
       console.info('登录')
       loginAPI({
         loginName: this.$cookies.get('loginName'),
-        password: this.$cookies.get('password')
+        passWord: this.$cookies.get('passWord')
       }).then(response => {
         if (response.data.success === true) {
           // this.$store.commit('setUserName', response.data.data.userName)
@@ -74,27 +74,27 @@ export default {
     console.info(this.$store.state.slaveHost)
   },
   methods: {
-    doLogin () {
-      loginAPI({
-        loginName: this.pageData.loginName,
-        password: this.pageData.password
-      }).then(response => {
-        if (response.data.success === true) {
-          console.info('登录成功')
-          this.pageData = response.data.data
-          this.setUserCookie()
-          this.$store.commit('setUserName', this.pageData.userName)
-          this.$router.push('/flag')
-        } else {
-          this.$message.error('账号或密码错误')
-        }
-      })
-    },
-    setUserCookie () {
-      this.$cookies.set('loginName', this.pageData.loginName)
-      this.$cookies.set('password', this.pageData.password)
-      this.$cookies.set('userId', this.pageData.userId)
-    }
+    // doLogin () {
+    //   loginAPI({
+    //     loginName: this.pageData.loginName,
+    //     password: this.pageData.password
+    //   }).then(response => {
+    //     if (response.data.success === true) {
+    //       console.info('登录成功')
+    //       this.pageData = response.data.data
+    //       this.setUserCookie()
+    //       this.$store.commit('setUserName', this.pageData.userName)
+    //       this.$router.push('/flag')
+    //     } else {
+    //       this.$message.error('账号或密码错误')
+    //     }
+    //   })
+    // },
+    // setUserCookie () {
+    //   this.$cookies.set('loginName', this.pageData.loginName)
+    //   this.$cookies.set('password', this.pageData.password)
+    //   this.$cookies.set('userId', this.pageData.userId)
+    // }
   }
 }
 </script>

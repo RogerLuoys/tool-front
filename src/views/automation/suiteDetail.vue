@@ -9,6 +9,7 @@
           开始执行
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>批量重试</el-dropdown-item>
+            <el-dropdown-item @click="remove()">重置</el-dropdown-item>
             <el-dropdown-item @click="remove()">删除</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -18,10 +19,10 @@
     <el-divider content-position="right"></el-divider>
     <el-form :model="pageData" label-width="90px">
       <el-form-item label="标题">
-        <el-input v-model="pageData.name" placeholder="请输入标题" size="small" maxlength="30" show-word-limit></el-input>
+        <el-input v-model="pageData.name" @change="update" placeholder="请输入标题" size="small" maxlength="30" show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="说明">
-        <el-input v-model="pageData.description" placeholder="请描述功能和实现方法" type="textarea" maxlength="200"
+        <el-input v-model="pageData.description" @change="update" placeholder="请描述功能和实现方法" type="textarea" maxlength="200"
                   show-word-limit></el-input>
       </el-form-item>
       <!--用例列表-->

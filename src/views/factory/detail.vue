@@ -182,6 +182,12 @@
                     <el-option key="3" label="Date" value="java.util.Date"></el-option>
                     <el-option key="4" label="Long" value="java.lang.Long"></el-option>
                   </el-select>
+                  <el-tooltip placement="top-start">
+                    <template #content>
+                      <span>{{pageData.rpc.parameterList[index].comment}}</span>
+                    </template>
+                    <i class="el-icon-info"></i>
+                  </el-tooltip>
                 </el-col>
                 <el-col :span="5">
                   <el-input v-model="pageData.rpc.parameterList[index].name" placeholder="请输入rpc参数名" maxlength="50" size="small" show-word-limit></el-input>
@@ -213,11 +219,12 @@
     <div style="text-align: center">
       <el-button type="primary" size="small">试用</el-button>
       <el-button @click="save()" type="primary" size="small">保存</el-button>
-      <el-button v-if="pageControl.isEdit" @click="remove()" size="small">删除</el-button>
+      <el-popconfirm v-if="pageControl.isEdit" title="确定删除吗？" @confirm="remove">
+        <template #reference>
+          <el-button size="small">删除</el-button>
+        </template>
+      </el-popconfirm>
     </div>
-<!--    <el-dialog :visible.sync="pageControl.isContactDB" title="请关联数据库">-->
-<!--      <select-device></select-device>-->
-<!--    </el-dialog>-->
     <tl-select-data-source :is-visible="pageControl.isContactDB"></tl-select-data-source>
   </div>
 </template>

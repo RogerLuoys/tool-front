@@ -25,12 +25,12 @@
       </el-table-column>
       <el-table-column prop="name" label="标题" width="180" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column prop="description" label="说明" width="180" show-overflow-tooltip>
+      <el-table-column prop="description" label="说明" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="110">
         <template slot-scope="scope">
-          <el-link @click="use(scope.row.caseId)" :underline="false" type="primary">试用</el-link>
           <el-link @click="edit(scope.row.caseId)" :underline="false" type="primary">编辑</el-link>
+          <el-link @click="use(scope.row.caseId)" :underline="false" type="primary">执行</el-link>
         </template>
       </el-table-column>
     </el-table>
@@ -50,7 +50,7 @@
     </el-drawer>
     <el-drawer :visible.sync="pageControl.isEditCase" title="编辑用例" :with-header="false" size="55%">
       <el-card style="min-height: 100%">
-        <tl-detail v-if="pageControl.isEditCase" :case-id="pageControl.selectedCaseId" :is-edit="true"></tl-detail>
+        <tl-detail v-if="pageControl.isEditCase" :case-id="pageControl.selectedCaseId" :visible.sync="pageControl.isEditCase"></tl-detail>
       </el-card>
     </el-drawer>
     <el-dialog :visible.sync="pageControl.isUseCase" title="执行用例">

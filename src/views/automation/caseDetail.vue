@@ -14,7 +14,12 @@
       </el-col>
       <el-col :span="8" style="text-align: right">
         <el-button @click="use()" type="primary" size="small">执行用例</el-button>
-        <el-button @click="remove()" size="small">删除用例</el-button>
+<!--        <el-button @click="remove()" size="small">删除用例</el-button>-->
+        <el-popconfirm title="确定删除吗？" @confirm="remove">
+          <template #reference>
+            <el-button size="small">删除用例</el-button>
+          </template>
+        </el-popconfirm>
       </el-col>
     </el-row>
     <!--基本信息-->
@@ -42,7 +47,7 @@
       </el-form-item>
       <!--前置步骤******************************-->
       <el-divider content-position="right">
-        <el-button @click="createRelatedStep(pageData.preStepList !== null ? pageData.preStepList.length + 1 : 1, 1)" type="text">新增</el-button>
+        <el-button @click="createRelatedStep(pageData.preStepList !== null ? pageData.preStepList.length + 1 : 1, 1, null)" type="text">新增</el-button>
         <el-button @click="pageControl.isNewPreStep=true" type="text">关联</el-button>
         <el-button v-if="pageData.preStepList !== null && pageData.preStepList.length !== 0" @click="deleteStep(pageData.preStepList.pop())" type="text">删除</el-button>
         <span>前置步骤</span>
@@ -93,7 +98,7 @@
       </el-table>
       <!--主要步骤-->
       <el-divider content-position="right">
-        <el-button @click="createRelatedStep(pageData.mainStepList !== null ? pageData.mainStepList.length + 1 : 1, 2)" type="text">新增</el-button>
+        <el-button @click="createRelatedStep(pageData.mainStepList !== null ? pageData.mainStepList.length + 1 : 1, 2, null)" type="text">新增</el-button>
         <el-button @click="pageControl.isNewMainStep=true" type="text">关联</el-button>
         <el-button v-if="pageData.mainStepList !== null && pageData.mainStepList.length !== 0" @click="deleteStep(pageData.mainStepList.pop())" type="text">删除</el-button>
         <span>主要步骤</span>
@@ -145,7 +150,7 @@
       </el-table>
       <!--收尾步骤-->
       <el-divider content-position="right">
-        <el-button @click="createRelatedStep(pageData.afterStepList !== null ? pageData.afterStepList.length + 1 : 1, 3)" type="text">新增</el-button>
+        <el-button @click="createRelatedStep(pageData.afterStepList !== null ? pageData.afterStepList.length + 1 : 1, 3, null)" type="text">新增</el-button>
         <el-button @click="pageControl.isNewAfterStep=true" type="text">关联</el-button>
         <el-button v-if="pageData.afterStepList !== null && pageData.afterStepList.length !== 0" @click="deleteStep(pageData.afterStepList.pop())" type="text">删除</el-button>
         <span>收尾步骤</span>
@@ -214,6 +219,10 @@ export default {
       default: ''
     },
     isEdit: {
+      type: Boolean,
+      default: true
+    },
+    visible: {
       type: Boolean,
       default: true
     }
@@ -326,14 +335,10 @@ export default {
             }
           }
         }],
-        afterStepList: [{
-          name: 'name',
-          stepId: '1',
-          sequence: null
-        }]
+        afterStepList: []
       },
       pageControl: {
-        isEdit: false,
+        // isEdit: false,
         isNewPreStep: false,
         isNewMainStep: false,
         isNewAfterStep: false,
@@ -372,7 +377,6 @@ export default {
     },
     checkCaseType () {
       console.info('自动校验用例类型，只要存在ui类型步骤，则是ui用例')
-      console.info(this.pageData.preStepList)
       let caseType = 1
       for (let i = 0; i < this.pageData.preStepList.length; i++) {
         console.info(this.pageData.preStepList[i].autoStep.type)
@@ -393,53 +397,11 @@ export default {
           break
         }
       }
-      // for (const step in this.pageData.preStepList) {
-      //   if (step.caseStep.type === 4) {
-      //     this.pageData.type = 2
-      //     break
-      //   }
-      // }
       if (caseType !== this.pageData.type) {
         this.pageData.type = caseType
-        this.update()
+        updateAPI(this.pageData).then()
       }
     },
-    // newPreStep () {
-    //   if (this.pageData.preStepList === null) {
-    //     this.pageData.preStepList = [{name: '', stepId: this.pageControl.preStepId}]
-    //   } else {
-    //     this.pageData.preStepList.push({name: '', stepId: this.pageControl.preStepId})
-    //   }
-    //   this.pageControl.preStepId = ''
-    //   this.pageControl.isNewPreStep = false
-    // },
-    // deletePreStep (index) {
-    //   this.pageData.preStepList.splice(index, 1)
-    // },
-    // newMainStep () {
-    //   if (this.pageData.mainStepList === null) {
-    //     this.pageData.mainStepList = [{name: '', stepId: this.pageControl.mainStepId}]
-    //   } else {
-    //     this.pageData.mainStepList.push({name: '', stepId: this.pageControl.mainStepId})
-    //   }
-    //   this.pageControl.mainStepId = ''
-    //   this.pageControl.isNewMainStep = false
-    // },
-    // deleteMainStep (index) {
-    //   this.pageData.mainStepList.splice(index, 1)
-    // },
-    // newAfterStep () {
-    //   if (this.pageData.afterStepList === null) {
-    //     this.pageData.afterStepList = [{name: '', stepId: this.pageControl.afterStepId}]
-    //   } else {
-    //     this.pageData.afterStepList.push({name: '', stepId: this.pageControl.afterStepId})
-    //   }
-    //   this.pageControl.afterStepId = ''
-    //   this.pageControl.isNewAfterStep = false
-    // },
-    // deleteAfterStep (index) {
-    //   this.pageData.afterStepList.splice(index, 1)
-    // },
     deleteStep (data) {
       removeRelatedStepAPI(data).then(response => {
         if (response.data.success === true) {
@@ -488,6 +450,7 @@ export default {
       removeAPI({caseId: this.pageData.caseId}).then(response => {
         if (response.data.success === true) {
           this.$message.success('删除用例成功')
+          this.$emit('update:visible', false)
         }
       })
     },
@@ -508,10 +471,6 @@ export default {
         }
       })
     },
-    // edit (autoStep) {
-    //   this.pageControl.selectedStep = autoStep
-    //   this.pageControl.isEditStep = true
-    // },
     edit (row, event, column) {
       console.info(row.autoStep)
       this.pageControl.selectedStep = row.autoStep

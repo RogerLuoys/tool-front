@@ -16,11 +16,16 @@ apiSlave.interceptors.request.use(function (config) {
 
 // 添加响应拦截器
 apiSlave.interceptors.response.use(function (response) {
+  // 当code为-1或1时，将接口返回的message直接提示
+  if (response.data.success === false && response.data.code === -1 && response.data.message !== null) {
+    Message.warning(response.data.message)
+  } else if (response.data.success === true && response.data.code === 1 && response.data.message !== null) {
+    Message.success(response.data.message)
+  }
   return response
 }, function (error) {
   // 接口返回异常时，统一错误提示
-  Message.error('执行异常，请检查自动化服务器')
-  Message.error('执行异常，请检查自动化服务器')
+  Message.error('执行自动化脚本异常，请检查自动化服务器')
   return Promise.reject(error)
 })
 

@@ -26,12 +26,10 @@
       </el-table-column>
       <el-table-column prop="ownerName" label="归属" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="110">
         <template slot-scope="scope">
-          <el-link @click="use(scope.row.toolId)" :underline="false" type="primary">使用</el-link>
           <el-link @click="$router.push(`factoryDetail/${scope.row.toolId}`)" :underline="false" type="primary">编辑</el-link>
-<!--          <el-button @click="use(scope.row.toolId)" type="text" size="mini">使用</el-button>-->
-<!--          <el-button @click="$router.push(`factoryDetail/${scope.row.toolId}`)" type="text" size="mini">编辑</el-button>-->
+          <el-link @click="use(scope.row.toolId)" :underline="false" type="primary">使用</el-link>
         </template>
       </el-table-column>
     </el-table>
