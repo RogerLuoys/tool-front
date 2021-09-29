@@ -17,13 +17,16 @@
     </el-row>
     <!--基本信息-->
     <el-divider content-position="right"></el-divider>
-    <el-form :model="pageData" label-width="90px">
+    <el-form :model="pageData" label-width="90px" size="small">
       <el-form-item label="标题">
-        <el-input v-model="pageData.name" @change="update" placeholder="请输入标题" size="small" maxlength="30" show-word-limit></el-input>
+        <el-input v-model="pageData.name" @change="update" placeholder="请输入标题" maxlength="30" show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="说明">
         <el-input v-model="pageData.description" @change="update" placeholder="请描述功能和实现方法" type="textarea" maxlength="200"
                   show-word-limit></el-input>
+      </el-form-item>
+      <el-form-item label="执行环境">
+        <el-input v-model="pageData.environment" @change="update" placeholder="请输入默认域名或ip端口，输入值将替换用例中的执行环境" maxlength="30" show-word-limit></el-input>
       </el-form-item>
       <!--用例列表-->
       <el-divider content-position="right">用例列表</el-divider>
