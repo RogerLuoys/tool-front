@@ -2,7 +2,6 @@
 // initial state
 // shape: [{ id, quantity }]
 const state = () => ({
-  isSelectDSVisible: false,
   selectedDataSource: {
     driver: '',
     url: '',
