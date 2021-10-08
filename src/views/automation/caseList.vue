@@ -35,6 +35,8 @@
       </el-table-column>
     </el-table>
     <!--分页-->
+    <el-link @click="test">访问连接</el-link>
+    <el-link @click="test2">打开连接</el-link>
     <el-pagination layout="total, prev, pager, next" @current-change="queryList()" :current-page.sync="pageControl.search.pageIndex"
                    :total="pageData.total" style="float: right">
     </el-pagination>
@@ -64,7 +66,7 @@
 <script>
 import tlDetail from './caseDetail'
 import tlUse from './caseUse'
-import {quickCreateAPI, queryAPI} from '@/api/autoCase'
+import {quickCreateAPI, queryAPI, testAPI} from '@/api/autoCase'
 
 export default {
   components: {tlDetail, tlUse},
@@ -114,6 +116,20 @@ export default {
     }
   },
   methods: {
+    test () {
+      console.info('测试')
+      testAPI({caseId: '123456'}, this.$store.state.slaveHost).then(
+        response => {
+          console.info(response.data.data)
+        }
+      )
+    },
+    test2 () {
+      let caseId1 = '01020304'
+      let url = this.$store.state.slaveHost + 'autoCase/test?caseId=' + caseId1
+      console.info(url)
+      window.open(url, '_blank')
+    },
     getStatus (status) {
       switch (status) {
         case 1:

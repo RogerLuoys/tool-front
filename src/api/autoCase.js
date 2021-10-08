@@ -73,3 +73,12 @@ export function useAPI (data, baseURL) {
     baseURL: baseURL
   })
 }
+
+export function testAPI (params, baseURL) {
+  return apiSlave({
+    url: 'autoCase/test',
+    method: 'get',
+    params: params,
+    baseURL: baseURL
+  })
+}
