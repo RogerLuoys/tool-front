@@ -83,7 +83,7 @@
         </el-table-column>
         <el-table-column label="实际结果" show-overflow-tooltip>
           <template slot-scope="scope">
-            <el-tag type="info" size="mini">{{ scope.row.autoStep.assertResult === null ? '不校验' : scope.row.autoStep.assertResult }}</el-tag>
+            <el-tag type="info" size="mini">{{ scope.row.autoStep.assertResult === null ? '未校验' : scope.row.autoStep.assertResult }}</el-tag>
             <span>{{scope.row.autoStep.assertActual}}</span>
           </template>
         </el-table-column>
@@ -135,7 +135,7 @@
         </el-table-column>
         <el-table-column label="实际结果" show-overflow-tooltip>
           <template slot-scope="scope">
-            <el-tag type="info" size="mini">{{ scope.row.autoStep.assertResult === null ? '不校验' : scope.row.autoStep.assertResult }}</el-tag>
+            <el-tag type="info" size="mini">{{ scope.row.autoStep.assertResult === null ? '未校验' : scope.row.autoStep.assertResult }}</el-tag>
             <span>{{scope.row.autoStep.assertActual}}</span>
           </template>
         </el-table-column>
@@ -186,7 +186,7 @@
         </el-table-column>
         <el-table-column label="实际结果" show-overflow-tooltip>
           <template slot-scope="scope">
-            <el-tag type="info" size="mini">{{ scope.row.autoStep.assertResult === null ? '不校验' : scope.row.autoStep.assertResult }}</el-tag>
+            <el-tag type="info" size="mini">{{ scope.row.autoStep.assertResult === -1 ? '未校验' : scope.row.autoStep.assertResult }}</el-tag>
             <span>{{scope.row.autoStep.assertActual}}</span>
           </template>
         </el-table-column>

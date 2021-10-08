@@ -33,7 +33,7 @@
         <template slot-scope="scope">
           <el-link @click="edit(scope.row.resourceId)" :underline="false" type="primary">编辑</el-link>
           <el-link v-if="scope.row.type===2 || scope.row.type===3" :underline="false" type="primary">领用</el-link>
-          <el-link v-if="scope.row.type===4" :underline="false" type="primary">领用</el-link>
+          <el-link v-if="scope.row.type===4" @click="use(scope.row.resourceId)" :underline="false" type="primary">领用</el-link>
         </template>
       </el-table-column>
     </el-table>
@@ -53,7 +53,7 @@
 
 <script>
 import tlDetail from './detail'
-import {queryAPI} from '@/api/resource'
+import {queryAPI, queryDetailAPI} from '@/api/resource'
 
 export default {
   components: {tlDetail},
@@ -133,6 +133,16 @@ export default {
       queryAPI(this.pageControl.search).then(response => {
         if (response.data.success === true) {
           this.pageData = response.data.data
+        }
+      })
+    },
+    use (resourceId) {
+      queryDetailAPI({
+        resourceId: resourceId
+      }).then(response => {
+        if (response.data.success === true) {
+          this.$store.state.slaveHost = response.data.data.slaveUrl
+          this.$message.success('从节点切换成功')
         }
       })
     }

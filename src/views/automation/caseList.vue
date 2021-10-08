@@ -18,9 +18,9 @@
     <el-table border :data="pageData.list" size="mini" style="width: 100%;height: 411px">
       <el-table-column prop="caseId" label="编号" width="120">
       </el-table-column>
-      <el-table-column prop="type" label="状态" width="180">
+      <el-table-column prop="type" label="状态" width="90">
         <template #default="scope">
-          <div>{{ getStatus(scope.row.status) }}</div>
+          <el-tag size="small">{{ getStatus(scope.row.status) }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="name" label="标题" width="180" show-overflow-tooltip>

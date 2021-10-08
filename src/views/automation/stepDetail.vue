@@ -77,7 +77,7 @@
               </el-input>
             </el-col>
             <el-col :span="3">
-              <el-button @click="$store.commit('setDataSourceDialog', true)" icon="el-icon-plus" type="primary" plain>点我可快捷关联</el-button>
+              <el-button @click="pageControl.isSelectDataSource=true" icon="el-icon-plus" type="primary" plain>点我可快捷关联</el-button>
             </el-col>
           </el-row>
         </el-form-item>
@@ -259,24 +259,25 @@
       </div>
     </el-form>
     <div style="text-align: center">
-<!--      <el-button type="primary" size="small">试用</el-button>-->
       <el-button @click="save()" type="primary" size="small">保存</el-button>
-<!--      <el-button v-if="isEdit" @click="remove()" size="small">删除</el-button>-->
       <el-popconfirm v-if="isEdit" title="确定删除吗？" @confirm="remove">
         <template #reference>
           <el-button size="small">删除</el-button>
         </template>
       </el-popconfirm>
     </div>
+    <el-dialog v-if="pageControl.isSelectDataSource" :visible.sync="pageControl.isSelectDataSource" append-to-body>
+      <tl-select-data-source :visible.sync="pageControl.isSelectDataSource"></tl-select-data-source>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import {createAPI, updateAPI, removeAPI, queryDetailAPI} from '@/api/autoStep'
-// import tlSelectDataSource from './selectDataSource'
+import tlSelectDataSource from '../factory/selectDataSource'
 
 export default {
-  // components: {tlSelectDataSource},
+  components: {tlSelectDataSource},
   props: {
     visible: {
       type: Boolean,
@@ -346,7 +347,7 @@ export default {
         isNewParam: false,
         isNewSQL: false,
         isNewHeader: false,
-        isContactDB: false,
+        isSelectDataSource: false,
         isEdit: false,
         paramType: 'String',
         paramName: '',
@@ -364,8 +365,10 @@ export default {
     }
   },
   watch: {
-    '$store.state.commonFactory.selectedDataSource': function (newVal, oldVal) {
-      this.pageData.jdbc.dataSource = this.$store.state.selectedDataSource
+    'pageControl.isSelectDataSource': function () {
+      if (this.pageControl.isSelectDataSource === false) {
+        this.pageData.jdbc.dataSource = this.$store.state.selectedDataSource
+      }
     }
   },
   methods: {

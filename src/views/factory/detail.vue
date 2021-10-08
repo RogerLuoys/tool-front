@@ -94,7 +94,7 @@
               </el-input>
             </el-col>
             <el-col :span="3">
-              <el-button @click="$store.commit('setDataSourceDialog', true)" size="small" icon="el-icon-plus" type="primary" plain>点我可快捷关联</el-button>
+              <el-button @click="pageControl.isSelectDataSource=true" size="small" icon="el-icon-plus" type="primary" plain>点我可快捷关联</el-button>
             </el-col>
           </el-row>
         </el-form-item>
@@ -225,7 +225,9 @@
         </template>
       </el-popconfirm>
     </div>
-    <tl-select-data-source :is-visible="pageControl.isContactDB"></tl-select-data-source>
+    <el-dialog v-if="pageControl.isSelectDataSource" :visible.sync="pageControl.isSelectDataSource">
+      <tl-select-data-source :visible.sync="pageControl.isSelectDataSource"></tl-select-data-source>
+    </el-dialog>
   </div>
 </template>
 
@@ -289,6 +291,7 @@ export default {
         isNewParam: false,
         isContactDB: false,
         isEdit: false,
+        isSelectDataSource: false,
         paramType: 'String',
         paramName: '',
         rpcParam: '',
@@ -303,8 +306,11 @@ export default {
     }
   },
   watch: {
-    '$store.state.selectedDataSource': function (newVal, oldVal) {
-      this.pageData.jdbc.dataSource = this.$store.state.selectedDataSource
+    'pageControl.isSelectDataSource': function () {
+      console.info('选中数据库')
+      if (this.pageControl.isSelectDataSource === false) {
+        this.pageData.jdbc.dataSource = this.$store.state.selectedDataSource
+      }
     }
   },
   methods: {
