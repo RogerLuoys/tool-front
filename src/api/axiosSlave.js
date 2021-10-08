@@ -4,7 +4,8 @@ import {Message} from 'element-ui'
 const apiSlave = axios.create({
   // baseURL: 'http://localhost:9011/',
   timeout: 10000,
-  withCredentials: false
+  withCredentials: false,
+  headers: {'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Content-Type', 'Access-Control-Allow-Methods': 'DELETE,PUT,POST,GET,OPTIONS'}
 })
 
 // 添加请求拦截器
