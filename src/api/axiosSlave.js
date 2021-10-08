@@ -2,9 +2,9 @@ import axios from 'axios'
 import {Message} from 'element-ui'
 
 const apiSlave = axios.create({
-  // baseURL: 'http://localhost:9011/',
   timeout: 10000,
   withCredentials: false,
+  // 前端跨域设置，设置后才能正常访问从服务器
   headers: {'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Content-Type', 'Access-Control-Allow-Methods': 'DELETE,PUT,POST,GET,OPTIONS'}
 })
 
