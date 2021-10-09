@@ -15,16 +15,18 @@
     <!--列表-->
     <div style="height: 5px"></div>
     <el-table border :data="pageData.list" size="mini" style="width: 100%;height: 411px">
-      <el-table-column prop="type" label="类型" width="180">
+      <el-table-column prop="toolId" label="编号" width="130">
+      </el-table-column>
+      <el-table-column prop="type" label="类型" width="90">
         <template #default="scope">
           <div>{{ getType(scope.row.type) }}</div>
         </template>
       </el-table-column>
       <el-table-column prop="name" label="标题" width="180" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column prop="description" label="说明" width="180" show-overflow-tooltip>
+      <el-table-column prop="description" label="说明" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column prop="ownerName" label="归属" show-overflow-tooltip>
+      <el-table-column prop="ownerName" label="归属" width="150" show-overflow-tooltip>
       </el-table-column>
       <el-table-column label="操作" width="110">
         <template slot-scope="scope">
@@ -103,9 +105,10 @@ export default {
         case 3:
           return 'RPC'
         case 4:
+          return 'TOOLS'
+        default:
           return 'UNKNOWN'
       }
-      return type
     },
     use (toolId) {
       this.pageControl.selectedToolId = toolId

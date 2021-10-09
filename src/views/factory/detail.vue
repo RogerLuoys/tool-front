@@ -15,17 +15,18 @@
         <el-input v-model="pageData.description" placeholder="请描述功能和实现方法" type="textarea" maxlength="200"
                   show-word-limit></el-input>
       </el-form-item>
+      <el-form-item label="权限">
+        <el-radio-group v-model="pageData.permission" size="small">
+          <el-radio :label="1">公开</el-radio>
+          <el-radio :label="2">自己可见</el-radio>
+        </el-radio-group>
+      </el-form-item>
       <el-form-item label="类型">
         <el-radio-group v-model="pageData.type" :disabled="pageControl.isEdit" size="small">
           <el-radio :label="1">SQL</el-radio>
           <el-radio :label="2">HTTP</el-radio>
           <el-radio :label="3">RPC</el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="权限">
-        <el-radio-group v-model="pageData.permission" size="small">
-          <el-radio :label="1">公开</el-radio>
-          <el-radio :label="2">自己可见</el-radio>
+          <el-radio :label="4">TOOLS</el-radio>
         </el-radio-group>
       </el-form-item>
       <!--参数设置-->
@@ -208,6 +209,27 @@
           </div>
         </el-form-item>
       </div>
+      <!--聚合工具类型-->
+      <div v-else-if="pageData.type===4">
+        <el-form-item label="工具列表">
+          <!--显示工具列表，无则提示，有则返回列表-->
+          <div v-if="pageData.toolList === null || pageData.toolList.length===0">暂无子数据工厂，可点+添加</div>
+          <div v-else>
+            <div v-for="(item, index) in pageData.toolList" :key="index">
+              <el-input v-model="pageData.toolList[index]" placeholder="请输入数据工厂编号" size="small"
+                        maxlength="200" show-word-limit>
+                <template #append>
+                  <el-button @click="deleteTools(index)" type="primary" size="small">删除</el-button>
+                </template>
+              </el-input>
+            </div>
+          </div>
+          <!--增加工具控件-->
+          <div>
+            <el-button @click="newTools()" type="primary" size="mini" icon="el-icon-plus" plain>新增工具</el-button>
+          </div>
+        </el-form-item>
+      </div>
       <!--未知工具类型-->
       <div v-else>
         <el-form-item label="未知类型">
@@ -252,6 +274,7 @@ export default {
         //   name: 'name',
         //   value: 'value'
         // }],
+        toolList: ['', ''],
         jdbc: {
           dataSource: {
             driver: 'com.mysql.cj.jdbc.Driver',
@@ -335,6 +358,16 @@ export default {
     },
     deleteSQL (index) {
       this.pageData.jdbc.sqlList.splice(index, 1)
+    },
+    newTools () {
+      if (this.pageData.toolList === null) {
+        this.pageData.toolList = ['']
+      } else {
+        this.pageData.toolList.push('')
+      }
+    },
+    deleteTools (index) {
+      this.pageData.toolList.splice(index, 1)
     },
     newHeader () {
       if (this.pageData.httpRequest.httpHeaderList === null) {

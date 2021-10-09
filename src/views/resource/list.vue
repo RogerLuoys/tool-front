@@ -16,18 +16,20 @@
     <!--列表-->
     <div style="height: 5px"></div>
     <el-table border :data="pageData.list" size="mini" style="width: 100%;height: 411px">
-      <el-table-column prop="type" label="类型" width="180">
+      <el-table-column prop="resourceId" label="编号" width="130">
+      </el-table-column>
+      <el-table-column prop="type" label="类型" width="90">
         <template #default="scope">
           <div>{{ getType(scope.row.type) }}</div>
         </template>
       </el-table-column>
       <el-table-column prop="name" label="标题" width="180">
       </el-table-column>
-      <el-table-column prop="description" label="说明" width="180">
+      <el-table-column prop="description" label="说明">
       </el-table-column>
-      <el-table-column prop="ownerName" label="保管人">
+      <el-table-column prop="ownerName" label="保管人" width="150">
       </el-table-column>
-      <el-table-column prop="userName" label="借用人">
+      <el-table-column prop="userName" label="借用人" width="150">
       </el-table-column>
       <el-table-column label="操作" width="110">
         <template slot-scope="scope">

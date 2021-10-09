@@ -17,10 +17,8 @@
           <el-radio :label="4">UI</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item v-if="pageData.type === 4" label="等待时间">
-        <el-input-number v-model="pageData.afterSleep" :min="0" :max="30" size="mini"></el-input-number>
-        <span>步骤执行完成后的等待时间(单位：秒)</span>
-      </el-form-item>
+      <!--模板-->
+      <el-divider content-position="right"></el-divider>
       <el-form-item label="预期结果">
         <el-row :gutter="5">
           <el-col :span="4">
@@ -38,8 +36,10 @@
           </el-col>
         </el-row>
       </el-form-item>
-      <!--模板-->
-      <el-divider content-position="right"></el-divider>
+      <el-form-item v-if="pageData.type === 4" label="等待时间">
+        <el-input-number v-model="pageData.afterSleep" :min="0" :max="30" size="mini"></el-input-number>
+        <span>步骤执行完成后的等待时间(单位：秒)</span>
+      </el-form-item>
       <!--SQL类型-->
       <div v-if="pageData.type===1">
         <el-form-item label="SQL语句">
