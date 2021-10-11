@@ -5,9 +5,9 @@ const apiSlave = axios.create({
   timeout: 10000,
   withCredentials: false,
   // 设置成简单请求，不要触发浏览器预检
-  // headers: {'Content-Type': 'text/plain'}
+  headers: {'Content-Type': 'text/plain'}
   // 前端跨域设置，设置后才能正常访问从服务器(又不行了)
-  headers: {'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Content-Type', 'Access-Control-Allow-Methods': 'DELETE,PUT,POST,GET,OPTIONS'}
+  // headers: {'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Content-Type', 'Access-Control-Allow-Methods': 'DELETE,PUT,POST,GET,OPTIONS'}
 })
 
 // 添加请求拦截器
