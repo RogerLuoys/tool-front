@@ -257,6 +257,50 @@
           </el-row>
         </el-form-item>
       </div>
+      <!--STEPS类型，聚合步骤-->
+      <div v-else-if="pageData.type===5">
+        <el-form-item label="IF">
+          <!--IF列表-->
+          <div v-if="pageData.rpc.parameterList===null || pageData.rpc.parameterList.length===0">
+            暂无入参，可点+添加
+          </div>
+          <div v-else>
+            <div v-for="(item, index) in pageData.rpc.parameterList" :key="index">
+              <el-row :gutter="5">
+                <el-col :span="5">
+                  <el-select v-model="pageData.rpc.parameterList[index].comment" clearable size="small" placeholder="请选择类型"
+                             style="width:110px; float:left">
+                    <el-option key="1" label="String" value="java.lang.String"></el-option>
+                    <el-option key="2" label="Integer" value="java.lang.Integer"></el-option>
+                    <el-option key="3" label="Date" value="java.util.Date"></el-option>
+                    <el-option key="4" label="Long" value="java.lang.Long"></el-option>
+                  </el-select>
+                  <el-tooltip placement="top-start">
+                    <template #content>
+                      <span>{{pageData.rpc.parameterList[index].comment}}</span>
+                    </template>
+                    <i class="el-icon-info"></i>
+                  </el-tooltip>
+                </el-col>
+                <el-col :span="5">
+                  <el-input v-model="pageData.rpc.parameterList[index].name" placeholder="请输入rpc参数名" maxlength="50" show-word-limit></el-input>
+                </el-col>
+                <el-col :span="11">
+                  <el-input v-model="pageData.rpc.parameterList[index].value" placeholder="请输入rpc入参"
+                            maxlength="100" show-word-limit></el-input>
+                </el-col>
+                <el-col :span="2">
+                  <el-button @click="deleteRpcParam(index)">删除</el-button>
+                </el-col>
+              </el-row>
+            </div>
+          </div>
+          <!--新增rpc入参-->
+          <div>
+            <el-button @click="newRpcParam()" type="primary" size="mini" icon="el-icon-plus" plain>新增rpc入参</el-button>
+          </div>
+        </el-form-item>
+      </div>
     </el-form>
     <div style="text-align: center">
       <el-button @click="save()" type="primary" size="small">保存</el-button>
@@ -310,6 +354,7 @@ export default {
         afterSleep: 0,
         assertType: -1,
         assertExpect: '',
+        stepList: [],
         jdbc: {
           dataSource: {
             driver: 'com.mysql.cj.jdbc.Driver',
