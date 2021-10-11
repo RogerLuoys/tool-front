@@ -8,7 +8,7 @@
         </el-descriptions>
       </el-col>
       <el-col :span="4">
-        <el-link :underline="false" type="primary">更新</el-link>
+<!--        <el-link :underline="false" type="primary">更新</el-link>-->
         <el-link @click="$router.push('/login')" :underline="false" type="primary">切换账号</el-link>
         <el-link v-if="pageControl.isCalendarVisible" @click="pageControl.isCalendarVisible = false" :underline="false" type="primary">切换至周历</el-link>
         <el-link v-else @click="pageControl.isCalendarVisible = true" :underline="false" type="primary">切换至日历</el-link>

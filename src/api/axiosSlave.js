@@ -4,8 +4,11 @@ import {Message} from 'element-ui'
 const apiSlave = axios.create({
   timeout: 10000,
   withCredentials: false,
-  // 前端跨域设置，设置后才能正常访问从服务器
-  headers: {'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Content-Type', 'Access-Control-Allow-Methods': 'DELETE,PUT,POST,GET,OPTIONS'}
+  // 设置成简单请求，不要触发浏览器预检
+  headers: {'Content-Type': 'text/plain'}
+  // 前端跨域设置，设置后才能正常访问从服务器(又不行了)
+// headers: {'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Content-Type', 'Access-Control-Allow-Methods': 'DELETE,PUT,POST,GET,OPTIONS'}
+  // headers: {'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Content-Type', 'Access-Control-Allow-Methods': 'POST'}
 })
 
 // 添加请求拦截器
@@ -26,7 +29,7 @@ apiSlave.interceptors.response.use(function (response) {
   return response
 }, function (error) {
   // 接口返回异常时，统一错误提示
-  Message.error('执行自动化脚本异常，请检查自动化服务器')
+  Message.error('执行自动化异常，请检查调用的从服务器')
   return Promise.reject(error)
 })
 
