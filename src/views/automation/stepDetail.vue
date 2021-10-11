@@ -15,11 +15,12 @@
           <el-radio :label="2">HTTP</el-radio>
           <el-radio :label="3">RPC</el-radio>
           <el-radio :label="4">UI</el-radio>
+          <el-radio :label="5">STEPS</el-radio>
         </el-radio-group>
       </el-form-item>
       <!--模板-->
       <el-divider content-position="right"></el-divider>
-      <el-form-item label="预期结果">
+      <el-form-item v-show="pageData.type!==5" label="预期结果">
         <el-row :gutter="5">
           <el-col :span="4">
             <el-select v-model="pageData.assertType" placeholder="校验类型"
@@ -261,43 +262,86 @@
       <div v-else-if="pageData.type===5">
         <el-form-item label="IF">
           <!--IF列表-->
-          <div v-if="pageData.rpc.parameterList===null || pageData.rpc.parameterList.length===0">
-            暂无入参，可点+添加
+          <div v-if="pageData.ifStepList===null || pageData.ifStepList.length===0">
+            暂无步骤，可点+添加，此模块为空，会跳过then，直接执行else
           </div>
           <div v-else>
-            <div v-for="(item, index) in pageData.rpc.parameterList" :key="index">
+            <div v-for="(item, index) in pageData.ifStepList" :key="index">
               <el-row :gutter="5">
-                <el-col :span="5">
-                  <el-select v-model="pageData.rpc.parameterList[index].comment" clearable size="small" placeholder="请选择类型"
-                             style="width:110px; float:left">
-                    <el-option key="1" label="String" value="java.lang.String"></el-option>
-                    <el-option key="2" label="Integer" value="java.lang.Integer"></el-option>
-                    <el-option key="3" label="Date" value="java.util.Date"></el-option>
-                    <el-option key="4" label="Long" value="java.lang.Long"></el-option>
-                  </el-select>
-                  <el-tooltip placement="top-start">
-                    <template #content>
-                      <span>{{pageData.rpc.parameterList[index].comment}}</span>
-                    </template>
-                    <i class="el-icon-info"></i>
-                  </el-tooltip>
-                </el-col>
-                <el-col :span="5">
-                  <el-input v-model="pageData.rpc.parameterList[index].name" placeholder="请输入rpc参数名" maxlength="50" show-word-limit></el-input>
+                <el-col :span="10">
+                  <el-input v-model="pageData.ifStepList[index].stepId" placeholder="步骤编号" maxlength="30" show-word-limit></el-input>
                 </el-col>
                 <el-col :span="11">
-                  <el-input v-model="pageData.rpc.parameterList[index].value" placeholder="请输入rpc入参"
-                            maxlength="100" show-word-limit></el-input>
+                  <el-input-number v-model="pageData.ifStepList[index].sequence" :min="1" :max="10"></el-input-number>
                 </el-col>
                 <el-col :span="2">
-                  <el-button @click="deleteRpcParam(index)">删除</el-button>
+                  <el-button @click="deleteIfStep(index)">删除</el-button>
                 </el-col>
               </el-row>
             </div>
           </div>
-          <!--新增rpc入参-->
+          <!--新增步骤-->
           <div>
-            <el-button @click="newRpcParam()" type="primary" size="mini" icon="el-icon-plus" plain>新增rpc入参</el-button>
+            <el-button @click="newIfStep()" type="primary" size="mini" icon="el-icon-plus" plain>新增IF步骤</el-button>
+            <el-tooltip content="此模块是if语句中判断部分，所有步骤校验为true则判断为true，需输入步骤编号与执行顺序">
+              <i class="el-icon-info"></i>
+            </el-tooltip>
+          </div>
+        </el-form-item>
+        <el-form-item label="THEN">
+          <!--THEN列表-->
+          <div v-if="pageData.thenStepList===null || pageData.thenStepList.length===0">
+            暂无步骤，可点+添加，if模块步骤全部执行成功才会执行此模块步骤
+          </div>
+          <div v-else>
+            <div v-for="(item, index) in pageData.thenStepList" :key="index">
+              <el-row :gutter="5">
+                <el-col :span="10">
+                  <el-input v-model="pageData.thenStepList[index].stepId" placeholder="步骤编号" maxlength="30" show-word-limit></el-input>
+                </el-col>
+                <el-col :span="11">
+                  <el-input-number v-model="pageData.thenStepList[index].sequence" :min="1" :max="10"></el-input-number>
+                </el-col>
+                <el-col :span="2">
+                  <el-button @click="deleteThenStep(index)">删除</el-button>
+                </el-col>
+              </el-row>
+            </div>
+          </div>
+          <!--新增步骤-->
+          <div>
+            <el-button @click="newThenStep()" type="primary" size="mini" icon="el-icon-plus" plain>新增THEN步骤</el-button>
+            <el-tooltip content="if模块不为空且判断成功才会执行此模块的步骤，需输入步骤编号与执行顺序">
+              <i class="el-icon-info"></i>
+            </el-tooltip>
+          </div>
+        </el-form-item>
+        <el-form-item label="ELSE">
+          <!--ELSE列表-->
+          <div v-if="pageData.elseStepList===null || pageData.elseStepList.length===0">
+            暂无步骤，可点+添加，if模块步骤为空，或有执行失败会执行此模块步骤
+          </div>
+          <div v-else>
+            <div v-for="(item, index) in pageData.elseStepList" :key="index">
+              <el-row :gutter="5">
+                <el-col :span="10">
+                  <el-input v-model="pageData.elseStepList[index].stepId" placeholder="步骤编号" maxlength="30" show-word-limit></el-input>
+                </el-col>
+                <el-col :span="11">
+                  <el-input-number v-model="pageData.elseStepList[index].sequence" :min="1" :max="10"></el-input-number>
+                </el-col>
+                <el-col :span="2">
+                  <el-button @click="deleteElseStep(index)">删除</el-button>
+                </el-col>
+              </el-row>
+            </div>
+          </div>
+          <!--新增步骤-->
+          <div>
+            <el-button @click="newElseStep()" type="primary" size="mini" icon="el-icon-plus" plain>新增ELSE步骤</el-button>
+            <el-tooltip content="if模块为空或判断失败会执行此模块的步骤，需输入步骤编号与执行顺序">
+              <i class="el-icon-info"></i>
+            </el-tooltip>
           </div>
         </el-form-item>
       </div>
@@ -354,7 +398,9 @@ export default {
         afterSleep: 0,
         assertType: -1,
         assertExpect: '',
-        stepList: [],
+        ifStepList: [{area: 'IF', stepId: '123321', sequence: 1}],
+        thenStepList: [{area: 'THEN', stepId: '123321', sequence: 1}],
+        elseStepList: [{area: 'ELSE', stepId: '123321', sequence: 1}],
         jdbc: {
           dataSource: {
             driver: 'com.mysql.cj.jdbc.Driver',
@@ -488,6 +534,36 @@ export default {
     },
     deleteRpcParam (index) {
       this.pageData.rpc.parameterList.splice(index, 1)
+    },
+    newIfStep () {
+      if (this.pageData.ifStepList === null) {
+        this.pageData.ifStepList = [{area: 'IF', stepId: '', sequence: 1}]
+      } else {
+        this.pageData.ifStepList.push({area: 'IF', stepId: '', sequence: this.pageData.ifStepList.length + 1})
+      }
+    },
+    deleteIfStep (index) {
+      this.pageData.ifStepList.splice(index, 1)
+    },
+    newThenStep () {
+      if (this.pageData.thenStepList === null) {
+        this.pageData.thenStepList = [{area: 'THEN', stepId: '', sequence: 1}]
+      } else {
+        this.pageData.thenStepList.push({area: 'THEN', stepId: '', sequence: this.pageData.thenStepList.length + 1})
+      }
+    },
+    deleteThenStep (index) {
+      this.pageData.thenStepList.splice(index, 1)
+    },
+    newElseStep () {
+      if (this.pageData.elseStepList === null) {
+        this.pageData.elseStepList = [{area: 'ELSE', stepId: '', sequence: 1}]
+      } else {
+        this.pageData.elseStepList.push({area: 'ELSE', stepId: '', sequence: this.pageData.elseStepList.length + 1})
+      }
+    },
+    deleteElseStep (index) {
+      this.pageData.elseStepList.splice(index, 1)
     },
     save () {
       // 把无关类型的数据去除

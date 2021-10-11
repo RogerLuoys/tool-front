@@ -7,6 +7,7 @@
       <el-option key="2" label="HTTP" :value="2"></el-option>
       <el-option key="3" label="RPC" :value="3"></el-option>
       <el-option key="4" label="UI" :value="4"></el-option>
+      <el-option key="5" label="STEPS" :value="5"></el-option>
     </el-select>
     <el-input placeholder="请输入名称" clearable size="mini" v-model="pageControl.search.name"
               style="width:200px; float:left"></el-input>
@@ -119,6 +120,8 @@ export default {
           return 'RPC'
         case 4:
           return 'UI'
+        case 5:
+          return 'STEPS'
         default:
           return 'UNKNOWN'
       }
