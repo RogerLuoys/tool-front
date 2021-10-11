@@ -79,6 +79,7 @@ export function testAPI (params, baseURL) {
     url: 'autoCase/test',
     method: 'get',
     params: params,
+    headers: {'userId': '001'},
     baseURL: baseURL
   })
 }
