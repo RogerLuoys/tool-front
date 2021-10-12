@@ -4,6 +4,7 @@ import {Message} from 'element-ui'
 const apiSlave = axios.create({
   timeout: 10000,
   withCredentials: false
+  // chrome问题：chrome://flags/ disable一个跨域设置
   // 设置成简单请求，不要触发浏览器预检
   // headers: {'Content-Type': 'text/plain'}
   // 前端跨域设置，设置后才能正常访问从服务器(又不行了)

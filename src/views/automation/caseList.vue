@@ -35,8 +35,8 @@
       </el-table-column>
     </el-table>
     <!--分页-->
-    <el-link @click="test">访问连接</el-link>
-    <el-link @click="test2">打开连接</el-link>
+<!--    <el-link @click="test">访问连接</el-link>-->
+<!--    <el-link @click="test2">打开连接</el-link>-->
     <el-pagination layout="total, prev, pager, next" @current-change="queryList()" :current-page.sync="pageControl.search.pageIndex"
                    :total="pageData.total" style="float: right">
     </el-pagination>
