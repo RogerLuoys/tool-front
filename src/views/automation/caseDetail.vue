@@ -59,7 +59,7 @@
         <el-input v-model="pageControl.preStepId" placeholder="请输入要关联的步骤编号"
                   maxlength="20" show-word-limit>
           <template #append>
-            <el-button @click="createRelatedStep(pageData.preStepList.length, 1, pageControl.preStepId)" type="primary">确认</el-button>
+            <el-button @click="createRelatedStep(pageData.preStepList !== null ? pageData.preStepList.length + 1 : 1, 1, pageControl.preStepId)" type="primary">确认</el-button>
             <el-button @click="pageControl.isNewPreStep=false">取消</el-button>
           </template>
         </el-input>
@@ -110,7 +110,7 @@
         <el-input v-model="pageControl.mainStepId" placeholder="请输入要关联的步骤编号"
                   maxlength="20" show-word-limit>
           <template #append>
-            <el-button @click="createRelatedStep(pageData.mainStepList.length, 2, pageControl.mainStepId)" type="primary">确认</el-button>
+            <el-button @click="createRelatedStep(pageData.mainStepList !== null ? pageData.mainStepList.length + 1 : 1, 2, pageControl.mainStepId)" type="primary">确认</el-button>
             <el-button @click="pageControl.isNewMainStep=false">取消</el-button>
           </template>
         </el-input>
@@ -162,7 +162,7 @@
         <el-input v-model="pageControl.afterStepId" placeholder="请输入要关联的步骤编号"
                   maxlength="20" show-word-limit>
           <template #append>
-            <el-button @click="createRelatedStep(pageData.afterStepList.length, 3, pageControl.afterStepId)" type="primary">确认</el-button>
+            <el-button @click="createRelatedStep(pageData.afterStepList !== null ? pageData.afterStepList.length + 1 : 1, 3, pageControl.afterStepId)" type="primary">确认</el-button>
             <el-button @click="pageControl.isNewAfterStep=false">取消</el-button>
           </template>
         </el-input>
