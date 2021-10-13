@@ -24,6 +24,14 @@ export function updateAPI (data) {
   })
 }
 
+export function updateUserAPI (data) {
+  return api({
+    url: 'resource/updateUser',
+    method: 'put',
+    data: data
+  })
+}
+
 export function queryDetailAPI (params) {
   return api({
     url: 'resource/queryDetail',

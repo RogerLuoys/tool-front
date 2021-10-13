@@ -34,8 +34,8 @@
       <el-table-column label="操作" width="110">
         <template slot-scope="scope">
           <el-link @click="edit(scope.row.resourceId)" :underline="false" type="primary">编辑</el-link>
-          <el-link v-if="scope.row.type===2 || scope.row.type===3" :underline="false" type="primary">领用</el-link>
-          <el-link v-if="scope.row.type===4" @click="use(scope.row.resourceId)" :underline="false" type="primary">领用</el-link>
+          <el-link v-if="scope.row.type===2 || scope.row.type===3" @click="use(scope.row.resourceId, -1)" :underline="false" type="primary">领用</el-link>
+          <el-link v-if="scope.row.type===4" @click="use(scope.row.resourceId, 4)" :underline="false" type="primary">领用</el-link>
         </template>
       </el-table-column>
     </el-table>
@@ -55,7 +55,7 @@
 
 <script>
 import tlDetail from './detail'
-import {queryAPI, queryDetailAPI} from '@/api/resource'
+import {queryAPI, queryDetailAPI, updateUserAPI} from '@/api/resource'
 
 export default {
   components: {tlDetail},
@@ -138,13 +138,27 @@ export default {
         }
       })
     },
-    use (resourceId) {
-      queryDetailAPI({
-        resourceId: resourceId
+    use (resourceId, type) {
+      updateUserAPI({
+        resourceId: resourceId,
+        userId: this.$store.state.userId,
+        userName: this.$store.state.userName
       }).then(response => {
         if (response.data.success === true) {
-          this.$store.state.slaveHost = response.data.data.slaveUrl
-          this.$message.success('从节点切换成功')
+          // 从服务器资源领用，还需要切换自动化服务器
+          if (type === 4) {
+            queryDetailAPI({
+              resourceId: resourceId
+            }).then(response => {
+              if (response.data.success === true) {
+                this.$store.state.slaveHost = response.data.data.slaveUrl
+                this.$message.success('领用和从节点切换成功')
+              }
+            })
+          } else {
+            this.$message.success('资源领用成功')
+          }
+          this.queryList()
         }
       })
     }
