@@ -27,6 +27,10 @@
       </el-table-column>
       <el-table-column prop="description" label="说明" show-overflow-tooltip>
       </el-table-column>
+      <el-table-column prop="finishTime" label="计划完成时间" width="130" show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column prop="ownerName" label="责任人" width="130" show-overflow-tooltip>
+      </el-table-column>
       <el-table-column label="操作" width="110">
         <template slot-scope="scope">
           <el-link @click="edit(scope.row.caseId)" :underline="false" type="primary">编辑</el-link>

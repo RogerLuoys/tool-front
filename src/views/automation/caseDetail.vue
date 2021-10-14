@@ -14,7 +14,6 @@
       </el-col>
       <el-col :span="8" style="text-align: right">
         <el-button @click="use()" type="primary" size="small">执行用例</el-button>
-<!--        <el-button @click="remove()" size="small">删除用例</el-button>-->
         <el-popconfirm title="确定删除吗？" @confirm="remove">
           <template #reference>
             <el-button size="small">删除用例</el-button>
@@ -32,18 +31,17 @@
         <el-input v-model="pageData.description" @change="update" placeholder="请描述功能和实现方法" type="textarea" maxlength="200"
                   show-word-limit></el-input>
       </el-form-item>
-<!--      <el-form-item label="类型">-->
-<!--        <el-radio-group v-model="pageData.type">-->
-<!--          <el-radio :label="1">接口自动化</el-radio>-->
-<!--          <el-radio :label="2">UI自动化</el-radio>-->
-<!--        </el-radio-group>-->
-<!--      </el-form-item>-->
       <el-form-item label="执行环境">
         <el-input v-model="pageData.environment" @change="update" placeholder="请输入默认域名或ip端口，可在步骤中通过${env}使用此参数" maxlength="30" show-word-limit></el-input>
       </el-form-item>
-      <el-form-item label="最大时间">
-        <el-input-number v-model="pageData.maxTime" @change="update" :min="1" :max="60" label="用例最大执行时间(分)" size="mini"></el-input-number>
-        <span>分钟</span>
+<!--      <el-form-item label="最大时间">-->
+<!--        <el-input-number v-model="pageData.maxTime" @change="update" :min="1" :max="60" label="用例最大执行时间(分)" size="mini"></el-input-number>-->
+<!--        <span>分钟</span>-->
+<!--      </el-form-item>-->
+      <el-form-item label="计划完成">
+        <el-date-picker type="date" placeholder="计划完成日期" v-model="pageData.finishTime"
+                        @change="update" value-format="yyyy-MM-dd" size="small"
+                        style="width: 200px"></el-date-picker>
       </el-form-item>
       <!--前置步骤******************************-->
       <el-divider content-position="right">
@@ -234,6 +232,7 @@ export default {
         name: 'name',
         description: '',
         environment: '',
+        finishTime: '',
         maxTime: 1,
         ownerId: '123',
         ownerName: 'tester',

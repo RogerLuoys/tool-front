@@ -56,16 +56,25 @@
         <el-input v-model="pageControl.selectedCaseId" size="small" placeholder="请输入要关联的用例编号"
                   maxlength="20" show-word-limit>
           <template #append>
-            <el-button @click="createRelatedCase(pageControl.selectedCaseId)" type="primary" size="small">确认</el-button>
+            <el-button @click="createRelatedCase()" type="primary" size="small">确认</el-button>
             <el-button @click="pageControl.isRelatedCase=false" size="small">取消</el-button>
           </template>
         </el-input>
       </div>
+      <div v-else-if="pageControl.isBatchRelatedCase">
+        <el-input v-model="pageControl.selectedCaseName" size="small" placeholder="请输入用例名(将模糊匹配)"
+                  maxlength="20" show-word-limit>
+          <template #append>
+            <el-button @click="batchRelatedCase()" type="primary" size="small">确认</el-button>
+            <el-button @click="pageControl.isBatchRelatedCase=false" size="small">取消</el-button>
+          </template>
+        </el-input>
+      </div>
       <div v-else>
-        <el-button size="mini" type="primary" plain>批量关联</el-button>
+        <el-button @click="pageControl.isBatchRelatedCase=true" size="mini" type="primary" plain>批量关联</el-button>
         <el-button @click="pageControl.isRelatedCase=true" size="mini" plain>单个关联</el-button>
         <!--分页-->
-        <el-pagination layout="prev, pager, next" @current-change="queryList()" :current-page="pageControl.search.pageIndex"
+        <el-pagination layout="prev, pager, next" @current-change="queryDetail()" :current-page="pageControl.search.pageIndex"
                        :total="pageData.relatedCase.total" small style="float: right">
         </el-pagination>
       </div>
@@ -76,11 +85,9 @@
 </template>
 
 <script>
-import {createAPI, createRelatedCaseAPI, updateAPI, removeAPI, queryDetailAPI, useAPI} from '@/api/autoSuite'
-// import tlSelectDataSource from './selectDataSource'
+import {createAPI, createRelatedCaseAPI, batchRelatedCaseAPI, updateAPI, removeAPI, queryDetailAPI, useAPI} from '@/api/autoSuite'
 
 export default {
-  // components: {tlSelectDataSource},
   props: {
     suiteId: {
       type: String,
@@ -114,7 +121,9 @@ export default {
       },
       pageControl: {
         isRelatedCase: false,
+        isBatchRelatedCase: false,
         selectedCaseId: '',
+        selectedCaseName: '',
         search: {
           pageIndex: 1
         }
@@ -162,15 +171,27 @@ export default {
         }
       })
     },
-    createRelatedCase (caseId) {
+    createRelatedCase () {
       createRelatedCaseAPI({
         suiteId: this.pageData.suiteId,
-        caseId: caseId
+        caseId: this.pageControl.selectedCaseId
       }).then(response => {
         if (response.data.success === true) {
           this.queryDetail()
           this.pageControl.isRelatedCase = false
-          this.$message.success('创建关联用例成功，请自行编辑')
+          this.$message.success('关联用例成功')
+        }
+      })
+    },
+    batchRelatedCase () {
+      batchRelatedCaseAPI({
+        suiteId: this.pageData.suiteId,
+        caseName: this.pageControl.selectedCaseName
+      }).then(response => {
+        if (response.data.success === true) {
+          this.queryDetail()
+          this.$message.success('批量关联用例成功')
+          this.pageControl.isBatchRelatedCase = false
         }
       })
     },

@@ -25,6 +25,14 @@ export function createRelatedCaseAPI (data) {
   })
 }
 
+export function batchRelatedCaseAPI (params) {
+  return api({
+    url: 'autoSuite/batchRelatedCase',
+    method: 'get',
+    params: params
+  })
+}
+
 export function removeAPI (params) {
   return api({
     url: 'autoSuite/remove',
