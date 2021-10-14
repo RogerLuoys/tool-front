@@ -54,7 +54,7 @@
         </el-tooltip>
       </el-divider>
       <div v-if="pageControl.isNewPreStep">
-        <el-input v-model="pageControl.preStepId" placeholder="请输入要关联的步骤编号"
+        <el-input v-model="pageControl.preStepId" placeholder="请输入要关联的步骤编号" size="small"
                   maxlength="20" show-word-limit>
           <template #append>
             <el-button @click="createRelatedStep(pageData.preStepList !== null ? pageData.preStepList.length + 1 : 1, 1, pageControl.preStepId)" type="primary">确认</el-button>
@@ -105,7 +105,7 @@
         </el-tooltip>
       </el-divider>
       <div v-if="pageControl.isNewMainStep">
-        <el-input v-model="pageControl.mainStepId" placeholder="请输入要关联的步骤编号"
+        <el-input v-model="pageControl.mainStepId" placeholder="请输入要关联的步骤编号" size="small"
                   maxlength="20" show-word-limit>
           <template #append>
             <el-button @click="createRelatedStep(pageData.mainStepList !== null ? pageData.mainStepList.length + 1 : 1, 2, pageControl.mainStepId)" type="primary">确认</el-button>
@@ -157,7 +157,7 @@
         </el-tooltip>
       </el-divider>
       <div v-if="pageControl.isNewAfterStep">
-        <el-input v-model="pageControl.afterStepId" placeholder="请输入要关联的步骤编号"
+        <el-input v-model="pageControl.afterStepId" placeholder="请输入要关联的步骤编号" size="small"
                   maxlength="20" show-word-limit>
           <template #append>
             <el-button @click="createRelatedStep(pageData.afterStepList !== null ? pageData.afterStepList.length + 1 : 1, 3, pageControl.afterStepId)" type="primary">确认</el-button>
@@ -437,6 +437,9 @@ export default {
       this.pageControl.isNewPreStep = false
       this.pageControl.isNewMainStep = false
       this.pageControl.isNewAfterStep = false
+      this.pageControl.preStepId = ''
+      this.pageControl.mainStepId = ''
+      this.pageControl.afterStepId = ''
     },
     update () {
       updateAPI(this.pageData).then(response => {
