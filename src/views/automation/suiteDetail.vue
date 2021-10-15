@@ -74,13 +74,11 @@
         <el-button @click="pageControl.isBatchRelatedCase=true" size="mini" type="primary" plain>批量关联</el-button>
         <el-button @click="pageControl.isRelatedCase=true" size="mini" plain>单个关联</el-button>
         <!--分页-->
-        <el-pagination layout="prev, pager, next" @current-change="queryDetail()" :current-page="pageControl.search.pageIndex"
+        <el-pagination layout="prev, pager, next" @current-change="queryDetail()" :current-page.sync="pageControl.search.pageIndex"
                        :total="pageData.relatedCase.total" small style="float: right">
         </el-pagination>
       </div>
     </el-form>
-<!--    <el-dialog :visible.sync="pageControl.isNewCase" title="关联用例" append-to-body>-->
-<!--    </el-dialog>-->
   </div>
 </template>
 

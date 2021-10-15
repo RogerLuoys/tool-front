@@ -43,7 +43,7 @@
       </el-card>
     </el-drawer>
     <el-drawer v-if="pageControl.isEditSuite" :visible.sync="pageControl.isEditSuite" title="编辑测试集" :with-header="false" size="55%">
-      <el-card style="height: 100%">
+      <el-card style="min-height: 100%">
         <tl-detail :suite-id="pageControl.selectedSuiteId" :is-edit="true"></tl-detail>
       </el-card>
     </el-drawer>

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <el-container style="background-color: whitesmoke">
-      <el-aside style="background-color: whitesmoke; width: 200px; height: 16cm">
+    <el-container style="background-color: whitesmoke; height: 16cm">
+      <el-aside style="width: 180px">
           <el-menu class="el-menu-vertical-demo" default-active="1"
                    background-color="#545c64"
                    text-color="#fff"
@@ -28,7 +28,7 @@
 <!--            </el-menu-item>-->
           </el-menu>
       </el-aside>
-      <el-main style="background-color: whitesmoke; height: 15cm">
+      <el-main>
         <router-view></router-view>
       </el-main>
     </el-container>
@@ -102,8 +102,5 @@ export default {
 <style>
 #app {
   color: #2c3e50;
-}
-.el-header {
-  background-color: #FFFFFF;
 }
 </style>

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <el-row>
-      <el-col v-for="(item, index) in pageData" :key="index" :span="4">
-        <el-card style="width: 170px; height: 480px">
+    <el-row :gutter="10">
+      <el-col v-for="(item, index) in pageData" :key="index" style="width: 16.6%">
+        <el-card style="height: 500px">
           <template #header>
             <span>{{item.weekName}}</span>
             <el-tooltip x-placement="top">
