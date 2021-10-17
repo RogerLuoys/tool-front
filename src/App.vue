@@ -1,11 +1,11 @@
 <template>
   <div id="app">
-    <el-container style="background-color: whitesmoke; height: 16cm">
+    <el-container style="background-color: whitesmoke; height: 14.8cm">
       <el-aside style="width: 180px">
           <el-menu class="el-menu-vertical-demo" default-active="1"
                    background-color="#545c64"
                    text-color="#fff"
-                   active-text-color="#ffd04b" style="height: 16cm;">
+                   active-text-color="#ffd04b" style="height: 14.8cm;">
             <el-menu-item index="1" @click="$router.push('/')">
               <i class="el-icon-s-home"></i>
               <span slot="title">首页</span>

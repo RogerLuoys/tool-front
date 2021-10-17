@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row>
+    <el-row style="height: 60px">
       <el-col :span="14">
         <el-menu default-active="2" mode="horizontal">
           <el-menu-item @click="pageControl.activeName = 'step'" index="1">公共步骤</el-menu-item>
@@ -22,7 +22,7 @@
         </el-tooltip>
       </el-col>
     </el-row>
-    <div style="height: 10px"></div>
+    <div style="height: 1px"></div>
     <tl-step-list v-show="pageControl.activeName === 'step'"></tl-step-list>
     <tl-case-list v-show="pageControl.activeName === 'case'"></tl-case-list>
     <tl-suite-list v-show="pageControl.activeName === 'suite'"></tl-suite-list>

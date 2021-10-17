@@ -49,6 +49,14 @@ export function updateAPI (data) {
   })
 }
 
+export function updateRelatedCaseAPI (data) {
+  return api({
+    url: 'autoSuite/updateRelatedCase',
+    method: 'put',
+    data: data
+  })
+}
+
 export function queryDetailAPI (params) {
   return api({
     url: 'autoSuite/queryDetail',
@@ -70,6 +78,15 @@ export function useAPI (params, baseURL) {
     url: 'autoSuite/use',
     method: 'get',
     params: params,
+    baseURL: baseURL
+  })
+}
+
+export function useSingleAPI (data, baseURL) {
+  return apiSlave({
+    url: 'autoSuite/useSingle',
+    method: 'get',
+    data: data,
     baseURL: baseURL
   })
 }

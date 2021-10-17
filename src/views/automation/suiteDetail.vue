@@ -38,22 +38,29 @@
         </el-table-column>
         <el-table-column label="标题" width="180" show-overflow-tooltip>
           <template slot-scope="scope">
-            {{scope.row.autoCase.name}}
+            <el-link @click="editCase(scope.row.caseId)" :underline="false" type="primary">
+              {{scope.row.autoCase.name}}
+            </el-link>
           </template>
         </el-table-column>
         <el-table-column label="优先级">
           <template slot-scope="scope">
-            {{scope.row.sequence}}
+            <el-link @click="editSequence(scope.row)" :underline="false" type="primary">
+              {{scope.row.sequence}}
+            </el-link>
           </template>
         </el-table-column>
         <el-table-column label="结果" width="130">
           <template slot-scope="scope">
             <el-tag size="small">{{ getStatus(scope.row.status) }}</el-tag>
+            <el-link v-if="scope.row.status !== 3" @click="useSingle(scope.row)" :underline="false" type="primary">
+              重试
+            </el-link>
           </template>
         </el-table-column>
       </el-table>
       <div v-if="pageControl.isRelatedCase">
-        <el-input v-model="pageControl.selectedCaseId" size="small" placeholder="请输入要关联的用例编号"
+        <el-input v-model="pageControl.relatedCaseId" size="small" placeholder="请输入要关联的用例编号"
                   maxlength="20" show-word-limit>
           <template #append>
             <el-button @click="createRelatedCase()" type="primary" size="small">确认</el-button>
@@ -62,7 +69,7 @@
         </el-input>
       </div>
       <div v-else-if="pageControl.isBatchRelatedCase">
-        <el-input v-model="pageControl.selectedCaseName" size="small" placeholder="请输入用例名(将模糊匹配)"
+        <el-input v-model="pageControl.relatedCaseName" size="small" placeholder="请输入用例名(将模糊匹配)"
                   maxlength="20" show-word-limit>
           <template #append>
             <el-button @click="batchRelatedCase()" type="primary" size="small">确认</el-button>
@@ -79,13 +86,25 @@
         </el-pagination>
       </div>
     </el-form>
+    <!--弹窗-->
+    <el-drawer :visible.sync="pageControl.isEditCase" title="编辑用例" :with-header="false" size="55%" append-to-body>
+      <el-card style="min-height: 100%">
+        <tl-case-detail v-if="pageControl.isEditCase" :case-id="pageControl.selectedCaseId" :visible.sync="pageControl.isEditCase"></tl-case-detail>
+      </el-card>
+    </el-drawer>
+    <el-dialog :visible.sync="pageControl.isEditSequence" title="编辑执行顺序" append-to-body>
+      <el-input-number v-model="pageControl.selectedSuiteCase.sequence" :min="1" size="small"></el-input-number>
+      <el-button @click="updateRelatedCase" type="primary" size="small">保存</el-button>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import {createAPI, createRelatedCaseAPI, batchRelatedCaseAPI, updateAPI, removeAPI, queryDetailAPI, useAPI} from '@/api/autoSuite'
+import tlCaseDetail from './caseDetail'
+import {createAPI, createRelatedCaseAPI, batchRelatedCaseAPI, updateAPI, useSingleAPI, updateRelatedCaseAPI, removeAPI, queryDetailAPI, useAPI} from '@/api/autoSuite'
 
 export default {
+  components: {tlCaseDetail},
   props: {
     suiteId: {
       type: String,
@@ -106,7 +125,7 @@ export default {
         failed: 0,
         relatedCase: {
           list: [{
-            sequence: null,
+            sequence: 999,
             autoCase: {
               caseId: null,
               name: 'name',
@@ -120,8 +139,18 @@ export default {
       pageControl: {
         isRelatedCase: false,
         isBatchRelatedCase: false,
+        isEditSequence: false,
+        isEditCase: false,
+        relatedCaseId: '',
+        relatedCaseName: '',
+        selectedSequence: '',
         selectedCaseId: '',
-        selectedCaseName: '',
+        selectedSuiteCase: {
+          suiteId: '',
+          caseId: '',
+          sequence: 999,
+          status: 1
+        },
         search: {
           pageIndex: 1
         }
@@ -172,7 +201,7 @@ export default {
     createRelatedCase () {
       createRelatedCaseAPI({
         suiteId: this.pageData.suiteId,
-        caseId: this.pageControl.selectedCaseId
+        caseId: this.pageControl.relatedCaseId
       }).then(response => {
         if (response.data.success === true) {
           this.queryDetail()
@@ -184,7 +213,7 @@ export default {
     batchRelatedCase () {
       batchRelatedCaseAPI({
         suiteId: this.pageData.suiteId,
-        caseName: this.pageControl.selectedCaseName
+        caseName: this.pageControl.relatedCaseName
       }).then(response => {
         if (response.data.success === true) {
           this.queryDetail()
@@ -217,6 +246,9 @@ export default {
         }
       })
     },
+    useSingle (row) {
+      useSingleAPI()
+    },
     queryDetail () {
       queryDetailAPI({
         suiteId: this.suiteId,
@@ -224,6 +256,29 @@ export default {
       }).then(response => {
         if (response.data.success === true) {
           this.pageData = response.data.data
+        }
+      })
+    },
+    editCase (caseId) {
+      this.pageControl.selectedCaseId = caseId
+      this.pageControl.isEditCase = true
+      console.info('editCase' + this.pageControl.isEditCase)
+    },
+    editSequence (row) {
+      console.info('test')
+      this.pageControl.selectedSuiteCase = row
+      this.pageControl.isEditSequence = true
+    },
+    updateRelatedCase () {
+      console.info('test')
+      updateRelatedCaseAPI({
+        suiteId: this.pageControl.selectedSuiteCase.suiteId,
+        caseId: this.pageControl.selectedSuiteCase.caseId,
+        sequence: this.pageControl.selectedSuiteCase.sequence
+      }).then(response => {
+        if (response.data.success === true) {
+          this.pageControl.isEditSequence = false
+          this.$message.success('编辑执行顺序成功')
         }
       })
     }

@@ -34,7 +34,7 @@
       <el-table-column label="操作" width="110">
         <template slot-scope="scope">
           <el-link @click="edit(scope.row.caseId)" :underline="false" type="primary">编辑</el-link>
-          <el-link @click="use(scope.row.caseId)" :underline="false" type="primary">执行</el-link>
+<!--          <el-link @click="use(scope.row.caseId)" :underline="false" type="primary">执行</el-link>-->
         </template>
       </el-table-column>
     </el-table>
