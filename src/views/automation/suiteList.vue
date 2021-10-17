@@ -11,7 +11,11 @@
     <el-table border :data="pageData.list" size="mini" style="width: 100%; height: 411px">
       <el-table-column prop="suiteId" label="编号" width="120">
       </el-table-column>
-      <el-table-column prop="name" label="标题" width="180" show-overflow-tooltip>
+      <el-table-column label="标题" width="200" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <el-tag size="mini">{{ getStatus(scope.row.status) }}</el-tag>
+          {{scope.row.name}}
+        </template>
       </el-table-column>
       <el-table-column prop="description" label="说明" show-overflow-tooltip>
       </el-table-column>
@@ -44,7 +48,7 @@
     </el-drawer>
     <el-drawer v-if="pageControl.isEditSuite" :visible.sync="pageControl.isEditSuite" title="编辑测试集" :with-header="false" size="55%">
       <el-card style="min-height: 100%">
-        <tl-detail :suite-id="pageControl.selectedSuiteId" :is-edit="true"></tl-detail>
+        <tl-detail :suite-id="pageControl.selectedSuiteId" :is-edit="true" :visible.sync="pageControl.isEditSuite"></tl-detail>
       </el-card>
     </el-drawer>
     <el-dialog :visible.sync="pageControl.isUseSuite" title="执行测试">
@@ -101,6 +105,16 @@ export default {
     }
   },
   methods: {
+    getStatus (status) {
+      switch (status) {
+        case 1:
+          return '空闲'
+        case 2:
+          return '执行中'
+        default:
+          return '未知'
+      }
+    },
     use (suiteId) {
       this.pageControl.selectedSuiteId = suiteId
       this.pageControl.isUseSuite = true

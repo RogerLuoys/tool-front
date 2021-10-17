@@ -3,14 +3,10 @@ import VueCookies from 'vue-cookies'
 import {Message} from 'element-ui'
 
 const api = axios.create({
-  // 我的电脑
-  // baseURL: 'http://192.168.10.106:9001/',
-  // 办公电脑
-  // baseURL: 'http://10.201.10.183:9001/',
   // 我的云主机
-  // baseURL: 'http://8.140.8.45:9011/',
+  baseURL: 'http://8.140.8.45:9011/',
   // 本地
-  baseURL: 'http://localhost:9011/',
+  // baseURL: 'http://localhost:9011/',
   timeout: 10000,
   withCredentials: false
 })

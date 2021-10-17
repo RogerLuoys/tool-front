@@ -41,6 +41,14 @@ export function removeAPI (params) {
   })
 }
 
+export function removeRelatedCaseAPI (params) {
+  return api({
+    url: 'autoSuite/removeRelatedCase',
+    method: 'delete',
+    params: params
+  })
+}
+
 export function updateAPI (data) {
   return api({
     url: 'autoSuite/update',
@@ -54,6 +62,14 @@ export function updateRelatedCaseAPI (data) {
     url: 'autoSuite/updateRelatedCase',
     method: 'put',
     data: data
+  })
+}
+
+export function resetAPI (params) {
+  return api({
+    url: 'autoSuite/reset',
+    method: 'put',
+    params: params
   })
 }
 
@@ -85,7 +101,7 @@ export function useAPI (params, baseURL) {
 export function useSingleAPI (data, baseURL) {
   return apiSlave({
     url: 'autoSuite/useSingle',
-    method: 'get',
+    method: 'post',
     data: data,
     baseURL: baseURL
   })

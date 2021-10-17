@@ -469,7 +469,7 @@ export default {
       useAPI(this.pageData, this.$store.state.slaveHost).then(response => {
         if (response.data.success === true) {
           this.pageControl.respondData = response.data.data
-          this.$message.success('使用成功')
+          this.$message.success('用例开始执行')
         }
       })
     },
