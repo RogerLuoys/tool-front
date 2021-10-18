@@ -10,7 +10,7 @@
     <el-input placeholder="请输入名称" clearable size="mini" v-model="pageControl.search.name"
               style="width:200px; float:left"></el-input>
     <el-button @click="queryList()" icon="el-icon-search" type="primary" size="mini"></el-button>
-    <el-checkbox v-model="pageControl.search.isOnlyOwner">仅看自己</el-checkbox>
+<!--    <el-checkbox v-model="pageControl.search.isOnlyOwner">仅看自己</el-checkbox>-->
     <!--新增-->
     <el-button type="primary" @click="pageControl.isNewCase=true" size="mini" style="float:right">新增</el-button>
     <!--列表-->

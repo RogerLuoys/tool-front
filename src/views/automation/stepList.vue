@@ -19,16 +19,16 @@
     <el-table border :data="pageData.list" size="mini" style="width: 100%;height: 411px">
       <el-table-column prop="stepId" label="编号" width="120">
       </el-table-column>
-      <el-table-column prop="type" label="类型" width="180">
+      <el-table-column prop="type" label="类型" width="90">
         <template #default="scope">
           <div>{{ getType(scope.row.type) }}</div>
         </template>
       </el-table-column>
       <el-table-column prop="name" label="标题" width="180" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column prop="description" label="说明" width="180" show-overflow-tooltip>
+      <el-table-column prop="description" label="说明" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column prop="expectResult" label="预期结果" show-overflow-tooltip>
+      <el-table-column prop="expectResult" label="预期结果" width="180" show-overflow-tooltip>
       </el-table-column>
       <el-table-column label="操作" width="110">
         <template slot-scope="scope">

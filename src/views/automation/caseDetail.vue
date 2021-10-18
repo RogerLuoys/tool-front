@@ -13,10 +13,10 @@
         </el-tooltip>
       </el-col>
       <el-col :span="8" style="text-align: right">
-        <el-button @click="use()" type="primary" size="small">执行用例</el-button>
-        <el-popconfirm title="确定删除吗？" @confirm="remove">
+        <el-button @click="use()" type="primary" size="small">执行</el-button>
+        <el-popconfirm title="用例将被删除，确定吗？" @confirm="remove">
           <template #reference>
-            <el-button size="small">删除用例</el-button>
+            <el-button size="small">删除</el-button>
           </template>
         </el-popconfirm>
       </el-col>
