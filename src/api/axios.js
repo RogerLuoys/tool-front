@@ -7,7 +7,7 @@ const api = axios.create({
   baseURL: 'http://8.140.8.45:9011/',
   // 本地
   // baseURL: 'http://localhost:9011/',
-  timeout: 10000,
+  timeout: 30000,
   withCredentials: false
 })
 
