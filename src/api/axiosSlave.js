@@ -2,7 +2,7 @@ import axios from 'axios'
 import {Message} from 'element-ui'
 
 const apiSlave = axios.create({
-  timeout: 10000,
+  timeout: 30000,
   withCredentials: false
   // chrome问题：chrome://flags/ disable一个跨域设置 (Block insecure private network requests)
   // 设置成简单请求，不要触发浏览器预检
