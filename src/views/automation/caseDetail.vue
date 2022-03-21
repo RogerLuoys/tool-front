@@ -11,6 +11,7 @@
         <el-tooltip v-if="pageData.type === 2" content="此用例包含ui步骤，将视为ui用例">
           <el-tag size="small">ui</el-tag>
         </el-tooltip>
+        <el-button @click="pageControl.isCoding=true" size="small">coding</el-button>
       </el-col>
       <el-col :span="8" style="text-align: right">
         <el-button @click="use()" type="primary" size="small">执行</el-button>
@@ -34,10 +35,6 @@
       <el-form-item label="执行环境">
         <el-input v-model="pageData.environment" @change="update" placeholder="请输入默认域名或ip端口，可在步骤中通过${env}使用此参数" maxlength="30" show-word-limit></el-input>
       </el-form-item>
-<!--      <el-form-item label="最大时间">-->
-<!--        <el-input-number v-model="pageData.maxTime" @change="update" :min="1" :max="60" label="用例最大执行时间(分)" size="mini"></el-input-number>-->
-<!--        <span>分钟</span>-->
-<!--      </el-form-item>-->
       <el-form-item label="计划完成">
         <el-date-picker type="date" placeholder="计划完成日期" v-model="pageData.finishTime"
                         @change="update" value-format="yyyy-MM-dd" size="small"
@@ -85,14 +82,6 @@
             <span>{{scope.row.autoStep.assertActual}}</span>
           </template>
         </el-table-column>
-<!--        <el-table-column label="" width="80">-->
-<!--          <template slot-scope="scope">-->
-<!--            <div v-if="scope.row.autoStep.isPublic">公用步骤</div>-->
-<!--            <div v-else>-->
-<!--              <el-button @click="edit(scope.row.autoStep)" type="text" size="mini">编辑</el-button>-->
-<!--            </div>-->
-<!--          </template>-->
-<!--        </el-table-column>-->
       </el-table>
       <!--主要步骤-->
       <el-divider content-position="right">
@@ -137,14 +126,6 @@
             <span>{{scope.row.autoStep.assertActual}}</span>
           </template>
         </el-table-column>
-<!--        <el-table-column label="" width="80">-->
-<!--          <template slot-scope="scope">-->
-<!--            <div v-if="scope.row.autoStep.isPublic">公用步骤</div>-->
-<!--            <div v-else>-->
-<!--              <el-button @click="edit(scope.row.autoStep)" type="text">编辑</el-button>-->
-<!--            </div>-->
-<!--          </template>-->
-<!--        </el-table-column>-->
       </el-table>
       <!--收尾步骤-->
       <el-divider content-position="right">
@@ -188,14 +169,6 @@
             <span>{{scope.row.autoStep.assertActual}}</span>
           </template>
         </el-table-column>
-<!--        <el-table-column label="" width="80">-->
-<!--          <template slot-scope="scope">-->
-<!--            <div v-if="scope.row.autoStep.isPublic">公用步骤</div>-->
-<!--            <div v-else>-->
-<!--              <el-button @click="edit(scope.row.autoStep)" type="text">编辑</el-button>-->
-<!--            </div>-->
-<!--          </template>-->
-<!--        </el-table-column>-->
       </el-table>
     </el-form>
     <!--弹窗-->
@@ -342,6 +315,7 @@ export default {
         isNewMainStep: false,
         isNewAfterStep: false,
         isEditStep: false,
+        isCoding: false,
         preStepId: '',
         mainStepId: '',
         afterStepId: '',
