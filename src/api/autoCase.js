@@ -49,6 +49,22 @@ export function updateAPI (data) {
   })
 }
 
+export function changeUiModeAPI (data) {
+  return api({
+    url: 'autoCase/changeUiMode',
+    method: 'put',
+    data: data
+  })
+}
+
+export function changeScriptModeAPI (data) {
+  return api({
+    url: 'autoCase/changeScriptMode',
+    method: 'put',
+    data: data
+  })
+}
+
 export function queryDetailAPI (params) {
   return api({
     url: 'autoCase/queryDetail',

@@ -81,7 +81,14 @@
 <!--      </el-table>-->
       <!--主要步骤-->
       <div v-if="pageControl.isCoding">
-        <el-input type="textarea" :autosize="{minRows: 13, maxRows: 200}" placeholder="请输入脚本" v-model="pageData.mainSteps"></el-input>
+        <el-divider content-position="right">
+          <el-button @click="changeUiMode" type="text">检查并同步</el-button>
+          <span>主要步骤</span>
+          <el-tooltip class="item" effect="dark" content="主要步骤会前置步骤后执行，是用例主体，不可为空" placement="top-start">
+            <i class="el-icon-info"></i>
+          </el-tooltip>
+        </el-divider>
+        <el-input @change="update" type="textarea" :autosize="{minRows: 13, maxRows: 200}" placeholder="请输入脚本" v-model="pageData.mainSteps"></el-input>
       </div>
       <div v-else>
         <el-divider content-position="right">
@@ -180,7 +187,7 @@
 </template>
 
 <script>
-import {createAPI, createRelatedStepAPI, updateAPI, removeAPI, removeRelatedStepAPI, queryDetailAPI, useAPI} from '@/api/autoCase'
+import {createAPI, createRelatedStepAPI, updateAPI, removeAPI, removeRelatedStepAPI, changeUiModeAPI, changeScriptModeAPI, queryDetailAPI, useAPI} from '@/api/autoCase'
 import tlStepDetail from './stepDetail'
 
 export default {
@@ -421,6 +428,20 @@ export default {
       updateAPI(this.pageData).then(response => {
         if (response.data.success === true) {
           this.$message.success('编辑用例成功')
+        }
+      })
+    },
+    changeUiMode () {
+      changeUiModeAPI(this.pageData).then(response => {
+        if (response.data.success === true) {
+          this.$message.success('检查通过')
+        }
+      })
+    },
+    changeScriptMode () {
+      changeScriptModeAPI(this.pageData).then(response => {
+        if (response.data.success === true) {
+          this.$message.success('同步成功')
         }
       })
     },
