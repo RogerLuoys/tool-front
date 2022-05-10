@@ -434,6 +434,7 @@ export default {
     changeUiMode () {
       changeUiModeAPI(this.pageData).then(response => {
         if (response.data.success === true) {
+          this.queryDetail()
           this.$message.success('检查通过')
         }
       })
