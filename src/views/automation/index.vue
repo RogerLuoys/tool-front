@@ -26,17 +26,6 @@
     <tl-step-list v-show="pageControl.activeName === 'step'"></tl-step-list>
     <tl-case-list v-show="pageControl.activeName === 'case'"></tl-case-list>
     <tl-suite-list v-show="pageControl.activeName === 'suite'"></tl-suite-list>
-    <!--    <el-tabs v-model="pageControl.activeName" @tab-click="handleClick">-->
-<!--      <el-tab-pane label="公共步骤" name="stepList">-->
-<!--        <tl-step-list></tl-step-list>-->
-<!--      </el-tab-pane>-->
-<!--      <el-tab-pane label="用例管理" name="caseList">-->
-<!--        <tl-case-list></tl-case-list>-->
-<!--      </el-tab-pane>-->
-<!--      <el-tab-pane label="套件管理" name="suiteList">-->
-<!--        <tl-suite-list></tl-suite-list>-->
-<!--      </el-tab-pane>-->
-<!--    </el-tabs>-->
   </div>
 </template>
 

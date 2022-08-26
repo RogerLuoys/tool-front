@@ -10,7 +10,6 @@
     <el-input placeholder="请输入名称" clearable size="mini" v-model="pageControl.search.name"
               style="width:200px; float:left"></el-input>
     <el-button @click="queryList()" icon="el-icon-search" type="primary" size="mini"></el-button>
-<!--    <el-checkbox v-model="pageControl.search.isOnlyOwner">仅看自己</el-checkbox>-->
     <!--新增-->
     <el-button type="primary" @click="pageControl.isNewCase=true" size="mini" style="float:right">新增</el-button>
     <!--列表-->
@@ -34,13 +33,10 @@
       <el-table-column label="操作" width="110">
         <template slot-scope="scope">
           <el-link @click="edit(scope.row.caseId)" :underline="false" type="primary">编辑</el-link>
-<!--          <el-link @click="use(scope.row.caseId)" :underline="false" type="primary">执行</el-link>-->
         </template>
       </el-table-column>
     </el-table>
     <!--分页-->
-<!--    <el-link @click="test">访问连接</el-link>-->
-<!--    <el-link @click="test2">打开连接</el-link>-->
     <el-pagination layout="total, prev, pager, next" @current-change="queryList()" :current-page.sync="pageControl.search.pageIndex"
                    :total="pageData.total" style="float: right">
     </el-pagination>

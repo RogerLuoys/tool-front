@@ -36,50 +36,8 @@
                         @change="update" value-format="yyyy-MM-dd" size="small"
                         style="width: 200px"></el-date-picker>
       </el-form-item>
-<!--      &lt;!&ndash;前置步骤******************************&ndash;&gt;-->
-<!--      <el-divider content-position="right">-->
-<!--        <el-button @click="createRelatedStep(pageData.preStepList !== null ? pageData.preStepList.length + 1 : 1, 1, null)" type="text">新增</el-button>-->
-<!--        <el-button @click="pageControl.isNewPreStep=true" type="text">关联</el-button>-->
-<!--        <el-button v-if="pageData.preStepList !== null && pageData.preStepList.length !== 0" @click="deleteStep(pageData.preStepList.pop())" type="text">删除</el-button>-->
-<!--        <span>前置步骤</span>-->
-<!--        <el-tooltip class="item" effect="dark" content="前置步骤会在用例最开始执行，主要用于环境准备" placement="top-start">-->
-<!--          <i class="el-icon-info"></i>-->
-<!--        </el-tooltip>-->
-<!--      </el-divider>-->
-<!--      <div v-if="pageControl.isNewPreStep">-->
-<!--        <el-input v-model="pageControl.preStepId" placeholder="请输入要关联的步骤编号" size="small"-->
-<!--                  maxlength="20" show-word-limit>-->
-<!--          <template #append>-->
-<!--            <el-button @click="createRelatedStep(pageData.preStepList !== null ? pageData.preStepList.length + 1 : 1, 1, pageControl.preStepId)" type="primary">确认</el-button>-->
-<!--            <el-button @click="pageControl.isNewPreStep=false">取消</el-button>-->
-<!--          </template>-->
-<!--        </el-input>-->
-<!--      </div>-->
-<!--      <el-table border :data="pageData.preStepList" @row-click="edit" :row-style="{cursor: 'pointer'}" size="mini" style="width: 100%">-->
-<!--        <el-table-column label="编号" width="130">-->
-<!--          <template slot-scope="scope">-->
-<!--            {{scope.row.autoStep.stepId}}-->
-<!--          </template>-->
-<!--        </el-table-column>-->
-<!--        <el-table-column label="标题" width="150" show-overflow-tooltip>-->
-<!--          <template slot-scope="scope">-->
-<!--            {{scope.row.autoStep.name}}-->
-<!--          </template>-->
-<!--        </el-table-column>-->
-<!--        <el-table-column label="预期结果" width="150" show-overflow-tooltip>-->
-<!--          <template slot-scope="scope">-->
-<!--            <el-tag type="info" size="mini">{{ getAssertType(scope.row.autoStep.assertType) }}</el-tag>-->
-<!--            <span>{{scope.row.autoStep.assertExpect}}</span>-->
-<!--          </template>-->
-<!--        </el-table-column>-->
-<!--        <el-table-column label="实际结果" show-overflow-tooltip>-->
-<!--          <template slot-scope="scope">-->
-<!--            <el-tag type="info" size="mini">{{ scope.row.autoStep.assertResult === null ? '未校验' : scope.row.autoStep.assertResult }}</el-tag>-->
-<!--            <span>{{scope.row.autoStep.assertActual}}</span>-->
-<!--          </template>-->
-<!--        </el-table-column>-->
-<!--      </el-table>-->
       <!--主要步骤-->
+      <!--coding模式-->
       <div v-if="pageControl.isCoding">
         <el-divider content-position="right">
           <el-button @click="changeUiMode" type="text">检查并同步</el-button>
@@ -90,6 +48,7 @@
         </el-divider>
         <el-input @change="update" type="textarea" :autosize="{minRows: 13, maxRows: 200}" placeholder="请输入脚本" v-model="pageData.mainSteps"></el-input>
       </div>
+      <!--ui模式-->
       <div v-else>
         <el-divider content-position="right">
           <el-button @click="createRelatedStep(pageData.mainStepList !== null ? pageData.mainStepList.length + 1 : 1, 2, null)" type="text">新增</el-button>
@@ -135,49 +94,6 @@
           </el-table-column>
         </el-table>
       </div>
-<!--      &lt;!&ndash;收尾步骤&ndash;&gt;-->
-<!--      <el-divider content-position="right">-->
-<!--        <el-button @click="createRelatedStep(pageData.afterStepList !== null ? pageData.afterStepList.length + 1 : 1, 3, null)" type="text">新增</el-button>-->
-<!--        <el-button @click="pageControl.isNewAfterStep=true" type="text">关联</el-button>-->
-<!--        <el-button v-if="pageData.afterStepList !== null && pageData.afterStepList.length !== 0" @click="deleteStep(pageData.afterStepList.pop())" type="text">删除</el-button>-->
-<!--        <span>收尾步骤</span>-->
-<!--        <el-tooltip class="item" effect="dark" content="收尾步骤会在主要步骤后执行，用于环境还原，若结果为fail则不执行" placement="top-start">-->
-<!--          <i class="el-icon-info"></i>-->
-<!--        </el-tooltip>-->
-<!--      </el-divider>-->
-<!--      <div v-if="pageControl.isNewAfterStep">-->
-<!--        <el-input v-model="pageControl.afterStepId" placeholder="请输入要关联的步骤编号" size="small"-->
-<!--                  maxlength="20" show-word-limit>-->
-<!--          <template #append>-->
-<!--            <el-button @click="createRelatedStep(pageData.afterStepList !== null ? pageData.afterStepList.length + 1 : 1, 3, pageControl.afterStepId)" type="primary">确认</el-button>-->
-<!--            <el-button @click="pageControl.isNewAfterStep=false">取消</el-button>-->
-<!--          </template>-->
-<!--        </el-input>-->
-<!--      </div>-->
-<!--      <el-table border :data="pageData.afterStepList" @row-click="edit" :row-style="{cursor: 'pointer'}" size="mini" style="width: 100%">-->
-<!--        <el-table-column label="编号" width="130">-->
-<!--          <template slot-scope="scope">-->
-<!--            {{scope.row.autoStep.stepId}}-->
-<!--          </template>-->
-<!--        </el-table-column>-->
-<!--        <el-table-column label="标题" width="150" show-overflow-tooltip>-->
-<!--          <template slot-scope="scope">-->
-<!--            {{scope.row.autoStep.name}}-->
-<!--          </template>-->
-<!--        </el-table-column>-->
-<!--        <el-table-column label="预期结果" width="150" show-overflow-tooltip>-->
-<!--          <template slot-scope="scope">-->
-<!--            <el-tag type="info" size="mini">{{ getAssertType(scope.row.autoStep.assertType) }}</el-tag>-->
-<!--            <span>{{scope.row.autoStep.assertExpect}}</span>-->
-<!--          </template>-->
-<!--        </el-table-column>-->
-<!--        <el-table-column label="实际结果" show-overflow-tooltip>-->
-<!--          <template slot-scope="scope">-->
-<!--            <el-tag type="info" size="mini">{{ scope.row.autoStep.assertResult === -1 ? '未校验' : scope.row.autoStep.assertResult }}</el-tag>-->
-<!--            <span>{{scope.row.autoStep.assertActual}}</span>-->
-<!--          </template>-->
-<!--        </el-table-column>-->
-<!--      </el-table>-->
     </el-form>
     <!--弹窗-->
     <el-dialog v-if="pageControl.isEditStep" :visible.sync="pageControl.isEditStep" title="编辑步骤" width="65%" append-to-body>
