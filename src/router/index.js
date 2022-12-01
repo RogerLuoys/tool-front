@@ -7,6 +7,8 @@ import factoryDetail from '@/views/factory/detail'
 import resource from '@/views/resource/index'
 import automation from '@/views/automation/index'
 import caseDetail from '@/views/automation/caseDetail'
+import config from '@/views/config/index'
+import suite from '@/views/suite/index'
 
 Vue.use(Router)
 
@@ -26,6 +28,16 @@ export default new Router({
       path: '/factory',
       name: 'factory',
       component: factory
+    },
+    {
+      path: '/config',
+      name: 'config',
+      component: config
+    },
+    {
+      path: '/suite',
+      name: 'suite',
+      component: suite
     },
     {
       path: '/factoryDetail/:id',

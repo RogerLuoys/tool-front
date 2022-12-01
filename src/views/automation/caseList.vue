@@ -3,9 +3,15 @@
     <!--搜索-->
     <el-select v-model="pageControl.search.type" clearable size="mini" placeholder="请选择状态"
                style="width:110px; float:left">
+      <el-option key="1" label="用例" :value="1"></el-option>
+      <el-option key="2" label="超类" :value="2"></el-option>
+      <el-option key="3" label="PO" :value="3"></el-option>
+    </el-select>
+    <el-select v-model="pageControl.search.status" clearable size="mini" placeholder="请选择状态"
+               style="width:110px; float:left">
       <el-option key="1" label="计划中" :value="1"></el-option>
-      <el-option key="2" label="已完成" :value="2"></el-option>
-      <el-option key="3" label="待修复" :value="3"></el-option>
+      <el-option key="2" label="待修复" :value="2"></el-option>
+      <el-option key="3" label="已完成" :value="3"></el-option>
     </el-select>
     <el-input placeholder="请输入名称" clearable size="mini" v-model="pageControl.search.name"
               style="width:200px; float:left"></el-input>
@@ -41,6 +47,7 @@
                    :total="pageData.total" style="float: right">
     </el-pagination>
     <!--弹出框-->
+    <!--新增弹窗-->
     <el-drawer :visible.sync="pageControl.isNewCase" title="新增测试用例" size="55%">
       <el-card shadow="never" style="height: 100%">
         <el-input v-model="pageControl.quickCreate.name" @keyup.enter.native="quickCreate()" placeholder="请输入名称后回车，或点确认新增" size="small" maxlength="30" show-word-limit>
@@ -50,11 +57,13 @@
         </el-input>
       </el-card>
     </el-drawer>
+    <!--编辑弹窗-->
     <el-drawer :visible.sync="pageControl.isEditCase" title="编辑用例" :with-header="false" size="55%">
       <el-card style="min-height: 100%">
         <tl-detail v-if="pageControl.isEditCase" :case-id="pageControl.selectedCaseId" :visible.sync="pageControl.isEditCase"></tl-detail>
       </el-card>
     </el-drawer>
+    <!--执行弹窗-->
     <el-dialog :visible.sync="pageControl.isUseCase" title="执行用例">
       <el-card>
         <tl-use :tool-id="pageControl.selectedCaseId"></tl-use>
@@ -75,11 +84,12 @@ export default {
     return {
       pageData: {
         list: [{
-          caseId: null,
+          caseId: 1,
           name: 'name',
           description: 'desc',
+          finishTime: '2022-12-31',
           ownerId: 'tester',
-          ownerName: '',
+          ownerName: '测试一',
           status: 1
         }],
         total: 1
@@ -92,13 +102,13 @@ export default {
         isEditCase: false,
         isUseCase: false,
         selectedCaseId: null,
-        search: {
+        search: {//  列表搜索入参
+          type: 1,
           status: null,
           pageIndex: 1,
-          isOnlyOwner: true,
           name: null
         },
-        quickCreate: {
+        quickCreate: {//  快速新增用例的入参
           name: null,
           type: 1
         }

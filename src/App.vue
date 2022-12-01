@@ -8,24 +8,28 @@
                    active-text-color="#ffd04b" style="height: 14.8cm;">
             <el-menu-item index="1" @click="$router.push('/')">
               <i class="el-icon-s-home"></i>
-              <span slot="title">首页</span>
+              <span slot="title">工作台</span>
             </el-menu-item>
-            <el-menu-item index="2" @click="$router.push('/factory')">
+            <el-menu-item index="2" @click="$router.push('/automation')">
               <i class="el-icon-s-management"></i>
-              <span slot="title">数据工厂</span>
+              <span slot="title">用例管理</span>
             </el-menu-item>
-            <el-menu-item index="3" @click="$router.push('/automation')">
+            <el-menu-item index="3" @click="$router.push('/suite')">
               <i class="el-icon-s-promotion"></i>
-              <span slot="title">自动化测试</span>
+              <span slot="title">套件执行</span>
             </el-menu-item>
             <el-menu-item index="4" @click="$router.push('/resource')">
               <i class="el-icon-s-platform"></i>
               <span slot="title">资源管理</span>
             </el-menu-item>
-<!--            <el-menu-item index="5" @click="$router.push('/config')">-->
-<!--              <i class="el-icon-setting"></i>-->
-<!--              <span slot="title">配置管理</span>-->
-<!--            </el-menu-item>-->
+            <el-menu-item index="5" @click="$router.push('/config')">
+              <i class="el-icon-setting"></i>
+              <span slot="title">设置</span>
+            </el-menu-item>
+            <el-menu-item index="6" @click="$router.push('/factory')">
+              <i class="el-icon-plus"></i>
+              <span slot="title">数据工厂</span>
+            </el-menu-item>
           </el-menu>
       </el-aside>
       <el-main>
@@ -58,7 +62,7 @@ export default {
         } else {
           // this.$store.commit('setUserName', '默认用户')
           // this.$store.commit('setUserId', '101')
-          this.$store.state.userId = '101'
+          this.$store.state.userId = '1'
           this.$store.state.userName = '默认用户'
         }
       })
@@ -66,7 +70,7 @@ export default {
       console.info('默认用户')
       // this.$store.commit('setUserName', '默认用户')
       // this.$store.commit('setUserId', '101')
-      this.$store.state.userId = '101'
+      this.$store.state.userId = '1'
       this.$store.state.userName = '默认用户'
     }
     console.info(this.$store.state.userId)

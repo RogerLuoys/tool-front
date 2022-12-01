@@ -11,13 +11,14 @@
       </el-form-item>
       <el-form-item label="类型">
         <el-radio-group v-model="pageData.type" @change="changeType()" :disabled="isEdit">
-          <el-radio :label="1">SQL</el-radio>
-          <el-radio :label="2">HTTP</el-radio>
+          <el-radio :label="-1">未知</el-radio>
+          <el-radio :label="1">PO</el-radio>
+          <el-radio :label="2">SQL</el-radio>
           <el-radio :label="3">RPC</el-radio>
-          <el-radio :label="4">UI</el-radio>
-          <el-radio :label="5">ASSERT</el-radio>
+          <el-radio :label="4">HTTP</el-radio>
+          <el-radio :label="5">UI</el-radio>
           <el-radio :label="6">UTIL</el-radio>
-          <el-radio :label="7">TASK</el-radio>
+          <el-radio :label="7">ASSERTION</el-radio>
         </el-radio-group>
       </el-form-item>
       <!--模板-->

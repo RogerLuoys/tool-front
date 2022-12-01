@@ -2,10 +2,11 @@
   <div>
     <el-row style="height: 60px">
       <el-col :span="14">
-        <el-menu default-active="2" mode="horizontal">
-          <el-menu-item @click="pageControl.activeName = 'step'" index="1">公共步骤</el-menu-item>
-          <el-menu-item @click="pageControl.activeName = 'case'" index="2">用例管理</el-menu-item>
-          <el-menu-item @click="pageControl.activeName = 'suite'" index="3">套件管理</el-menu-item>
+        <el-menu default-active="1" mode="horizontal">
+          <el-menu-item @click="pageControl.activeName = 'case'" index="1">用例</el-menu-item>
+          <el-menu-item @click="pageControl.activeName = 'supper'" index="2">超类</el-menu-item>
+          <el-menu-item @click="pageControl.activeName = 'po'" index="3">PO</el-menu-item>
+<!--          <el-menu-item @click="pageControl.activeName = 'suite'" index="4">套件</el-menu-item>-->
         </el-menu>
       </el-col>
       <el-col :span="10" style="background-color: white; height: 60px;">
@@ -23,9 +24,9 @@
       </el-col>
     </el-row>
     <div style="height: 1px"></div>
-    <tl-step-list v-show="pageControl.activeName === 'step'"></tl-step-list>
+<!--    <tl-step-list v-show="pageControl.activeName === 'step'"></tl-step-list>-->
     <tl-case-list v-show="pageControl.activeName === 'case'"></tl-case-list>
-    <tl-suite-list v-show="pageControl.activeName === 'suite'"></tl-suite-list>
+<!--    <tl-suite-list v-show="pageControl.activeName === 'suite'"></tl-suite-list>-->
   </div>
 </template>
 
