@@ -6,7 +6,6 @@
           <el-menu-item @click="pageControl.activeName = 'case'" index="1">用例</el-menu-item>
           <el-menu-item @click="pageControl.activeName = 'supper'" index="2">超类</el-menu-item>
           <el-menu-item @click="pageControl.activeName = 'po'" index="3">PO</el-menu-item>
-<!--          <el-menu-item @click="pageControl.activeName = 'suite'" index="4">套件</el-menu-item>-->
         </el-menu>
       </el-col>
       <el-col :span="10" style="background-color: white; height: 60px;">
