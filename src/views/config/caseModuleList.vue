@@ -1,18 +1,6 @@
 <template>
   <div>
     <!--搜索-->
-    <el-select v-model="pageControl.search.type" clearable size="mini" placeholder="请选择状态"
-               style="width:110px; float:left">
-      <el-option key="1" label="用例" :value="1"></el-option>
-      <el-option key="2" label="超类" :value="2"></el-option>
-      <el-option key="3" label="PO" :value="3"></el-option>
-    </el-select>
-    <el-select v-model="pageControl.search.status" clearable size="mini" placeholder="请选择状态"
-               style="width:110px; float:left">
-      <el-option key="1" label="计划中" :value="1"></el-option>
-      <el-option key="2" label="待修复" :value="2"></el-option>
-      <el-option key="3" label="已完成" :value="3"></el-option>
-    </el-select>
     <el-input placeholder="请输入名称" clearable size="mini" v-model="pageControl.search.name"
               style="width:200px; float:left"></el-input>
     <el-button @click="queryList()" icon="el-icon-search" type="primary" size="mini"></el-button>
@@ -57,28 +45,28 @@
         </el-input>
       </el-card>
     </el-drawer>
-    <!--编辑弹窗-->
-    <el-drawer :visible.sync="pageControl.isEditCase" title="编辑用例" :with-header="false" size="55%">
-      <el-card style="min-height: 100%">
-        <tl-detail v-if="pageControl.isEditCase" :case-id="pageControl.selectedCaseId" :visible.sync="pageControl.isEditCase"></tl-detail>
-      </el-card>
-    </el-drawer>
-    <!--执行弹窗-->
-    <el-dialog :visible.sync="pageControl.isUseCase" title="执行用例">
-      <el-card>
-        <tl-use :tool-id="pageControl.selectedCaseId"></tl-use>
-      </el-card>
-    </el-dialog>
+<!--    &lt;!&ndash;编辑弹窗&ndash;&gt;-->
+<!--    <el-drawer :visible.sync="pageControl.isEditCase" title="编辑用例" :with-header="false" size="55%">-->
+<!--      <el-card style="min-height: 100%">-->
+<!--        <tl-detail v-if="pageControl.isEditCase" :case-id="pageControl.selectedCaseId" :visible.sync="pageControl.isEditCase"></tl-detail>-->
+<!--      </el-card>-->
+<!--    </el-drawer>-->
+<!--    &lt;!&ndash;执行弹窗&ndash;&gt;-->
+<!--    <el-dialog :visible.sync="pageControl.isUseCase" title="执行用例">-->
+<!--      <el-card>-->
+<!--        <tl-use :tool-id="pageControl.selectedCaseId"></tl-use>-->
+<!--      </el-card>-->
+<!--    </el-dialog>-->
   </div>
 </template>
 
 <script>
-import tlDetail from './caseDetail'
-import tlUse from './caseUse'
+// import tlDetail from './caseDetail'
+// import tlUse from './caseUse'
 import {quickCreateAPI, queryAPI, testAPI} from '@/api/autoCase'
 
 export default {
-  components: {tlDetail, tlUse},
+  // components: {tlDetail, tlUse},
   props: {
     supperCaseId: {
       type: Number,
@@ -108,14 +96,14 @@ export default {
         isUseCase: false,
         selectedCaseId: null,
         search: {//  列表搜索入参
-          type: 1,
+          type: 2,
           status: null,
           pageIndex: 1,
           name: null
         },
         quickCreate: {//  快速新增用例的入参
           name: null,
-          type: 1
+          type: 2
         }
       }
     }

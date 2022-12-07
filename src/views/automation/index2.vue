@@ -22,26 +22,16 @@
 <!--        </el-tooltip>-->
 <!--      </el-col>-->
 <!--    </el-row>-->
-    <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="flagWeb" name="first"></el-tab-pane>
-      <el-tab-pane label="flagHttp" name="second"></el-tab-pane>
-      <el-tab-pane label="uc" name="third">角色管理</el-tab-pane>
-      <el-tab-pane label="express" name="fourth">定时任务补偿</el-tab-pane>
-      <el-tab-pane label="flagWeb" name="first"></el-tab-pane>
-      <el-tab-pane label="flagHttp" name="second"></el-tab-pane>
-      <el-tab-pane label="uc" name="third">角色管理</el-tab-pane>
-      <el-tab-pane label="express" name="fourth">定时任务补偿</el-tab-pane>
-      <el-tab-pane label="flagWeb" name="first"></el-tab-pane>
-      <el-tab-pane label="flagHttp" name="second"></el-tab-pane>
-      <el-tab-pane label="uc" name="third">角色管理</el-tab-pane>
-      <el-tab-pane label="express" name="fourth">定时任务补偿</el-tab-pane>
-      <el-tab-pane label="flagWeb" name="first"></el-tab-pane>
-      <el-tab-pane label="flagHttp" name="second"></el-tab-pane>
-      <el-tab-pane label="uc" name="third">角色管理</el-tab-pane>
-      <el-tab-pane label="express" name="fourth">定时任务补偿</el-tab-pane>
+    <el-tabs v-model="pageControl.activeName" @tab-click="handleClick">
+<!--      <el-tab-pane label="flagWeb" name="first"></el-tab-pane>-->
+<!--      <el-tab-pane label="flagHttp" name="second"></el-tab-pane>-->
+<!--      <el-tab-pane label="uc" name="third"></el-tab-pane>-->
+<!--      <el-tab-pane label="express" name="fourth"></el-tab-pane>-->
+      <el-tab-pane v-for="tab in pageData.list" :key="tab.caseId" :label="tab.name" :name="tab.name">
+        <tl-case-list :supper-case-id="1"></tl-case-list>
+      </el-tab-pane>
     </el-tabs>
     <div style="height: 1px"></div>
-    <tl-case-list v-show="pageControl.activeName === 'case'"></tl-case-list>
   </div>
 </template>
 
@@ -54,14 +44,32 @@ export default {
   components: {tlStepList, tlCaseList, tlSuiteList},
   data () {
     return {
+      pageData: {
+        list: [{
+          caseId: 1,
+          name: 'flagUi'
+        }, {
+          caseId: 2,
+          name: 'flagHttp'
+        }],
+        total: 1
+      },
       pageControl: {
-        activeName: 'case'
+        activeName: 'flagHttp'
       }
     }
+  },
+  created: function () {
+    console.info('created')
+    this.queryTabs()
   },
   methods: {
     handleClick (tab, event) {
       console.log(tab, event)
+    },
+    // 查项目内的所有超类列表
+    queryTabs () {
+      console.log('tabs')
     }
   }
 }
