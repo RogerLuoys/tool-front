@@ -82,7 +82,7 @@ export default {
   props: {
     supperCaseId: {
       type: Number,
-      default: 1
+      default: 0
     }
   },
   data () {
@@ -108,6 +108,7 @@ export default {
         isUseCase: false,
         selectedCaseId: null,
         search: {//  列表搜索入参
+          supperCaseId: 0,
           type: 1,
           status: null,
           pageIndex: 1,
@@ -115,12 +116,17 @@ export default {
         },
         quickCreate: {//  快速新增用例的入参
           name: null,
-          type: 1
+          type: 1,
+          supperCaseId: 0
         }
       }
     }
   },
   created: function () {
+    console.info('created2')
+    this.pageControl.search.supperCaseId = this.supperCaseId
+    this.pageControl.quickCreate.supperCaseId = this.supperCaseId
+    console.info(this.pageControl.quickCreate)
     this.queryList()
   },
   watch: {
@@ -172,7 +178,8 @@ export default {
         }
       })
     },
-    quickCreate () {
+    quickCreate () { // 快速新增用例
+      console.info(this.pageControl.quickCreate)
       quickCreateAPI(this.pageControl.quickCreate).then(response => {
         if (response.data.success === true) {
           this.pageControl.selectedCaseId = response.data.data

@@ -28,7 +28,7 @@
 <!--      <el-tab-pane label="uc" name="third"></el-tab-pane>-->
 <!--      <el-tab-pane label="express" name="fourth"></el-tab-pane>-->
       <el-tab-pane v-for="tab in pageData.list" :key="tab.caseId" :label="tab.name" :name="tab.name">
-        <tl-case-list :supper-case-id="1"></tl-case-list>
+        <tl-case-list :supper-case-id="tab.caseId"></tl-case-list>
       </el-tab-pane>
     </el-tabs>
     <div style="height: 1px"></div>
@@ -39,28 +39,26 @@
 import tlStepList from './stepList'
 import tlCaseList from './caseList'
 import tlSuiteList from './suiteList'
+import {queryAPI} from '@/api/autoCase'
 
 export default {
   components: {tlStepList, tlCaseList, tlSuiteList},
   data () {
     return {
       pageData: {
-        list: [{
-          caseId: 1,
-          name: 'flagUi'
-        }, {
-          caseId: 2,
-          name: 'flagHttp'
-        }],
+        list: [],
         total: 1
       },
       pageControl: {
-        activeName: 'flagHttp'
+        activeName: '',
+        search: {
+          type: 2
+        }
       }
     }
   },
   created: function () {
-    console.info('created')
+    // console.info('created')
     this.queryTabs()
   },
   methods: {
@@ -69,7 +67,12 @@ export default {
     },
     // 查项目内的所有超类列表
     queryTabs () {
-      console.log('tabs')
+      queryAPI(this.pageControl.search).then(response => {
+        if (response.data.success === true) {
+          this.pageData = response.data.data
+          this.pageControl.activeName = this.pageData.list[0].name
+        }
+      })
     }
   }
 }

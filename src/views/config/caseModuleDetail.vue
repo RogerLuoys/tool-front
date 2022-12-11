@@ -1,10 +1,380 @@
 <template>
-  <div>123</div>
+  <div>
+    <el-row style="height: 15px">
+      <el-col :span="15">
+        <span>编辑测试模块(超类)</span>
+<!--        <el-tooltip v-if="pageData.type === 2" content="此用例包含ui步骤，将视为ui用例">-->
+<!--          <el-tag size="small">ui</el-tag>-->
+<!--        </el-tooltip>-->
+        <el-button v-if="pageControl.isCoding===false" @click="pageControl.isCoding=true" size="small">coding</el-button>
+        <el-button v-else @click="pageControl.isCoding=false" size="small">ui</el-button>
+      </el-col>
+      <el-col :span="8" style="text-align: right">
+<!--        <el-button @click="use()" type="primary" size="small">执行</el-button>-->
+        <el-popconfirm title="用例将被删除，确定吗？" @confirm="remove">
+          <template #reference>
+            <el-button size="small">删除</el-button>
+          </template>
+        </el-popconfirm>
+      </el-col>
+    </el-row>
+    <!--基本信息-->
+    <el-divider content-position="right"></el-divider>
+    <el-form :model="pageData" label-width="90px" size="small">
+      <el-form-item label="标题">
+        <el-input v-model="pageData.name" @change="update" placeholder="请输入标题" maxlength="10" show-word-limit></el-input>
+      </el-form-item>
+      <el-form-item label="说明">
+        <el-input v-model="pageData.description" @change="update" placeholder="请描述功能和实现方法" type="textarea" maxlength="200"
+                  show-word-limit></el-input>
+      </el-form-item>
+      <el-form-item label="公共参数">
+        <el-input v-model="pageData.description" @change="update" placeholder="请描述功能和实现方法" type="textarea" maxlength="200"
+                  show-word-limit></el-input>
+      </el-form-item>
+      <el-form-item label="webDriver配置">
+        <el-input v-model="pageData.description" @change="update" placeholder="请描述功能和实现方法" type="textarea" maxlength="200"
+                  show-word-limit></el-input>
+      </el-form-item>
+<!--      <el-form-item label="计划完成">-->
+<!--        <el-date-picker type="date" placeholder="计划完成日期" v-model="pageData.finishTime"-->
+<!--                        @change="update" value-format="yyyy-MM-dd" size="small"-->
+<!--                        style="width: 200px"></el-date-picker>-->
+<!--      </el-form-item>-->
+      <!--前置步骤-->
+      <el-divider content-position="right">
+        <el-button @click="createRelatedStep(pageData.preStepList !== null ? pageData.preStepList.length + 1 : 1, 1, null)" type="text">新增</el-button>
+        <el-button v-if="pageData.preStepList !== null && pageData.preStepList.length !== 0" @click="deleteStep(pageData.preStepList.pop())" type="text">删除</el-button>
+        <span>前置步骤(@BeforeTest)</span>
+        <el-tooltip class="item" effect="dark" content="参考Testng中的@BeforeTest，会在@Test之前执行" placement="top-start">
+          <i class="el-icon-info"></i>
+        </el-tooltip>
+      </el-divider>
+      <div v-if="pageControl.isNewPreStep">
+        <el-input v-model="pageControl.preStepId" placeholder="请输入要关联的步骤编号" size="small"
+                  maxlength="20" show-word-limit>
+          <template #append>
+            <el-button @click="createRelatedStep(pageData.preStepList !== null ? pageData.preStepList.length + 1 : 1, 1, pageControl.preStepId)" type="primary">确认</el-button>
+            <el-button @click="pageControl.isNewPreStep=false">取消</el-button>
+          </template>
+        </el-input>
+      </div>
+      <!--列表-->
+      <el-table border :data="pageData.preStepList" @row-click="edit" :row-style="{cursor: 'pointer'}" size="mini" style="width: 100%">
+        <el-table-column label="编号" width="130">
+          <template slot-scope="scope">
+            {{scope.row.autoStep.stepId}}
+          </template>
+        </el-table-column>
+        <el-table-column label="标题" width="150" show-overflow-tooltip>
+          <template slot-scope="scope">
+            {{scope.row.autoStep.name}}
+          </template>
+        </el-table-column>
+        <el-table-column label="预期结果" width="150" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <el-tag type="info" size="mini">{{ getAssertType(scope.row.autoStep.assertType) }}</el-tag>
+            <span>{{scope.row.autoStep.assertExpect}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="实际结果" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <el-tag type="info" size="mini">{{ scope.row.autoStep.assertResult === null ? '未校验' : scope.row.autoStep.assertResult }}</el-tag>
+            <span>{{scope.row.autoStep.assertActual}}</span>
+          </template>
+        </el-table-column>
+      </el-table>
+      <!--后置步骤-->
+      <el-divider content-position="right">
+        <el-button @click="createRelatedStep(pageData.afterStepList !== null ? pageData.afterStepList.length + 1 : 1, 3, null)" type="text">新增</el-button>
+        <el-button v-if="pageData.afterStepList !== null && pageData.afterStepList.length !== 0" @click="deleteStep(pageData.afterStepList.pop())" type="text">删除</el-button>
+        <span>置后步骤(@AfterTest)</span>
+        <el-tooltip class="item" effect="dark" content="参考Testng中的@AfterTest，会在@Test之后执行" placement="top-start">
+          <i class="el-icon-info"></i>
+        </el-tooltip>
+      </el-divider>
+      <div v-if="pageControl.isNewAfterStep">
+        <el-input v-model="pageControl.afterStepId" placeholder="请输入要关联的步骤编号" size="small"
+                  maxlength="20" show-word-limit>
+          <template #append>
+            <el-button @click="createRelatedStep(pageData.afterStepList !== null ? pageData.afterStepList.length + 1 : 1, 1, pageControl.afterStepId)" type="primary">确认</el-button>
+            <el-button @click="pageControl.isNewAfterStep=false">取消</el-button>
+          </template>
+        </el-input>
+      </div>
+      <!--列表-->
+      <el-table border :data="pageData.afterStepList" @row-click="edit" :row-style="{cursor: 'pointer'}" size="mini" style="width: 100%">
+        <el-table-column label="编号" width="130">
+          <template slot-scope="scope">
+            {{scope.row.autoStep.stepId}}
+          </template>
+        </el-table-column>
+        <el-table-column label="标题" width="150" show-overflow-tooltip>
+          <template slot-scope="scope">
+            {{scope.row.autoStep.name}}
+          </template>
+        </el-table-column>
+        <el-table-column label="预期结果" width="150" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <el-tag type="info" size="mini">{{ getAssertType(scope.row.autoStep.assertType) }}</el-tag>
+            <span>{{scope.row.autoStep.assertExpect}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="实际结果" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <el-tag type="info" size="mini">{{ scope.row.autoStep.assertResult === null ? '未校验' : scope.row.autoStep.assertResult }}</el-tag>
+            <span>{{scope.row.autoStep.assertActual}}</span>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-form>
+    <!--弹窗-->
+    <!--编辑步骤-->
+    <el-dialog v-if="pageControl.isEditStep" :visible.sync="pageControl.isEditStep" title="编辑步骤" width="65%" append-to-body>
+      <tl-step-detail :case-step="pageControl.selectedStep" :visible.sync="pageControl.isEditStep"></tl-step-detail>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
+import {createAPI, createRelatedStepAPI, updateAPI, removeAPI, removeRelatedStepAPI, changeUiModeAPI, changeScriptModeAPI, queryDetailAPI, useAPI} from '@/api/autoCase'
+import tlStepDetail from '@/component/stepDetail'
+
 export default {
-  name: ''
+  components: {tlStepDetail},
+  props: {
+    caseId: {
+      type: Number,
+      default: -1
+    },
+    isEdit: {
+      type: Boolean,
+      default: true
+    },
+    visible: {
+      type: Boolean,
+      default: true
+    }
+  },
+  data () {
+    return {
+      pageData: {
+        caseId: null,
+        name: 'name',
+        description: '',
+        environment: '',
+        finishTime: '',
+        maxTime: 1,
+        ownerId: '123',
+        ownerName: 'tester',
+        type: 1,
+        status: 1,
+        preStepList: [{
+          type: 1,
+          sequence: null,
+          autoStep: {
+            stepId: null,
+            name: 'caseStep',
+            description: 'caseStepdesc',
+            ownerId: '12',
+            ownerName: 'tester',
+            isPublic: false,
+            type: 1,
+            assertType: -1,
+            assertExpect: '',
+            assertResult: false,
+            jdbc: {
+              dataSource: {
+                driver: 'com.mysql.cj.jdbc.Driver',
+                url: 'jdbc:mysql://118.24.117.181:3306/onepiece?useUnicode=true&characterEncoding=UTF-8&userSSL=false',
+                username: 'testerone',
+                password: 'testerone'
+              },
+              sqlList: null
+            },
+            httpRequest: {
+              httpType: 'GET',
+              httpURL: null,
+              httpHeaderList: null,
+              httpBody: null
+            },
+            rpc: {
+              url: '',
+              interfaceName: '',
+              methodName: '',
+              parameterType: '',
+              parameterList: [{
+                name: '',
+                value: '',
+                comment: ''
+              }]
+            },
+            ui: {
+              type: 1,
+              url: 'url',
+              element: 'element',
+              elementId: 1
+            }
+          }
+        }],
+        afterStepList: []
+      },
+      pageControl: {
+        // isEdit: false,
+        isNewPreStep: false,
+        isNewAfterStep: false,
+        isEditStep: false,
+        preStepId: '',
+        afterStepId: '',
+        selectedStep: {}
+      }
+    }
+  },
+  watch: {
+    'pageControl.isEditStep': function () {
+      if (!this.pageControl.isEditStep) {
+        // this.checkCaseType()
+      }
+    }
+  },
+  created: function () {
+    if (this.isEdit) {
+      this.queryDetail()
+    }
+  },
+  methods: {
+    getAssertType (type) {
+      switch (type) {
+        case -1:
+          return '不校验'
+        case 1:
+          return 'equals'
+        case 2:
+          return 'contains'
+        default:
+          return '未知类型'
+      }
+    },
+    // checkCaseType () {
+    //   console.info('自动校验用例类型，只要存在ui类型步骤，则是ui用例')
+    //   let caseType = 1
+    //   for (let i = 0; i < this.pageData.preStepList.length; i++) {
+    //     console.info(this.pageData.preStepList[i].autoStep.type)
+    //     if (this.pageData.preStepList[i].autoStep.type === 4) {
+    //       caseType = 2
+    //       break
+    //     }
+    //   }
+    //   for (let i = 0; i < this.pageData.mainStepList.length; i++) {
+    //     if (this.pageData.mainStepList[i].autoStep.type === 4) {
+    //       caseType = 2
+    //       break
+    //     }
+    //   }
+    //   for (let i = 0; i < this.pageData.afterStepList.length; i++) {
+    //     if (this.pageData.afterStepList[i].autoStep.type === 4) {
+    //       caseType = 2
+    //       break
+    //     }
+    //   }
+    //   if (caseType !== this.pageData.type) {
+    //     this.pageData.type = caseType
+    //     updateAPI(this.pageData).then()
+    //   }
+    // },
+    deleteStep (data) {
+      removeRelatedStepAPI(data).then(response => {
+        if (response.data.success === true) {
+          this.$message.success('删除步骤成功')
+        }
+      })
+    },
+    save () {
+      if (this.isEdit) {
+        this.update()
+      } else {
+        this.create()
+      }
+    },
+    create () {
+      createAPI(this.pageData).then(response => {
+        if (response.data.success === true) {
+          this.$message.success('创建用例成功')
+        }
+      })
+    },
+    createRelatedStep (sequence, type, stepId) {
+      createRelatedStepAPI({
+        caseId: this.pageData.caseId,
+        sequence: sequence,
+        type: type,
+        stepId: stepId
+      }).then(response => {
+        if (response.data.success === true) {
+          this.queryDetail()
+          this.$message.success('创建关联步骤成功，请自行编辑')
+        }
+      })
+      this.pageControl.isNewPreStep = false
+      this.pageControl.isNewMainStep = false
+      this.pageControl.isNewAfterStep = false
+      this.pageControl.preStepId = ''
+      this.pageControl.mainStepId = ''
+      this.pageControl.afterStepId = ''
+    },
+    update () {
+      updateAPI(this.pageData).then(response => {
+        if (response.data.success === true) {
+          this.$message.success('编辑用例成功')
+        }
+      })
+    },
+    changeUiMode () {
+      changeUiModeAPI(this.pageData).then(response => {
+        if (response.data.success === true) {
+          this.queryDetail()
+          this.$message.success('检查通过')
+        }
+      })
+    },
+    changeScriptMode () {
+      changeScriptModeAPI(this.pageData).then(response => {
+        if (response.data.success === true) {
+          this.$message.success('同步成功')
+        }
+      })
+    },
+    remove () {
+      removeAPI({caseId: this.pageData.caseId}).then(response => {
+        if (response.data.success === true) {
+          this.$message.success('删除用例成功')
+          this.$emit('update:visible', false)
+        }
+      })
+    },
+    queryDetail () {
+      queryDetailAPI({
+        caseId: this.caseId
+      }).then(response => {
+        if (response.data.success === true) {
+          this.pageData = response.data.data
+        }
+      })
+    },
+    use () {
+      useAPI(this.pageData, this.$store.state.slaveHost).then(response => {
+        if (response.data.success === true) {
+          this.pageControl.respondData = response.data.data
+          this.$message.success('用例开始执行')
+        }
+      })
+    },
+    edit (row, event, column) {
+      console.info(row.autoStep)
+      this.pageControl.selectedStep = row.autoStep
+      this.pageControl.isEditStep = true
+    }
+  }
 }
 </script>
 

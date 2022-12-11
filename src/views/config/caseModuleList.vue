@@ -11,17 +11,17 @@
     <el-table border :data="pageData.list" size="mini" style="width: 100%;height: 411px">
       <el-table-column prop="caseId" label="编号" width="120">
       </el-table-column>
-      <el-table-column prop="type" label="状态" width="90">
-        <template #default="scope">
-          <el-tag size="small">{{ getStatus(scope.row.status) }}</el-tag>
-        </template>
-      </el-table-column>
+<!--      <el-table-column prop="type" label="状态" width="90">-->
+<!--        <template #default="scope">-->
+<!--          <el-tag size="small">{{ getStatus(scope.row.status) }}</el-tag>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
       <el-table-column prop="name" label="标题" width="180" show-overflow-tooltip>
       </el-table-column>
       <el-table-column prop="description" label="说明" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column prop="finishTime" label="计划完成时间" width="130" show-overflow-tooltip>
-      </el-table-column>
+<!--      <el-table-column prop="finishTime" label="计划完成时间" width="130" show-overflow-tooltip>-->
+<!--      </el-table-column>-->
       <el-table-column prop="ownerName" label="责任人" width="130" show-overflow-tooltip>
       </el-table-column>
       <el-table-column label="操作" width="110">
@@ -36,21 +36,21 @@
     </el-pagination>
     <!--弹出框-->
     <!--新增弹窗-->
-    <el-drawer :visible.sync="pageControl.isNewCase" title="新增测试用例" size="55%">
+    <el-drawer :visible.sync="pageControl.isNewCase" title="新增测试模块" size="55%">
       <el-card shadow="never" style="height: 100%">
-        <el-input v-model="pageControl.quickCreate.name" @keyup.enter.native="quickCreate()" placeholder="请输入名称后回车，或点确认新增" size="small" maxlength="30" show-word-limit>
+        <el-input v-model="pageControl.quickCreate.name" @keyup.enter.native="quickCreate()" placeholder="请输入名称后回车，或点确认新增" size="small" maxlength="10" show-word-limit>
           <template #append>
             <el-button @click="quickCreate()" type="primary" size="small">确认新增</el-button>
           </template>
         </el-input>
       </el-card>
     </el-drawer>
-<!--    &lt;!&ndash;编辑弹窗&ndash;&gt;-->
-<!--    <el-drawer :visible.sync="pageControl.isEditCase" title="编辑用例" :with-header="false" size="55%">-->
-<!--      <el-card style="min-height: 100%">-->
-<!--        <tl-detail v-if="pageControl.isEditCase" :case-id="pageControl.selectedCaseId" :visible.sync="pageControl.isEditCase"></tl-detail>-->
-<!--      </el-card>-->
-<!--    </el-drawer>-->
+    <!--编辑弹窗-->
+    <el-drawer :visible.sync="pageControl.isEditCase" title="编辑用例" :with-header="false" size="55%">
+      <el-card style="min-height: 100%">
+        <tl-detail v-if="pageControl.isEditCase" :case-id="pageControl.selectedCaseId" :visible.sync="pageControl.isEditCase"></tl-detail>
+      </el-card>
+    </el-drawer>
 <!--    &lt;!&ndash;执行弹窗&ndash;&gt;-->
 <!--    <el-dialog :visible.sync="pageControl.isUseCase" title="执行用例">-->
 <!--      <el-card>-->
@@ -61,12 +61,11 @@
 </template>
 
 <script>
-// import tlDetail from './caseDetail'
-// import tlUse from './caseUse'
 import {quickCreateAPI, queryAPI, testAPI} from '@/api/autoCase'
+import tlDetail from './caseModuleDetail'
 
 export default {
-  // components: {tlDetail, tlUse},
+  components: {tlDetail},
   props: {
     supperCaseId: {
       type: Number,
