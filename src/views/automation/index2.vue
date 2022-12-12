@@ -22,7 +22,7 @@
 <!--        </el-tooltip>-->
 <!--      </el-col>-->
 <!--    </el-row>-->
-    <el-tabs v-model="pageControl.activeName" @tab-click="handleClick">
+    <el-tabs v-model="pageControl.activeName" @tab-click="handleClick" lazy>
 <!--      <el-tab-pane label="flagWeb" name="first"></el-tab-pane>-->
 <!--      <el-tab-pane label="flagHttp" name="second"></el-tab-pane>-->
 <!--      <el-tab-pane label="uc" name="third"></el-tab-pane>-->
