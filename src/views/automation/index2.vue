@@ -31,7 +31,7 @@
         <tl-case-list :supper-case-id="tab.caseId"></tl-case-list>
       </el-tab-pane>
     </el-tabs>
-    <div style="height: 1px"></div>
+<!--    <div style="height: 1px"></div>-->
   </div>
 </template>
 
