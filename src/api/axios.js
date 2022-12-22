@@ -18,7 +18,7 @@ api.interceptors.request.use(function (config) {
   if (userId) {
     config.headers.userId = userId
   } else {
-    config.headers.userId = '1'
+    config.headers.userId = '101'
     config.headers.projectId = '1'
   }
   return config

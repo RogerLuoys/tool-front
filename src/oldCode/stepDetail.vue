@@ -365,7 +365,7 @@
 
 <script>
 import {createAPI, updateAPI, removeAPI, queryDetailAPI} from '@/api/autoStep'
-import tlSelectDataSource from '../factory/selectDataSource'
+import tlSelectDataSource from '../views/factory/selectDataSource'
 
 export default {
   components: {tlSelectDataSource},

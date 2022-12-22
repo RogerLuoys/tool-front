@@ -15,8 +15,8 @@
     <el-button type="primary" @click="pageControl.isNewResource = true" size="mini" style="float:right">新增</el-button>
     <!--列表-->
     <div style="height: 5px"></div>
-    <el-table border :data="pageData.list" size="mini" style="width: 100%;height: 411px">
-      <el-table-column prop="resourceId" label="编号" width="130">
+    <el-table border :data="pageData.list" @row-click="edit" size="mini" style="width: 100%;height: 411px">
+      <el-table-column prop="resourceId" label="编号" width="90">
       </el-table-column>
 <!--      <el-table-column prop="type" label="类型" width="90">-->
 <!--        <template #default="scope">-->
@@ -27,21 +27,25 @@
       </el-table-column>
       <el-table-column prop="description" label="说明">
       </el-table-column>
-      <el-table-column prop="jdbcUrl" label="链接" width="150">
+      <el-table-column label="链接" width="150">
+        <template #default="scope">
+          <span>{{scope.row.dataSource.url}}</span>
+        </template>
       </el-table-column>
-      <el-table-column prop="jdbcDriver" label="驱动" width="150">
-      </el-table-column>
-      <el-table-column prop="jdbcUsername" label="账号名" width="150">
+<!--      <el-table-column prop="jdbcDriver" label="驱动" width="150">-->
+<!--      </el-table-column>-->
+      <el-table-column label="账号名" width="150">
+        <template #default="scope">
+          <span>{{scope.row.dataSource.username}}</span>
+        </template>
       </el-table-column>
 <!--      <el-table-column prop="jdbcPassword" label="密码" width="150">-->
 <!--      </el-table-column>-->
-      <el-table-column label="操作" width="110">
-        <template slot-scope="scope">
-          <el-link @click="edit(scope.row.resourceId)" :underline="false" type="primary">编辑</el-link>
-<!--          <el-link v-if="scope.row.type===2 || scope.row.type===3" @click="use(scope.row.resourceId, -1)" :underline="false" type="primary">领用</el-link>-->
-<!--          <el-link v-if="scope.row.type===4" @click="use(scope.row.resourceId, 4)" :underline="false" type="primary">领用</el-link>-->
-        </template>
-      </el-table-column>
+<!--      <el-table-column label="操作" width="110">-->
+<!--        <template slot-scope="scope">-->
+<!--          <el-link @click="edit(scope.row.resourceId)" :underline="false" type="primary">编辑</el-link>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
     </el-table>
     <!--分页-->
     <el-pagination layout="total, prev, pager, next" @current-change="queryList()" :current-page.sync="pageControl.search.pageIndex"
@@ -49,45 +53,23 @@
     </el-pagination>
     <!--弹窗-->
     <el-dialog v-if="pageControl.isNewResource" :visible.sync="pageControl.isNewResource" title="新增资源">
-      <tl-detail :visible.sync="pageControl.isNewResource"></tl-detail>
+      <tl-jdbc-detail :visible.sync="pageControl.isNewResource"></tl-jdbc-detail>
     </el-dialog>
     <el-dialog v-if="pageControl.isEditResource" :visible.sync="pageControl.isEditResource" title="编辑资源">
-      <tl-detail :resource-id="pageControl.selectedResourceId" :visible.sync="pageControl.isEditResource" :is-edit="true"></tl-detail>
+      <tl-jdbc-detail :resource-id="pageControl.selectedResourceId" :visible.sync="pageControl.isEditResource" :is-edit="true"></tl-jdbc-detail>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import tlDetail from './detail'
+import tlJdbcDetail from './jdbcDetail'
 import {queryAPI, queryDetailAPI, updateUserAPI} from '@/api/resource'
 
 export default {
-  components: {tlDetail},
-
-  props: {
-    // pointId: {
-    //   type: String,
-    //   default: '0'
-    // },
-    // type: {
-    //   type: Number,
-    //   default: 0
-    // }
-  },
+  components: {tlJdbcDetail},
   data () {
     return {
-      pageData: {
-        list: [{
-          resourceId: null,
-          type: 0,
-          name: 'title',
-          description: 'desc',
-          ownerId: '',
-          ownerName: '',
-          permission: 0
-        }],
-        total: 0
-      },
+      pageData: null,
       pageControl: {
         totalCount: 1,
         visible: false,
@@ -96,8 +78,8 @@ export default {
         selectedResourceId: 0,
         search: {
           pageIndex: 1,
-          type: 2,
-          permission: 2,
+          type: 1,
+          // permission: 2,
           name: null
         }
       }
@@ -132,10 +114,15 @@ export default {
     //   }
     //   return type
     // },
-    edit (resourceId) {
-      this.pageControl.selectedResourceId = resourceId
+    edit (row, event, column) {
+      console.info(row.resourceId)
+      this.pageControl.selectedResourceId = row.resourceId
       this.pageControl.isEditResource = true
     },
+    // edit (resourceId) {
+    //   this.pageControl.selectedResourceId = resourceId
+    //   this.pageControl.isEditResource = true
+    // },
     queryList () {
       queryAPI(this.pageControl.search).then(response => {
         if (response.data.success === true) {

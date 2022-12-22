@@ -158,7 +158,7 @@
 </template>
 
 <script>
-import tlCaseDetail from './caseDetail'
+import tlCaseDetail from '../views/automation/caseDetail'
 import {createAPI, createRelatedCaseAPI, batchRelatedCaseAPI, updateAPI, useSingleAPI, updateRelatedCaseAPI, resetAPI, removeAPI, removeRelatedCaseAPI, queryDetailAPI, useAPI} from '@/api/autoSuite'
 
 export default {

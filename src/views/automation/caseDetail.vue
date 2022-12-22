@@ -104,7 +104,7 @@
 
 <script>
 import {createAPI, createRelatedStepAPI, updateAPI, removeAPI, removeRelatedStepAPI, changeUiModeAPI, changeScriptModeAPI, queryDetailAPI, useAPI} from '@/api/autoCase'
-import tlStepDetail from './stepDetail'
+import tlStepDetail from '@/component/stepDetail'
 
 export default {
   components: {tlStepDetail},
