@@ -5,7 +5,7 @@
         <tl-case-module-list></tl-case-module-list>
       </el-tab-pane>
       <el-tab-pane label="角色管理" name="third">
-        <tl-project-user-list></tl-project-user-list>
+        <tl-member-list></tl-member-list>
       </el-tab-pane>
       <el-tab-pane label="项目管理" name="fourth">
         <tl-project-list></tl-project-list>
@@ -17,10 +17,10 @@
 <script>
 import tlCaseModuleList from './caseModuleList'
 import tlProjectList from './projectList'
-import tlProjectUserList from './projectUserList'
+import tlMemberList from './memberList'
 
 export default {
-  components: {tlCaseModuleList, tlProjectList, tlProjectUserList},
+  components: {tlCaseModuleList, tlProjectList, tlMemberList},
   methods: {
     handleClick () {
       console.log('test')
