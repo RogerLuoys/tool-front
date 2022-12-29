@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import {queryAPI, testAPI} from '@/api/autoCase'
+import {queryAPI} from '@/api/member'
 import tlMemberDetail from './memberDetail'
 
 export default {
@@ -67,21 +67,12 @@ export default {
         total: 1
       },
       pageControl: {
-        totalCount: 0,
-        selectIndex: 0,
-        visible: false,
         isInviteMember: false,
         isEditMember: false,
         selectedMemberId: null,
         search: {//  列表搜索入参
-          type: 2,
-          status: null,
           pageIndex: 1,
-          name: null
-        },
-        quickCreate: {//  快速新增用例的入参
-          name: null,
-          type: 2
+          nickname: null
         }
       }
     }
@@ -97,20 +88,6 @@ export default {
     }
   },
   methods: {
-    test () {
-      console.info('测试')
-      testAPI({caseId: '123456'}, this.$store.state.slaveHost).then(
-        response => {
-          console.info(response.data.data)
-        }
-      )
-    },
-    test2 () {
-      let caseId1 = '01020304'
-      let url = this.$store.state.slaveHost + 'autoCase/test?caseId=' + caseId1
-      console.info(url)
-      window.open(url, '_blank')
-    },
     getStatus (status) {
       switch (status) {
         case 1:
@@ -138,16 +115,6 @@ export default {
         }
       })
     }
-    // quickCreate () {
-    //   quickCreateAPI(this.pageControl.quickCreate).then(response => {
-    //     if (response.data.success === true) {
-    //       this.pageControl.selectedCaseId = response.data.data
-    //       this.pageControl.isNewCase = false
-    //       this.pageControl.isEditCase = true
-    //       this.pageControl.quickCreate.name = ''
-    //     }
-    //   })
-    // }
   }
 }
 </script>

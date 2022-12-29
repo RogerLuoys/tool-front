@@ -1,11 +1,11 @@
 <template>
-  <div id="app">
-    <el-container style="background-color: whitesmoke; height: 14.8cm">
+  <div id="app" style="height: calc(97vh)">
+    <el-container style="background-color: whitesmoke; height: calc(97vh)">
       <el-aside style="width: 180px">
           <el-menu class="el-menu-vertical-demo" default-active="1"
                    background-color="#545c64"
                    text-color="#fff"
-                   active-text-color="#ffd04b" style="height: 14.8cm;">
+                   active-text-color="#ffd04b" style="height: calc(97vh)">
             <el-menu-item index="1" @click="$router.push('/')">
               <i class="el-icon-s-home"></i>
               <span slot="title">工作台</span>
@@ -32,7 +32,7 @@
             </el-menu-item>
           </el-menu>
       </el-aside>
-      <el-main>
+      <el-main style="height: calc(97vh)">
         <router-view></router-view>
       </el-main>
     </el-container>
