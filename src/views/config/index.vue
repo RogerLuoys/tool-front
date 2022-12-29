@@ -1,6 +1,7 @@
 <template>
-  <div>
-    <el-tabs value="second" @tab-click="handleClick">
+  <div style="height: calc(85vh)">
+    <!--标签页-->
+    <el-tabs value="second" @tab-click="handleClick" type="border-card">
       <el-tab-pane label="测试模块" name="second">
         <tl-case-module-list></tl-case-module-list>
       </el-tab-pane>

@@ -11,7 +11,7 @@
     <el-button type="primary" @click="pageControl.isInviteMember=true" size="mini" style="float:right">邀请成员</el-button>
     <!--列表-->
     <div style="height: 5px"></div>
-    <el-table border :data="pageData.list" size="mini" style="width: 100%;height: 411px">
+    <el-table border :data="pageData.list" size="mini" style="width: 100%;height: calc(70vh)">
       <el-table-column prop="name" label="昵称" width="180" show-overflow-tooltip>
       </el-table-column>
       <el-table-column prop="description" label="账号" show-overflow-tooltip>

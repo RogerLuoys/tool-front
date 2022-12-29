@@ -1,13 +1,5 @@
 <template>
   <div>
-    <!--搜索-->
-<!--    <el-select v-model="pageControl.search.type" clearable size="mini" placeholder="请选择状态"-->
-<!--               style="width:110px; float:left">-->
-<!--      <el-option key="1" label="数据库" :value="1"></el-option>-->
-<!--      <el-option key="2" label="设备" :value="2"></el-option>-->
-<!--      <el-option key="3" label="测试环境" :value="3"></el-option>-->
-<!--      <el-option key="4" label="从节点" :value="4"></el-option>-->
-<!--    </el-select>-->
     <el-input placeholder="请输入名称" clearable size="mini" v-model="pageControl.search.name"
               style="width:200px; float:left"></el-input>
     <el-button @click="queryList()" icon="el-icon-search" type="primary" size="mini"></el-button>
