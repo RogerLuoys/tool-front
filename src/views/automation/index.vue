@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-tabs v-model="pageControl.activeName" @tab-click="handleClick" lazy>
+    <el-tabs v-model="pageControl.activeName" @tab-click="handleClick" lazy type="border-card">
       <el-tab-pane v-for="tab in pageData.list" :key="tab.caseId" :label="tab.name" :name="tab.name">
         <tl-case-list :supper-case-id="tab.caseId"></tl-case-list>
       </el-tab-pane>

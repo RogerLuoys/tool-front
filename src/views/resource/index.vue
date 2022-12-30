@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-tabs v-model="pageControl.activeName">
+    <el-tabs v-model="pageControl.activeName" type="border-card">
             <el-tab-pane label="数据库" name="first">
               <tl-jdbc-list></tl-jdbc-list>
             </el-tab-pane>
