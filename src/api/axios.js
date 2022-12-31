@@ -15,8 +15,10 @@ const api = axios.create({
 api.interceptors.request.use(function (config) {
   // 在发送请之前检查cookie，有cookie使用cookie，无cookie使用访客Id
   let userId = VueCookies.get('userId')
+  let projectId = VueCookies.get('projectId')
   if (userId) {
     config.headers.userId = userId
+    config.headers.projectId = projectId
   } else {
     config.headers.userId = 2
     config.headers.projectId = 1

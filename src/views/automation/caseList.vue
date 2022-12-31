@@ -20,7 +20,7 @@
     <el-button type="primary" @click="pageControl.isNewCase=true" size="mini" style="float:right">新增</el-button>
     <!--列表-->
     <div style="height: 5px"></div>
-    <el-table border :data="pageData.list" size="mini"  style="width: 100%;height: calc(68vh)">
+    <el-table border :data="pageData.list" size="mini" height="calc(66.4vh)" style="width: 100%;">
       <el-table-column prop="caseId" label="编号" width="120">
       </el-table-column>
       <el-table-column prop="type" label="状态" width="90">
