@@ -3,14 +3,8 @@
     <el-row style="height: 15px">
       <el-col :span="15">
         <span>编辑测试模块(超类)</span>
-<!--        <el-tooltip v-if="pageData.type === 2" content="此用例包含ui步骤，将视为ui用例">-->
-<!--          <el-tag size="small">ui</el-tag>-->
-<!--        </el-tooltip>-->
-        <el-button v-if="pageControl.isCoding===false" @click="pageControl.isCoding=true" size="small">coding</el-button>
-        <el-button v-else @click="pageControl.isCoding=false" size="small">ui</el-button>
       </el-col>
       <el-col :span="8" style="text-align: right">
-<!--        <el-button @click="use()" type="primary" size="small">执行</el-button>-->
         <el-popconfirm title="用例将被删除，确定吗？" @confirm="remove">
           <template #reference>
             <el-button size="small">删除</el-button>
@@ -32,15 +26,35 @@
         <el-input v-model="pageData.description" @change="update" placeholder="请描述功能和实现方法" type="textarea" maxlength="200"
                   show-word-limit></el-input>
       </el-form-item>
+      <el-form-item label="参数">
+        <div v-if="pageData.parameterList === null || pageData.parameterList.length===0">暂无参数，可点+添加</div>
+        <div v-else v-for="(item, index) in pageData.parameterList" :key="index">
+          <el-row :gutter="5">
+            <el-col :span="10">
+              <el-input v-model="pageData.parameterList[index].name" size="small" placeholder="请输入参数名"
+                        maxlength="20" show-word-limit></el-input>
+            </el-col>
+            <el-col :span="10">
+              <el-input v-model="pageData.parameterList[index].value" size="small" placeholder="请输入参数值"
+                        maxlength="30" show-word-limit>
+              </el-input>
+            </el-col>
+            <el-col :span="3">
+              <el-button @click="deleteParam(index)" size="small">删除</el-button>
+              <el-tooltip class="item" effect="dark" :content="'${'+pageData.parameterList[index].name+'}'" placement="top-start">
+                <i class="el-icon-info"></i>
+              </el-tooltip>
+            </el-col>
+          </el-row>
+        </div>
+        <div>
+          <el-button @click="newParam()" type="primary" size="mini" icon="el-icon-plus" plain>新增参数</el-button>
+        </div>
+      </el-form-item>
       <el-form-item label="webDriver配置">
         <el-input v-model="pageData.description" @change="update" placeholder="请描述功能和实现方法" type="textarea" maxlength="200"
                   show-word-limit></el-input>
       </el-form-item>
-<!--      <el-form-item label="计划完成">-->
-<!--        <el-date-picker type="date" placeholder="计划完成日期" v-model="pageData.finishTime"-->
-<!--                        @change="update" value-format="yyyy-MM-dd" size="small"-->
-<!--                        style="width: 200px"></el-date-picker>-->
-<!--      </el-form-item>-->
       <!--前置步骤-->
       <el-divider content-position="right">
         <el-button @click="createRelatedStep(pageData.preStepList !== null ? pageData.preStepList.length + 1 : 1, 1, null)" type="text">新增</el-button>
@@ -162,7 +176,7 @@ export default {
         caseId: null,
         name: 'name',
         description: '',
-        environment: '',
+        parameterList: null,
         finishTime: '',
         maxTime: 1,
         ownerId: '123',
@@ -255,33 +269,18 @@ export default {
           return '未知类型'
       }
     },
-    // checkCaseType () {
-    //   console.info('自动校验用例类型，只要存在ui类型步骤，则是ui用例')
-    //   let caseType = 1
-    //   for (let i = 0; i < this.pageData.preStepList.length; i++) {
-    //     console.info(this.pageData.preStepList[i].autoStep.type)
-    //     if (this.pageData.preStepList[i].autoStep.type === 4) {
-    //       caseType = 2
-    //       break
-    //     }
-    //   }
-    //   for (let i = 0; i < this.pageData.mainStepList.length; i++) {
-    //     if (this.pageData.mainStepList[i].autoStep.type === 4) {
-    //       caseType = 2
-    //       break
-    //     }
-    //   }
-    //   for (let i = 0; i < this.pageData.afterStepList.length; i++) {
-    //     if (this.pageData.afterStepList[i].autoStep.type === 4) {
-    //       caseType = 2
-    //       break
-    //     }
-    //   }
-    //   if (caseType !== this.pageData.type) {
-    //     this.pageData.type = caseType
-    //     updateAPI(this.pageData).then()
-    //   }
-    // },
+    newParam () {
+      if (this.pageData.parameterList === null) {
+        this.pageData.parameterList = [{name: '', value: ''}]
+      } else {
+        this.pageData.parameterList.push({name: '', value: ''})
+      }
+      this.pageControl.paramName = ''
+      this.pageControl.isNewParam = false
+    },
+    deleteParam (index) {
+      this.pageData.parameterList.splice(index, 1)
+    },
     deleteStep (data) {
       removeRelatedStepAPI(data).then(response => {
         if (response.data.success === true) {

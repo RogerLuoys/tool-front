@@ -70,22 +70,6 @@ export default {
     this.queryDetail()
   },
   methods: {
-    // mainNode () {
-    //   queryDetailAPI({resourceId: '1'}).then()
-    //   // this.$store.commit('setURL', 'http://118.24.117.181:9991/')
-    //   // console.info(this.$store.state.commonFactory.testURL)
-    // },
-    // slaveNode () {
-    //   console.info(this.$store.state.slaveHost)
-    //   queryDetailAPIS({resourceId: '1'}, this.$store.state.slaveHost).then()
-    //   // this.$store.commit('setURL', 'http://118.24.117.181:9991/')
-    // },
-    // test () {
-    //   let users = this.$store.state.userName
-    //   console.info(this.$store.state.userName)
-    //   console.info(users)
-    //   debugger
-    // },
     queryDetail () {
       queryDetailAPI().then(response => {
         if (response.data.success === true) {

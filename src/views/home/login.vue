@@ -76,9 +76,8 @@ export default {
       })
     },
     setUserCookie () {
-      this.$cookies.set('loginName', this.pageData.loginName)
-      this.$cookies.set('passWord', this.pageData.passWord)
-      this.$cookies.set('userId', this.pageData.userId)
+      this.$cookies.set('loginInfo', this.pageData.loginInfo)
+      // this.$cookies.set('passWord', this.pageData.passWord)
     },
     doLogin () {
       loginAPI({
@@ -88,8 +87,6 @@ export default {
         if (response.data.success === true) {
           this.pageData = response.data.data
           this.setUserCookie()
-          // this.$store.commit('setUserName', this.pageData.userName)
-          // this.$store.commit('setUserId', this.pageData.userId)
           this.$store.state.userId = this.pageData.userId
           this.$store.state.userName = this.pageData.userName
           this.$router.push('/')
