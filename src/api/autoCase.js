@@ -17,6 +17,14 @@ export function quickCreateAPI (data) {
   })
 }
 
+export function quickCreateConfigAPI (data) {
+  return api({
+    url: 'autoCase/quickCreateConfig',
+    method: 'post',
+    data: data
+  })
+}
+
 export function createRelatedStepAPI (data) {
   return api({
     url: 'autoCase/createRelatedStep',
@@ -33,6 +41,14 @@ export function removeAPI (params) {
   })
 }
 
+export function removeConfigAPI (params) {
+  return api({
+    url: 'autoCase/removeConfig',
+    method: 'delete',
+    params: params
+  })
+}
+
 export function removeRelatedStepAPI (data) {
   return api({
     url: 'autoCase/removeRelatedStep',
@@ -44,6 +60,14 @@ export function removeRelatedStepAPI (data) {
 export function updateAPI (data) {
   return api({
     url: 'autoCase/update',
+    method: 'put',
+    data: data
+  })
+}
+
+export function updateConfigAPI (data) {
+  return api({
+    url: 'autoCase/updateConfig',
     method: 'put',
     data: data
   })

@@ -22,25 +22,21 @@
         <el-input v-model="pageData.description" @change="update" placeholder="请描述功能和实现方法" type="textarea" maxlength="200"
                   show-word-limit></el-input>
       </el-form-item>
-      <el-form-item label="公共参数">
-        <el-input v-model="pageData.description" @change="update" placeholder="请描述功能和实现方法" type="textarea" maxlength="200"
-                  show-word-limit></el-input>
-      </el-form-item>
       <el-form-item label="参数">
         <div v-if="pageData.parameterList === null || pageData.parameterList.length===0">暂无参数，可点+添加</div>
         <div v-else v-for="(item, index) in pageData.parameterList" :key="index">
-          <el-row :gutter="5">
-            <el-col :span="10">
-              <el-input v-model="pageData.parameterList[index].name" size="small" placeholder="请输入参数名"
+          <el-row :gutter="2">
+            <el-col :span="8">
+              <el-input v-model="pageData.parameterList[index].name" @change="updateParam(pageData.parameterList[index])" size="mini" placeholder="请输入参数名"
                         maxlength="20" show-word-limit></el-input>
             </el-col>
-            <el-col :span="10">
-              <el-input v-model="pageData.parameterList[index].value" size="small" placeholder="请输入参数值"
+            <el-col :span="11">
+              <el-input v-model="pageData.parameterList[index].value" @change="updateParam(pageData.parameterList[index])" size="mini" placeholder="请输入参数值"
                         maxlength="30" show-word-limit>
               </el-input>
             </el-col>
-            <el-col :span="3">
-              <el-button @click="deleteParam(index)" size="small">删除</el-button>
+            <el-col :span="4">
+              <el-button @click="deleteParam(index)" size="mini">删除</el-button>
               <el-tooltip class="item" effect="dark" :content="'${'+pageData.parameterList[index].name+'}'" placement="top-start">
                 <i class="el-icon-info"></i>
               </el-tooltip>
@@ -151,7 +147,7 @@
 </template>
 
 <script>
-import {createAPI, createRelatedStepAPI, updateAPI, removeAPI, removeRelatedStepAPI, changeUiModeAPI, changeScriptModeAPI, queryDetailAPI, useAPI} from '@/api/autoCase'
+import {createAPI, createRelatedStepAPI, quickCreateConfigAPI, updateAPI, updateConfigAPI, removeAPI, removeConfigAPI, removeRelatedStepAPI, changeUiModeAPI, changeScriptModeAPI, queryDetailAPI, useAPI} from '@/api/autoCase'
 import tlStepDetail from '@/component/stepDetail'
 
 export default {
@@ -183,54 +179,7 @@ export default {
         ownerName: 'tester',
         type: 1,
         status: 1,
-        preStepList: [{
-          type: 1,
-          sequence: null,
-          autoStep: {
-            stepId: null,
-            name: 'caseStep',
-            description: 'caseStepdesc',
-            ownerId: '12',
-            ownerName: 'tester',
-            isPublic: false,
-            type: 1,
-            assertType: -1,
-            assertExpect: '',
-            assertResult: false,
-            jdbc: {
-              dataSource: {
-                driver: 'com.mysql.cj.jdbc.Driver',
-                url: 'jdbc:mysql://118.24.117.181:3306/onepiece?useUnicode=true&characterEncoding=UTF-8&userSSL=false',
-                username: 'testerone',
-                password: 'testerone'
-              },
-              sqlList: null
-            },
-            httpRequest: {
-              httpType: 'GET',
-              httpURL: null,
-              httpHeaderList: null,
-              httpBody: null
-            },
-            rpc: {
-              url: '',
-              interfaceName: '',
-              methodName: '',
-              parameterType: '',
-              parameterList: [{
-                name: '',
-                value: '',
-                comment: ''
-              }]
-            },
-            ui: {
-              type: 1,
-              url: 'url',
-              element: 'element',
-              elementId: 1
-            }
-          }
-        }],
+        preStepList: [],
         afterStepList: []
       },
       pageControl: {
@@ -270,16 +219,28 @@ export default {
       }
     },
     newParam () {
+      let config = {name: 'default', value: '', type: 1, caseId: this.pageData.caseId}
       if (this.pageData.parameterList === null) {
-        this.pageData.parameterList = [{name: '', value: ''}]
+        this.pageData.parameterList = [config]
       } else {
-        this.pageData.parameterList.push({name: '', value: ''})
+        this.pageData.parameterList.push(config)
       }
       this.pageControl.paramName = ''
       this.pageControl.isNewParam = false
+      quickCreateConfigAPI(config).then(response => {
+        if (response.data.success === true) {
+          this.$message.success('添加配置成功')
+        }
+      })
     },
     deleteParam (index) {
-      this.pageData.parameterList.splice(index, 1)
+      let configId = this.pageData.parameterList[index].configId
+      removeConfigAPI({configId: configId}).then(response => {
+        if (response.data.success === true) {
+          this.pageData.parameterList.splice(index, 1)
+          this.$message.success('删除步骤成功')
+        }
+      })
     },
     deleteStep (data) {
       removeRelatedStepAPI(data).then(response => {
@@ -323,6 +284,13 @@ export default {
     },
     update () {
       updateAPI(this.pageData).then(response => {
+        if (response.data.success === true) {
+          this.$message.success('编辑用例成功')
+        }
+      })
+    },
+    updateParam (param) {
+      updateConfigAPI(param).then(response => {
         if (response.data.success === true) {
           this.$message.success('编辑用例成功')
         }
