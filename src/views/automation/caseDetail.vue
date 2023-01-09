@@ -28,9 +28,9 @@
         <el-input v-model="pageData.description" @change="update" placeholder="请描述功能和实现方法" type="textarea" maxlength="200"
                   show-word-limit></el-input>
       </el-form-item>
-      <el-form-item label="执行环境">
-        <el-input v-model="pageData.environment" @change="update" placeholder="请输入默认域名或ip端口，可在步骤中通过${env}使用此参数" maxlength="30" show-word-limit></el-input>
-      </el-form-item>
+<!--      <el-form-item label="执行环境">-->
+<!--        <el-input v-model="pageData.environment" @change="update" placeholder="请输入默认域名或ip端口，可在步骤中通过${env}使用此参数" maxlength="30" show-word-limit></el-input>-->
+<!--      </el-form-item>-->
       <el-form-item label="计划完成">
         <el-date-picker type="date" placeholder="计划完成日期" v-model="pageData.finishTime"
                         @change="update" value-format="yyyy-MM-dd" size="small"
@@ -41,7 +41,7 @@
       <div v-if="pageControl.isCoding">
         <el-divider content-position="right">
           <el-button @click="changeUiMode" type="text">检查并同步</el-button>
-          <span>主要步骤</span>
+          <span>主要步骤@Test</span>
           <el-tooltip class="item" effect="dark" content="主要步骤会前置步骤后执行，是用例主体，不可为空" placement="top-start">
             <i class="el-icon-info"></i>
           </el-tooltip>
@@ -52,22 +52,22 @@
       <div v-else>
         <el-divider content-position="right">
           <el-button @click="createRelatedStep(pageData.mainStepList !== null ? pageData.mainStepList.length + 1 : 1, 2, null)" type="text">新增</el-button>
-          <el-button @click="pageControl.isNewMainStep=true" type="text">关联</el-button>
+<!--          <el-button @click="pageControl.isNewMainStep=true" type="text">关联</el-button>-->
           <el-button v-if="pageData.mainStepList !== null && pageData.mainStepList.length !== 0" @click="deleteStep(pageData.mainStepList.pop())" type="text">删除</el-button>
-          <span>主要步骤</span>
+          <span>主要步骤@Test</span>
           <el-tooltip class="item" effect="dark" content="主要步骤会前置步骤后执行，是用例主体，不可为空" placement="top-start">
             <i class="el-icon-info"></i>
           </el-tooltip>
         </el-divider>
-        <div v-if="pageControl.isNewMainStep">
-          <el-input v-model="pageControl.mainStepId" placeholder="请输入要关联的步骤编号" size="small"
-                    maxlength="20" show-word-limit>
-            <template #append>
-              <el-button @click="createRelatedStep(pageData.mainStepList !== null ? pageData.mainStepList.length + 1 : 1, 2, pageControl.mainStepId)" type="primary">确认</el-button>
-              <el-button @click="pageControl.isNewMainStep=false">取消</el-button>
-            </template>
-          </el-input>
-        </div>
+<!--        <div v-if="pageControl.isNewMainStep">-->
+<!--          <el-input v-model="pageControl.mainStepId" placeholder="请输入要关联的步骤编号" size="small"-->
+<!--                    maxlength="20" show-word-limit>-->
+<!--            <template #append>-->
+<!--              <el-button @click="createRelatedStep(pageData.mainStepList !== null ? pageData.mainStepList.length + 1 : 1, 2, pageControl.mainStepId)" type="primary">确认</el-button>-->
+<!--              <el-button @click="pageControl.isNewMainStep=false">取消</el-button>-->
+<!--            </template>-->
+<!--          </el-input>-->
+<!--        </div>-->
         <!--列表-->
         <el-table border :data="pageData.mainStepList" @row-click="edit" :row-style="{cursor: 'pointer'}" size="mini" style="width: 100%">
           <el-table-column label="编号" width="130">
