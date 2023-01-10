@@ -9,7 +9,7 @@
 <!--        <el-input v-model="pageData.description" placeholder="请描述步骤" type="textarea" maxlength="200"-->
 <!--                  show-word-limit></el-input>-->
 <!--      </el-form-item>-->
-      <el-form-item label="类型">
+      <el-form-item label="模块类型">
         <el-radio-group v-model="pageData.moduleType" @change="changeType()">
           <el-radio :label="1">PO</el-radio>
           <el-radio :label="2">SQL</el-radio>
@@ -23,76 +23,41 @@
       </el-form-item>
       <!--模板-->
       <el-divider content-position="right"></el-divider>
-      <!--SQL类型-->
-      <div v-if="pageData.moduleType===2">
-        <el-form-item label="SQL语句">
-          <!--显示sql，无则返回提示，有则返回列表-->
-          <el-input v-model="pageData.parameter1" placeholder="请输入单行SQL"
-                    maxlength="200" show-word-limit>
-          </el-input>
-        </el-form-item>
-        <el-form-item label="数据源">
-          <el-row :gutter="5">
-            <el-col :span="8">
-              <el-input v-model="pageData.methodName" placeholder="请输入数据库名" maxlength="50" show-word-limit>
-              </el-input>
-            </el-col>
-            <el-col :span="6">
-              <el-input v-model="pageData.methodId" placeholder="请输入数据库Id" maxlength="50" show-word-limit>
-              </el-input>
-            </el-col>
-            <el-col :span="3">
-              <el-button @click="pageControl.isSelectDataSource=true" icon="el-icon-plus" type="primary" plain>点我可快捷关联</el-button>
-            </el-col>
-          </el-row>
-        </el-form-item>
-      </div>
-      <!--HTTP类型-->
-      <div v-else-if="pageData.moduleType===4">
-        <el-form-item label="URL">
-          <el-row :gutter="5">
-            <el-col :span="4">
+      <!--PO类型-->
+      <el-form-item label="方法类型">
+        <el-row :gutter="5">
+          <el-col :span="4">
+            <template v-if="pageData.moduleType===1">
               <el-select v-model="pageData.methodType" placeholder="请求方法"
                          style="float:left; width: 100px">
-                <el-option key="1" label="GET" value="GET"></el-option>
-                <el-option key="2" label="POST" value="POST"></el-option>
-                <el-option key="3" label="PUT" value="PUT"></el-option>
-                <el-option key="4" label="DELETE" value="DELETE"></el-option>
+                <el-option key="1" label="Normal" value="1"></el-option>
+                <el-option key="2" label="Json" value="2"></el-option>
               </el-select>
-            </el-col>
-            <el-col :span="19">
-              <el-input v-model="pageData.parameter1" placeholder="请输入URL(可使用${env}参数)"
-                        maxlength="200" show-word-limit>
-              </el-input>
-            </el-col>
-          </el-row>
-        </el-form-item>
-        <el-form-item label="Body">
-          <el-input v-model="pageData.parameter2" :autosize="{ minRows: 4, maxRows: 9}" placeholder="请输入Body" type="textarea"
-                    maxlength="500" show-word-limit></el-input>
-        </el-form-item>
-        <el-form-item label="header">
-          <el-input v-model="pageData.parameter3" :autosize="{ minRows: 4, maxRows: 9}" placeholder="请输入Body" type="textarea"
-                    maxlength="500" show-word-limit></el-input>
-        </el-form-item>
-      </div>
-      <!--RPC类型-->
-      <div v-else-if="pageData.moduleType===3">
-        <el-form-item label="RPC地址">
-          <el-input v-model="pageData.parameter1" placeholder="请输入完整调用地址(协议://ip:prod/接口名#方法名)" size="small" maxlength="500" show-word-limit></el-input>
-        </el-form-item>
-        <el-form-item label="入参类型">
-          <el-input v-model="pageData.parameter2" placeholder="请输入参数类型(class name)" maxlength="100" show-word-limit></el-input>
-        </el-form-item>
-        <el-form-item label="入参值">
-          <el-input v-model="pageData.parameter3" placeholder="请输入参数值(class name)" maxlength="100" show-word-limit></el-input>
-        </el-form-item>
-      </div>
-      <!--UI类型-->
-      <div v-else-if="pageData.moduleType===5">
-        <el-form-item label="UI操作">
-          <el-row :gutter="5">
-            <el-col :span="4">
+            </template>
+            <template v-if="pageData.moduleType===2">
+              <el-select v-model="pageData.methodType" placeholder="请求方法"
+                         style="float:left; width: 100px">
+                <el-option key="1" label="Normal" value="1"></el-option>
+                <el-option key="2" label="Json" value="2"></el-option>
+              </el-select>
+            </template>
+            <template v-if="pageData.moduleType===3">
+              <el-select v-model="pageData.methodType" placeholder="请求方法"
+                         style="float:left; width: 100px">
+                <el-option key="1" label="GET" value="1"></el-option>
+                <el-option key="2" label="POST" value="2"></el-option>
+                <el-option key="3" label="PUT" value="3"></el-option>
+                <el-option key="4" label="DELETE" value="4"></el-option>
+              </el-select>
+            </template>
+            <template v-if="pageData.moduleType===4">
+              <el-select v-model="pageData.methodType" placeholder="请求方法"
+                         style="float:left; width: 100px">
+                <el-option key="1" label="Normal" value="1"></el-option>
+                <el-option key="2" label="Json" value="2"></el-option>
+              </el-select>
+            </template>
+            <template v-if="pageData.moduleType===5">
               <el-select v-model="pageData.methodType" placeholder="操作类型"
                          style="float:left; width: 100px">
                 <el-option key="1" label="openUrl" :value="1"></el-option>
@@ -102,59 +67,30 @@
                 <el-option key="5" label="switchFrame" :value="5"></el-option>
                 <el-option key="6" label="hover" :value="6"></el-option>
               </el-select>
-            </el-col>
-            <template v-if="pageData.methodType===1">
-              <el-col :span="19">
-                <el-input v-model="pageData.parameter1" placeholder="请输入URL(可使用${env}参数)" maxlength="200" show-word-limit>
-                </el-input>
-              </el-col>
             </template>
-            <template v-else-if="pageData.methodType===2 || pageData.methodType===4">
-              <el-col :span="14">
-                <el-input v-model="pageData.parameter1" placeholder="请输入元素Xpath"
-                          maxlength="200" show-word-limit>
-                </el-input>
-              </el-col>
-              <el-col :span="5">
-                <el-input-number v-model="pageData.parameter2" :min="1" :max="20"></el-input-number>
-                <el-tooltip content="如xpath查到多个元素，通过此序号定位，默认为1">
-                  <i class="el-icon-info"></i>
-                </el-tooltip>
-              </el-col>
+            <template v-if="pageData.moduleType===6">
+              <el-select v-model="pageData.methodType" placeholder="操作类型"
+                         style="float:left; width: 100px">
+                <el-option key="1" label="openUrl" :value="1"></el-option>
+                <el-option key="2" label="click" :value="2"></el-option>
+                <el-option key="3" label="sendKey" :value="3"></el-option>
+                <el-option key="4" label="isExist" :value="4"></el-option>
+                <el-option key="5" label="switchFrame" :value="5"></el-option>
+                <el-option key="6" label="hover" :value="6"></el-option>
+              </el-select>
             </template>
-            <template v-else-if="pageData.methodType===2 || pageData.methodType===3">
-              <el-col :span="7">
-                <el-input v-model="pageData.parameter1" placeholder="请输入元素Xpath"
-                          maxlength="200" show-word-limit>
-                </el-input>
-              </el-col>
-              <el-col :span="7">
-                <el-input v-model="pageData.parameter2" placeholder="请输入要发送的值"
-                          maxlength="500" show-word-limit>
-                </el-input>
-              </el-col>
-              <el-col :span="5">
-                <el-input-number v-model="pageData.parameter1" controls-position="right" :min="1" :max="20"></el-input-number>
-                <el-tooltip content="如xpath查到多个元素，通过此序号定位，默认为1">
-                  <i class="el-icon-info"></i>
-                </el-tooltip>
-              </el-col>
-            </template>
-            <template v-if="pageData.methodType===5">
-              <el-col :span="19">
-                <el-input v-model="pageData.parameter1" placeholder="请输入iframe的id、name或xpath" maxlength="200" show-word-limit>
-                </el-input>
-              </el-col>
-            </template>
-            <template v-if="pageData.methodType===6">
-              <el-col :span="19">
-                <el-input v-model="pageData.parameter1" placeholder="请输入xpath" maxlength="200" show-word-limit>
-                </el-input>
-              </el-col>
-            </template>
-          </el-row>
-        </el-form-item>
-      </div>
+          </el-col>
+          <el-col :span="19">
+            <el-tooltip class="item" effect="dark" :content="pageControl.format.description" placement="top-start">
+              <i class="el-icon-info"></i>
+            </el-tooltip>
+          </el-col>
+        </el-row>
+      </el-form-item>
+      <!--SQL类型-->
+      <!--HTTP类型-->
+      <!--RPC类型-->
+      <!--UI类型-->
     </el-form>
     <div style="text-align: center">
       <el-button @click="save()" type="primary" size="small">保存</el-button>
@@ -219,7 +155,14 @@ export default {
         paramType: 'String',
         paramName: '',
         sql: '',
-        httpHeader: ''
+        httpHeader: '',
+        format: {
+          isFunction: true,
+          parameter1: 'test',
+          parameter2: null,
+          parameter3: null,
+          description: 'auto.po.poName(parameter1, parameter2, parameter3)'
+        }
       }
     }
   },
