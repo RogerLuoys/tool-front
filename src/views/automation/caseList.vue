@@ -20,7 +20,7 @@
     <el-button type="primary" @click="pageControl.isNewCase=true" size="mini" style="float:right">新增</el-button>
     <!--列表-->
     <div style="height: 5px"></div>
-    <el-table border :data="pageData.list" size="mini" height="calc(66.4vh)" style="width: 100%;">
+    <el-table border :data="pageData.list" @row-click="edit" :row-style="{cursor: 'pointer'}" size="mini" height="calc(66.4vh)" style="width: 100%;">
       <el-table-column prop="caseId" label="编号" width="120">
       </el-table-column>
       <el-table-column prop="type" label="状态" width="90">
@@ -36,11 +36,11 @@
       </el-table-column>
       <el-table-column prop="ownerName" label="责任人" width="130" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column label="操作" width="110">
-        <template slot-scope="scope">
-          <el-link @click="edit(scope.row.caseId)" :underline="false" type="primary">编辑</el-link>
-        </template>
-      </el-table-column>
+<!--      <el-table-column label="操作" width="110">-->
+<!--        <template slot-scope="scope">-->
+<!--          <el-link @click="edit(scope.row.caseId)" :underline="false" type="primary">编辑</el-link>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
     </el-table>
     <!--分页-->
     <el-pagination layout="total, prev, pager, next" @current-change="queryList()" :current-page.sync="pageControl.search.pageIndex"
@@ -163,9 +163,9 @@ export default {
           return '未知'
       }
     },
-    edit (caseId) {
+    edit (row, event, column) {
       this.pageControl.isEditCase = true
-      this.pageControl.selectedCaseId = caseId
+      this.pageControl.selectedCaseId = row.caseId
     },
     use (caseId) {
       this.pageControl.selectedCaseId = caseId

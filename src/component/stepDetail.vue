@@ -123,7 +123,7 @@
         <el-input v-model="pageData.parameter3" :autosize="{ minRows: 1, maxRows: 6}" placeholder="请输入参数3" type="textarea"
                   maxlength="5000" show-word-limit></el-input>
       </el-form-item>
-      <el-form-item v-if="pageData.moduleType !== -1" label="结果赋值">
+      <el-form-item v-if="pageData.moduleType == null || pageData.moduleType !== -1" label="结果赋值">
         <el-input v-model="pageData.varName" placeholder="不赋值则空置"
                   maxlength="20" show-word-limit></el-input>
       </el-form-item>
@@ -136,9 +136,9 @@
         </template>
       </el-popconfirm>
     </div>
-    <el-dialog v-if="pageControl.isSelectDataSource" :visible.sync="pageControl.isSelectDataSource" append-to-body>
-      <tl-select-data-source :visible.sync="pageControl.isSelectDataSource"></tl-select-data-source>
-    </el-dialog>
+<!--    <el-dialog v-if="pageControl.isSelectDataSource" :visible.sync="pageControl.isSelectDataSource" append-to-body>-->
+<!--      <tl-select-data-source :visible.sync="pageControl.isSelectDataSource"></tl-select-data-source>-->
+<!--    </el-dialog>-->
   </div>
 </template>
 
@@ -163,32 +163,32 @@ export default {
     return {
       pageData: {
         stepId: null,
-        name: '',
-        description: '',
-        moduleType: 1,
-        methodType: 1,
-        methodName: 'methodName',
-        methodId: 1,
-        parameter1: 'parameter1',
-        parameter2: 'parameter2',
-        parameter3: 'parameter3',
-        varName: 'parameter3'
+        name: null,
+        description: null,
+        moduleType: null,
+        methodType: null,
+        methodName: null,
+        methodId: null,
+        parameter1: null,
+        parameter2: null,
+        parameter3: null,
+        varName: null
       },
       pageControl: {
-        isNewParam: false,
-        isNewSQL: false,
-        isNewHeader: false,
-        isSelectDataSource: false,
-        paramType: 'String',
-        paramName: '',
-        sql: '',
-        httpHeader: '',
+        // isNewParam: false,
+        // isNewSQL: false,
+        // isNewHeader: false,
+        // isSelectDataSource: false,
+        // paramType: 'String',
+        // paramName: '',
+        // sql: '',
+        // httpHeader: '',
         format: {
-          functionName: '数据源名',
-          paramName1: 'test',
-          paramName2: 'test2',
+          functionName: null,
+          paramName1: null,
+          paramName2: null,
           paramName3: null,
-          description: 'auto.po.poName(parameter1, parameter2, parameter3)'
+          description: '未定义'
         }
       }
     }
@@ -197,11 +197,11 @@ export default {
     this.pageData = this.caseStep
   },
   watch: {
-    'pageControl.isSelectDataSource': function () {
-      if (this.pageControl.isSelectDataSource === false) {
-        this.pageData.jdbc.dataSource = this.$store.state.selectedDataSource
-      }
-    }
+    // 'pageControl.isSelectDataSource': function () {
+    //   if (this.pageControl.isSelectDataSource === false) {
+    //     this.pageData.jdbc.dataSource = this.$store.state.selectedDataSource
+    //   }
+    // }
   },
   methods: {
     changeModuleType () {

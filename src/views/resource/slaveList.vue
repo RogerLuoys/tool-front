@@ -7,7 +7,7 @@
     <el-button type="primary" @click="pageControl.isNewResource = true" size="mini" style="float:right">新增</el-button>
     <!--列表-->
     <div style="height: 5px"></div>
-    <el-table border :data="pageData.list" @row-click="edit" size="mini" style="width: 100%;height: 411px">
+    <el-table border :data="pageData.list" @row-click="edit" :row-style="{cursor: 'pointer'}" size="mini" style="width: 100%;height: 411px">
       <el-table-column prop="resourceId" label="编号" width="90">
       </el-table-column>
       <el-table-column label="使用范围" width="100">

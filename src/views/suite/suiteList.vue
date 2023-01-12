@@ -8,7 +8,7 @@
     <el-button type="primary" @click="pageControl.isNewSuite=true" size="mini" style="float:right">新增</el-button>
     <!--列表-->
     <div style="height: 5px"></div>
-    <el-table border :data="pageData.list" size="mini" style="width: 100%; height: 411px">
+    <el-table border :data="pageData.list" @row-click="edit" :row-style="{cursor: 'pointer'}" size="mini" style="width: 100%; height: 411px">
       <el-table-column prop="suiteId" label="编号" width="120">
       </el-table-column>
       <el-table-column label="标题" width="200" show-overflow-tooltip>
@@ -27,8 +27,7 @@
       </el-table-column>
       <el-table-column label="操作" width="110">
         <template slot-scope="scope">
-          <el-link @click="edit(scope.row.suiteId)" :underline="false" type="primary">编辑</el-link>
-<!--          <el-link @click="use(scope.row.suiteId)" :underline="false" type="primary">执行</el-link>-->
+          <el-link @click="use(scope.row.suiteId)" :underline="false" type="primary">执行</el-link>
         </template>
       </el-table-column>
     </el-table>
@@ -119,8 +118,8 @@ export default {
       this.pageControl.selectedSuiteId = suiteId
       this.pageControl.isUseSuite = true
     },
-    edit (suiteId) {
-      this.pageControl.selectedSuiteId = suiteId
+    edit (row, event, column) {
+      this.pageControl.selectedSuiteId = row.suiteId
       this.pageControl.isEditSuite = true
     },
     queryList () {
