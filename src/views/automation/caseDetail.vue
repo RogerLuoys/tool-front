@@ -110,8 +110,8 @@ export default {
   components: {tlStepDetail},
   props: {
     caseId: {
-      type: String,
-      default: ''
+      type: Number,
+      default: 0
     },
     isEdit: {
       type: Boolean,

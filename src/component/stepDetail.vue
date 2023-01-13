@@ -108,8 +108,18 @@
         </el-row>
       </el-form-item>
       <el-form-item v-if="pageControl.format.functionName !== null" :label="pageControl.format.functionName">
-        <el-input v-model="pageData.methodName" placeholder="请输入参数1"
-                  maxlength="30" show-word-limit></el-input>
+<!--        <el-input v-model="pageData.methodName" placeholder="请选择引用的方法名"-->
+<!--                  maxlength="30" show-word-limit></el-input>-->
+<!--        <el-input v-model="pageData.methodId" placeholder="请选择引用的方法名"-->
+<!--                  maxlength="30" show-word-limit></el-input>-->
+        <el-select v-model="pageData.methodId" @change="changeMethodId" filterable placeholder="请选择引用的方法名">
+          <el-option
+            v-for="item in pageControl.options"
+            :key="item.methodId"
+            :label="item.methodName"
+            :value="item.methodId">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item v-if="pageControl.format.paramName1 !== null" :label="pageControl.format.paramName1">
         <el-input v-model="pageData.parameter1" :autosize="{ minRows: 1, maxRows: 6}" placeholder="请输入参数1" type="textarea"
@@ -136,18 +146,13 @@
         </template>
       </el-popconfirm>
     </div>
-<!--    <el-dialog v-if="pageControl.isSelectDataSource" :visible.sync="pageControl.isSelectDataSource" append-to-body>-->
-<!--      <tl-select-data-source :visible.sync="pageControl.isSelectDataSource"></tl-select-data-source>-->
-<!--    </el-dialog>-->
   </div>
 </template>
 
 <script>
 import {updateAPI, removeAPI, queryDetailAPI} from '@/api/autoStep'
-import tlSelectDataSource from '@/views/factory/selectDataSource'
 
 export default {
-  components: {tlSelectDataSource},
   props: {
     visible: {
       type: Boolean,
@@ -175,14 +180,13 @@ export default {
         varName: null
       },
       pageControl: {
-        // isNewParam: false,
-        // isNewSQL: false,
-        // isNewHeader: false,
-        // isSelectDataSource: false,
-        // paramType: 'String',
-        // paramName: '',
-        // sql: '',
-        // httpHeader: '',
+        options: [{
+          methodId: 1,
+          methodName: 'test'
+        }, {
+          methodId: 2,
+          methodName: 'test2'
+        }],
         format: {
           functionName: null,
           paramName1: null,
@@ -195,6 +199,7 @@ export default {
   },
   created: function () {
     this.pageData = this.caseStep
+    this.changeMethodType()
   },
   watch: {
     // 'pageControl.isSelectDataSource': function () {
@@ -204,6 +209,14 @@ export default {
     // }
   },
   methods: {
+    changeMethodId (id) {
+      for (let i = 0; i < this.pageControl.options.length; i++) {
+        if (this.pageControl.options[i].methodId === id) {
+          this.pageData.methodName = this.pageControl.options[i].methodName
+          break
+        }
+      }
+    },
     changeModuleType () {
       this.pageData.methodType = 1
       this.changeMethodType()
@@ -213,6 +226,7 @@ export default {
         case 1: // PO
           switch (this.pageData.methodType) {
             case 1: // normal
+              this.pageControl.options = this.$store.state.poList
               this.pageControl.format = {
                 functionName: 'PO名',
                 paramName1: 'PO入参1',
@@ -223,6 +237,7 @@ export default {
               break
             case 2: // json
               this.pageControl.format = {
+                functionName: null,
                 paramName1: 'PO入参1',
                 paramName2: null,
                 paramName3: null,
@@ -234,6 +249,7 @@ export default {
         case 2:
           switch (this.pageData.methodType) {
             case 1: // normal
+              this.pageControl.options = this.$store.state.dbList
               this.pageControl.format = {
                 functionName: '数据库名',
                 paramName1: 'SQL',
@@ -244,6 +260,7 @@ export default {
               break
             case 2: // json
               this.pageControl.format = {
+                functionName: null,
                 paramName1: 'Json入参',
                 paramName2: null,
                 paramName3: null,

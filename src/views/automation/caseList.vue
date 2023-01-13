@@ -17,7 +17,7 @@
               style="width:200px; float:left"></el-input>
     <el-button @click="queryList()" icon="el-icon-search" type="primary" size="mini"></el-button>
     <!--新增-->
-    <el-button type="primary" @click="pageControl.isNewCase=true" size="mini" style="float:right">新增</el-button>
+    <el-button type="primary" @click="pageControl.isNewCase=true" size="mini" style="float:right">新增用例</el-button>
     <!--列表-->
     <div style="height: 5px"></div>
     <el-table border :data="pageData.list" @row-click="edit" :row-style="{cursor: 'pointer'}" size="mini" height="calc(66.4vh)" style="width: 100%;">
@@ -123,10 +123,8 @@ export default {
     }
   },
   created: function () {
-    console.info('created2')
     this.pageControl.search.supperCaseId = this.supperCaseId
     this.pageControl.quickCreate.supperCaseId = this.supperCaseId
-    console.info(this.pageControl.quickCreate)
     this.queryList()
   },
   watch: {
@@ -179,7 +177,6 @@ export default {
       })
     },
     quickCreate () { // 快速新增用例
-      console.info(this.pageControl.quickCreate)
       quickCreateAPI(this.pageControl.quickCreate).then(response => {
         if (response.data.success === true) {
           this.pageControl.selectedCaseId = response.data.data
