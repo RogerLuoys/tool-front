@@ -17,7 +17,16 @@
               style="width:200px; float:left"></el-input>
     <el-button @click="queryList()" icon="el-icon-search" type="primary" size="mini"></el-button>
     <!--新增-->
-    <el-button type="primary" @click="pageControl.isNewCase=true" size="mini" style="float:right">新增用例</el-button>
+<!--    <el-button type="primary" @click="pageControl.isNewCase=true" size="mini" style="float:right">新增用例</el-button>-->
+    <el-dropdown split-button type="primary" @click="createCase" @command="handleCommand" size="mini" style="float:right">
+      新增用例
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item command="1">新增PO</el-dropdown-item>
+          <el-dropdown-item command="2" disabled>批量导入用例</el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
     <!--列表-->
     <div style="height: 5px"></div>
     <el-table border :data="pageData.list" @row-click="edit" :row-style="{cursor: 'pointer'}" size="mini" height="calc(66.4vh)" style="width: 100%;">
@@ -48,7 +57,10 @@
     </el-pagination>
     <!--弹出框-->
     <!--新增弹窗-->
-    <el-drawer :visible.sync="pageControl.isNewCase" title="新增测试用例" size="55%">
+    <el-drawer :visible.sync="pageControl.isNewCase" size="55%">
+      <template #title>
+        <span>新增{{pageControl.title}}</span>
+      </template>
       <el-card shadow="never" style="height: 100%">
         <el-input v-model="pageControl.quickCreate.name" @keyup.enter.native="quickCreate()" placeholder="请输入名称后回车，或点确认新增" size="small" maxlength="30" show-word-limit>
           <template #append>
@@ -107,6 +119,7 @@ export default {
         isEditCase: false,
         isUseCase: false,
         selectedCaseId: null,
+        title: '用例',
         search: {//  列表搜索入参
           supperCaseId: 0,
           type: 1,
@@ -160,6 +173,19 @@ export default {
         default:
           return '未知'
       }
+    },
+    handleCommand (command) {
+      switch (command) {
+        case '1':
+          this.pageControl.title = 'PO'
+          this.pageControl.quickCreate.type = 3
+          this.pageControl.isNewCase = true
+      }
+    },
+    createCase () {
+      this.pageControl.quickCreate.type = 1
+      this.pageControl.title = '用例'
+      this.pageControl.isNewCase = true
     },
     edit (row, event, column) {
       this.pageControl.isEditCase = true
