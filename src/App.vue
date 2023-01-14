@@ -26,10 +26,10 @@
               <i class="el-icon-setting"></i>
               <span slot="title">设置</span>
             </el-menu-item>
-            <el-menu-item index="6" @click="$router.push('/factory')">
-              <i class="el-icon-plus"></i>
-              <span slot="title">数据工厂</span>
-            </el-menu-item>
+<!--            <el-menu-item index="6" @click="$router.push('/factory')">-->
+<!--              <i class="el-icon-plus"></i>-->
+<!--              <span slot="title">数据工厂</span>-->
+<!--            </el-menu-item>-->
           </el-menu>
       </el-aside>
       <el-main style="height: calc(97vh)">

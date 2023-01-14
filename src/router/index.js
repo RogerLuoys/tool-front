@@ -2,8 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import home from '@/views/home/index'
 import login from '@/views/home/login'
-import factory from '@/views/factory/index'
-import factoryDetail from '@/views/factory/detail'
 import resource from '@/views/resource/index'
 import automation from '@/views/automation/index'
 import caseDetail from '@/views/automation/caseDetail'
@@ -25,11 +23,6 @@ export default new Router({
       component: login
     },
     {
-      path: '/factory',
-      name: 'factory',
-      component: factory
-    },
-    {
       path: '/config',
       name: 'config',
       component: config
@@ -38,11 +31,6 @@ export default new Router({
       path: '/suite',
       name: 'suite',
       component: suite
-    },
-    {
-      path: '/factoryDetail/:id',
-      name: 'factoryDetail',
-      component: factoryDetail
     },
     {
       path: '/resource',

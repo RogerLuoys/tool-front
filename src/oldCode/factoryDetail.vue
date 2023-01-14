@@ -175,7 +175,7 @@
             <div v-for="(item, index) in pageData.rpc.parameterList" :key="index">
               <el-row :gutter="5">
                 <el-col :span="5">
-<!--                  <el-input v-model="pageData.rpc.parameterList[index].comment" placeholder="请输入rpc参数类型(class name)" maxlength="100" size="small" show-word-limit></el-input>-->
+                  <!--                  <el-input v-model="pageData.rpc.parameterList[index].comment" placeholder="请输入rpc参数类型(class name)" maxlength="100" size="small" show-word-limit></el-input>-->
                   <el-select v-model="pageData.rpc.parameterList[index].comment" clearable size="small" placeholder="请选择类型"
                              style="width:110px; float:left">
                     <el-option key="1" label="String" value="java.lang.String"></el-option>

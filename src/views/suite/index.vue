@@ -1,5 +1,7 @@
 <template>
-  <suite-list></suite-list>
+  <el-card>
+    <suite-list></suite-list>
+  </el-card>
 </template>
 
 <script>

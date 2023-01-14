@@ -16,17 +16,17 @@
                     show-word-limit></el-input>
         </el-form-item>
       </div>
-<!--      <el-form-item v-if="pageControl.isViewTemplate">-->
-<!--        <template #label>-->
-<!--          <el-button type="text" size="small" @click="pageControl.isViewTemplate=false">收起模板</el-button>-->
-<!--        </template>-->
-<!--        <span>{{pageData.template}}</span>-->
-<!--      </el-form-item>-->
-<!--      <el-form-item v-else>-->
-<!--        <template #label>-->
-<!--          <el-button type="text" size="small" @click="pageControl.isViewTemplate=true">查看模板</el-button>-->
-<!--        </template>-->
-<!--      </el-form-item>-->
+      <!--      <el-form-item v-if="pageControl.isViewTemplate">-->
+      <!--        <template #label>-->
+      <!--          <el-button type="text" size="small" @click="pageControl.isViewTemplate=false">收起模板</el-button>-->
+      <!--        </template>-->
+      <!--        <span>{{pageData.template}}</span>-->
+      <!--      </el-form-item>-->
+      <!--      <el-form-item v-else>-->
+      <!--        <template #label>-->
+      <!--          <el-button type="text" size="small" @click="pageControl.isViewTemplate=true">查看模板</el-button>-->
+      <!--        </template>-->
+      <!--      </el-form-item>-->
       <el-form-item label="使用结果">
         <div>{{pageControl.respondData}}</div>
       </el-form-item>

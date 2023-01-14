@@ -5,26 +5,16 @@
         <span>编辑测试集</span>
       </el-col>
       <el-col :span="13" style="text-align: right">
-<!--        <el-dropdown @click="use()" size="mini" split-button type="primary">-->
-<!--          开始执行-->
-<!--          <el-dropdown-menu slot="dropdown">-->
-<!--            <el-dropdown-item>批量重试</el-dropdown-item>-->
-<!--            <el-dropdown-item @click="remove()">重置</el-dropdown-item>-->
-<!--            <el-dropdown-item @click="remove()">删除</el-dropdown-item>-->
-<!--          </el-dropdown-menu>-->
-<!--        </el-dropdown>-->
-        <el-button @click="use(false)" size="mini" type="primary">执行</el-button>
-        <el-button @click="use(true)" size="mini" type="primary">重试</el-button>
-        <el-popconfirm title="将重置套件执行状态和结果，确定吗？" @confirm="reset">
-          <template #reference>
-            <el-button size="mini">重置</el-button>
+        <el-dropdown split-button type="primary" @click="use(false)" @command="suiteSetting" size="mini" style="float:right">
+          执行套件
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="retry">批量重试</el-dropdown-item>
+              <el-dropdown-item command="reset">重置套件</el-dropdown-item>
+              <el-dropdown-item command="delete">删除套件</el-dropdown-item>
+            </el-dropdown-menu>
           </template>
-        </el-popconfirm>
-        <el-popconfirm title="将删除该套件，确定吗？" @confirm="remove">
-          <template #reference>
-            <el-button size="mini">删除</el-button>
-          </template>
-        </el-popconfirm>
+        </el-dropdown>
       </el-col>
     </el-row>
     <!--基本信息-->
@@ -37,17 +27,27 @@
         <el-input v-model="pageData.description" @change="update" placeholder="请描述功能和实现方法" type="textarea" maxlength="200"
                   show-word-limit></el-input>
       </el-form-item>
-      <el-form-item label="执行环境">
-        <el-input v-model="pageData.environment" @change="update" placeholder="请输入默认域名或ip端口，输入值将替换用例中的执行环境" maxlength="30" show-word-limit></el-input>
-      </el-form-item>
+<!--      <el-form-item label="执行环境">-->
+<!--        <el-input v-model="pageData.environment" @change="update" placeholder="请输入默认域名或ip端口，输入值将替换用例中的执行环境" maxlength="30" show-word-limit></el-input>-->
+<!--      </el-form-item>-->
       <!--用例列表-->
       <el-divider content-position="right">
-        <el-button @click="pageControl.isBatchRelatedCase=true" type="text">批量关联</el-button>
-        <el-button @click="pageControl.isRelatedCase=true" type="text">单个关联</el-button>
         <span>用例列表</span>
         <el-tooltip class="item" effect="dark" content="点编号可进入用例详情，点标题可进入关联设置，失败用例可单个重试" placement="top-start">
           <i class="el-icon-info"></i>
         </el-tooltip>
+        <el-divider direction="vertical"></el-divider>
+        <el-dropdown @command="relateSetting" size="mini">
+          <span style="cursor: pointer; color: #409EFF">
+            关联用例<i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="singleRelate">单个关联</el-dropdown-item>
+              <el-dropdown-item command="batchRelate">批量关联</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
       </el-divider>
       <div v-if="pageControl.isRelatedCase">
         <el-input v-model="pageControl.relatedCaseId" size="small" placeholder="请输入要关联的用例编号"
@@ -96,43 +96,19 @@
           </template>
         </el-table-column>
       </el-table>
-<!--      <div v-if="pageControl.isRelatedCase">-->
-<!--        <el-input v-model="pageControl.relatedCaseId" size="small" placeholder="请输入要关联的用例编号"-->
-<!--                  maxlength="20" show-word-limit>-->
-<!--          <template #append>-->
-<!--            <el-button @click="createRelatedCase()" type="primary" size="small">确认</el-button>-->
-<!--            <el-button @click="pageControl.isRelatedCase=false" size="small">取消</el-button>-->
-<!--          </template>-->
-<!--        </el-input>-->
-<!--      </div>-->
-<!--      <div v-else-if="pageControl.isBatchRelatedCase">-->
-<!--        <el-input v-model="pageControl.relatedCaseName" size="small" placeholder="请输入用例名(将模糊匹配)"-->
-<!--                  maxlength="20" show-word-limit>-->
-<!--          <template #append>-->
-<!--            <el-button @click="batchRelatedCase()" type="primary" size="small">确认</el-button>-->
-<!--            <el-button @click="pageControl.isBatchRelatedCase=false" size="small">取消</el-button>-->
-<!--          </template>-->
-<!--        </el-input>-->
-<!--      </div>-->
-<!--      <div v-else>-->
-<!--        <el-button @click="pageControl.isBatchRelatedCase=true" size="mini" type="primary" plain>批量关联</el-button>-->
-<!--        <el-button @click="pageControl.isRelatedCase=true" size="mini" plain>单个关联</el-button>-->
-<!--        &lt;!&ndash;分页&ndash;&gt;-->
-<!--        <el-pagination layout="prev, pager, next" @current-change="queryDetail()" :current-page.sync="pageControl.search.pageIndex"-->
-<!--                       :total="pageData.relatedCase.total" small style="float: right">-->
-<!--        </el-pagination>-->
-<!--      </div>-->
       <!--分页-->
       <el-pagination layout="prev, pager, next" @current-change="queryDetail()" :current-page.sync="pageControl.search.pageIndex"
                      :total="pageData.relatedCase.total" small style="float: right">
       </el-pagination>
     </el-form>
-    <!--弹窗-->
+    <!--其它弹窗-->
+    <!--编辑用例-->
     <el-drawer :visible.sync="pageControl.isEditCase" title="编辑用例" :with-header="false" size="55%" append-to-body>
       <el-card style="min-height: 100%">
         <tl-case-detail v-if="pageControl.isEditCase" :case-id="pageControl.selectedCaseId" :visible.sync="pageControl.isEditCase"></tl-case-detail>
       </el-card>
     </el-drawer>
+    <!--编辑关联设置-->
     <el-dialog :visible.sync="pageControl.isEditRelatedCase" title="编辑关联设置" append-to-body>
       <el-form :model="pageControl.selectedSuiteCase" label-width="90px" size="small">
         <el-form-item label="用例名">
@@ -152,6 +128,33 @@
       <div style="text-align: center">
         <el-button @click="updateRelatedCase" type="primary" size="small">保存设置</el-button>
         <el-button @click="removeRelatedCase(pageControl.selectedSuiteCase.caseId)" type="primary" size="small">删除关联</el-button>
+      </div>
+    </el-dialog>
+    <!--重试确认-->
+    <el-dialog :visible.sync="pageControl.isRetry" title="提示" width="30%" append-to-body>
+      <div style="text-align: center">确认重试套件中所有未成功的用例？</div>
+      <div style="height: 30px;"></div>
+      <div style="text-align: center">
+        <el-button @click="use(true)" type="primary" size="small">确定</el-button>
+        <el-button @click="pageControl.isRetry=false" size="small">取消</el-button>
+      </div>
+    </el-dialog>
+    <!--重置确认-->
+    <el-dialog :visible.sync="pageControl.isReset" title="提示" width="30%" append-to-body>
+      <div style="text-align: center">确认重置套件状态？重置后套件内所有用例状态也将置为未执行</div>
+      <div style="height: 30px;"></div>
+      <div style="text-align: center">
+        <el-button @click="reset" type="primary" size="small">确定</el-button>
+        <el-button @click="pageControl.isReset=false" size="small">取消</el-button>
+      </div>
+    </el-dialog>
+    <!--删除确认-->
+    <el-dialog :visible.sync="pageControl.isDelete" title="提示" width="30%" append-to-body>
+      <div style="text-align: center">确认重置删除套件？只删除套件与用例的关联关系，用例本身不受影响</div>
+      <div style="height: 30px;"></div>
+      <div style="text-align: center">
+        <el-button @click="remove" type="primary" size="small">确定</el-button>
+        <el-button @click="pageControl.isDelete=false" size="small">取消</el-button>
       </div>
     </el-dialog>
   </div>
@@ -204,13 +207,16 @@ export default {
         }
       },
       pageControl: {
-        isRelatedCase: false,
-        isBatchRelatedCase: false,
-        isEditRelatedCase: false,
-        isEditCase: false,
+        isRelatedCase: false, // 控制单个关联用例控件显示
+        isBatchRelatedCase: false, // 控制批量关联用例控件显示
+        isEditRelatedCase: false, // 控制设置用例状态弹窗
+        isEditCase: false, // 控制编辑用例抽屉
+        isRetry: false, // 控制重试失败用例弹窗
+        isReset: false, // 控制重置套件弹窗
+        isDelete: false, // 控制删除套件弹窗
         relatedCaseId: '',
         relatedCaseName: '',
-        selectedSequence: '',
+        // selectedSequence: '',
         selectedCaseId: '',
         selectedSuiteCase: {
           suiteId: '',
@@ -255,6 +261,30 @@ export default {
           return '通过'
         default:
           return '未知'
+      }
+    },
+    relateSetting (command) {
+      switch (command) {
+        case 'singleRelate':
+          this.pageControl.isBatchRelatedCase = false
+          this.pageControl.isRelatedCase = true
+          break
+        case 'batchRelate':
+          this.pageControl.isRelatedCase = false
+          this.pageControl.isBatchRelatedCase = true
+      }
+    },
+    suiteSetting (command) {
+      switch (command) {
+        case 'retry':
+          this.pageControl.isRetry = true
+          break
+        case 'reset':
+          this.pageControl.isReset = true
+          break
+        case 'delete':
+          this.pageControl.isDelete = true
+          break
       }
     },
     save () {
@@ -320,6 +350,7 @@ export default {
     reset () {
       resetAPI({suiteId: this.pageData.suiteId}).then(response => {
         if (response.data.success === true) {
+          this.pageControl.isReset = false
           this.queryDetail()
           this.$message.success('重置成功')
         }
@@ -328,6 +359,7 @@ export default {
     remove () {
       removeAPI({suiteId: this.pageData.suiteId}).then(response => {
         if (response.data.success === true) {
+          this.pageControl.isDelete = false
           this.$message.success('删除测试套件成功')
           this.$emit('update:visible', false)
         }
@@ -351,6 +383,7 @@ export default {
         retry: retry
       }, this.$store.state.slaveHost).then(response => {
         if (response.data.success === true) {
+          this.pageControl.isRetry = false
           this.$message.success('套件开始执行')
         }
       })
