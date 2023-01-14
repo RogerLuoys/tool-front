@@ -1,14 +1,17 @@
 <template>
   <div>
-    <!--搜索-->
-    <el-input placeholder="请输入名称" clearable size="mini" v-model="pageControl.search.name"
-              style="width:200px; float:left"></el-input>
-    <el-button @click="queryList()" icon="el-icon-search" type="primary" size="mini"></el-button>
-    <!--新增-->
-    <el-button type="primary" @click="pageControl.isNewSuite=true" size="mini" style="float:right">新增</el-button>
+    <div style="height: 33px">
+      <el-input placeholder="请输入名称" clearable size="mini" v-model="pageControl.search.name"
+                style="width:200px; float:left">
+        <template #append>
+          <el-button @click="queryList()" icon="el-icon-search" size="mini"></el-button>
+        </template>
+      </el-input>
+      <!--新增-->
+      <el-button type="primary" @click="pageControl.isNewSuite=true" size="mini" style="float:right">新增套件</el-button>
+    </div>
     <!--列表-->
-    <div style="height: 5px"></div>
-    <el-table border :data="pageData.list" @row-click="edit" :row-style="{cursor: 'pointer'}" size="mini" style="width: 100%; height: 411px">
+    <el-table border :data="pageData.list" @row-click="edit" :row-style="{cursor: 'pointer'}" size="mini" height="calc(75vh)" style="width: 100%;">
       <el-table-column prop="suiteId" label="编号" width="120">
       </el-table-column>
       <el-table-column label="标题" width="200" show-overflow-tooltip>

@@ -1,13 +1,21 @@
 <template>
   <div>
-    <el-input placeholder="请输入名称" clearable size="mini" v-model="pageControl.search.name"
-              style="width:200px; float:left"></el-input>
-    <el-button @click="queryList()" icon="el-icon-search" type="primary" size="mini"></el-button>
-    <!--新增-->
-    <el-button type="primary" @click="pageControl.isNewResource = true" size="mini" style="float:right">新增</el-button>
+    <div style="height: 33px;">
+<!--      <el-input placeholder="请输入名称" clearable size="mini" v-model="pageControl.search.name"-->
+<!--                style="width:200px; float:left"></el-input>-->
+<!--      <el-button @click="queryList()" icon="el-icon-search" type="primary" size="mini"></el-button>-->
+      <el-input placeholder="请输入名称" clearable size="mini" v-model="pageControl.search.name"
+                style="width:200px; float:left">
+        <template #append>
+          <el-button @click="queryList()" icon="el-icon-search" size="mini"></el-button>
+        </template>
+      </el-input>
+      <!--新增-->
+      <el-button type="primary" @click="pageControl.isNewResource = true" size="mini" style="float:right">新增节点</el-button>
+    </div>
     <!--列表-->
-    <div style="height: 5px"></div>
-    <el-table border :data="pageData.list" @row-click="edit" :row-style="{cursor: 'pointer'}" size="mini" style="width: 100%;height: 411px">
+<!--    <div style="height: 5px"></div>-->
+    <el-table border :data="pageData.list" @row-click="edit" :row-style="{cursor: 'pointer'}" size="mini" height="calc(66.4vh)" style="width: 100%;">
       <el-table-column prop="resourceId" label="编号" width="90">
       </el-table-column>
       <el-table-column label="使用范围" width="100">

@@ -1,17 +1,18 @@
 <template>
   <div>
-    <!--搜索-->
-    <el-input placeholder="请输入名称" clearable size="mini" v-model="pageControl.search.name"
-              style="width:200px; float:left">
-      <template #append>
-        <el-button @click="queryList()" icon="el-icon-search" size="mini"></el-button>
-      </template>
-    </el-input>
-    <!--邀请-->
-    <el-button type="primary" @click="pageControl.isInviteMember=true" size="mini" style="float:right">邀请成员</el-button>
+    <div style="height: 33px">
+      <!--搜索-->
+      <el-input placeholder="请输入名称" clearable size="mini" v-model="pageControl.search.name"
+                style="width:200px; float:left">
+        <template #append>
+          <el-button @click="queryList()" icon="el-icon-search" size="mini"></el-button>
+        </template>
+      </el-input>
+      <!--邀请-->
+      <el-button type="primary" @click="pageControl.isInviteMember=true" size="mini" style="float:right">邀请成员</el-button>
+    </div>
     <!--列表-->
-    <div style="height: 5px"></div>
-    <el-table border :data="pageData.list" size="mini" style="width: 100%;height: calc(70vh)">
+    <el-table border :data="pageData.list" size="mini" height="calc(66.4vh)" style="width: 100%;">
       <el-table-column prop="name" label="昵称" width="180" show-overflow-tooltip>
       </el-table-column>
       <el-table-column prop="description" label="账号" show-overflow-tooltip>

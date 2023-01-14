@@ -1,34 +1,41 @@
 <template>
   <div>
-    <!--搜索-->
-    <el-select v-model="pageControl.search.type" clearable size="mini" placeholder="请选择状态"
-               style="width:110px; float:left">
-      <el-option key="1" label="用例" :value="1"></el-option>
-      <el-option key="2" label="超类" :value="2"></el-option>
-      <el-option key="3" label="PO" :value="3"></el-option>
-    </el-select>
-    <el-select v-model="pageControl.search.status" clearable size="mini" placeholder="请选择状态"
-               style="width:110px; float:left">
-      <el-option key="1" label="计划中" :value="1"></el-option>
-      <el-option key="2" label="待修复" :value="2"></el-option>
-      <el-option key="3" label="已完成" :value="3"></el-option>
-    </el-select>
-    <el-input placeholder="请输入名称" clearable size="mini" v-model="pageControl.search.name"
-              style="width:200px; float:left"></el-input>
-    <el-button @click="queryList()" icon="el-icon-search" type="primary" size="mini"></el-button>
-    <!--新增-->
-<!--    <el-button type="primary" @click="pageControl.isNewCase=true" size="mini" style="float:right">新增用例</el-button>-->
-    <el-dropdown split-button type="primary" @click="createCase" @command="handleCommand" size="mini" style="float:right">
-      新增用例
-      <template #dropdown>
-        <el-dropdown-menu>
-          <el-dropdown-item command="1">新增PO</el-dropdown-item>
-          <el-dropdown-item command="2" disabled>批量导入用例</el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
+<!--    <el-input placeholder="请输入名称" clearable size="mini" v-model="pageControl.search.name"-->
+<!--              style="width:200px; float:left"></el-input>-->
+<!--    <el-button @click="queryList()" icon="el-icon-search" type="primary" size="mini"></el-button>-->
+    <div style="height: 33px">
+      <!--搜索-->
+      <el-select v-model="pageControl.search.type" clearable size="mini" placeholder="请选择状态"
+                 style="width:110px; float:left">
+        <el-option key="1" label="用例" :value="1"></el-option>
+        <el-option key="2" label="超类" :value="2"></el-option>
+        <el-option key="3" label="PO" :value="3"></el-option>
+      </el-select>
+      <el-select v-model="pageControl.search.status" clearable size="mini" placeholder="请选择状态"
+                 style="width:110px; float:left">
+        <el-option key="1" label="计划中" :value="1"></el-option>
+        <el-option key="2" label="待修复" :value="2"></el-option>
+        <el-option key="3" label="已完成" :value="3"></el-option>
+      </el-select>
+      <el-input placeholder="请输入名称" clearable size="mini" v-model="pageControl.search.name"
+                style="width:200px; float:left">
+        <template #append>
+          <el-button @click="queryList()" icon="el-icon-search" size="mini"></el-button>
+        </template>
+      </el-input>
+      <!--新增-->
+      <el-dropdown split-button type="primary" @click="createCase" @command="handleCommand" size="mini" style="float:right">
+        新增用例
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item command="1">新增PO</el-dropdown-item>
+            <el-dropdown-item command="2" disabled>批量导入用例</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+    </div>
     <!--列表-->
-    <div style="height: 5px"></div>
+<!--    <div style="height: 5px"></div>-->
     <el-table border :data="pageData.list" @row-click="edit" :row-style="{cursor: 'pointer'}" size="mini" height="calc(66.4vh)" style="width: 100%;">
       <el-table-column prop="caseId" label="编号" width="120">
       </el-table-column>
