@@ -28,9 +28,6 @@
         <el-input v-model="pageData.description" @change="update" placeholder="请描述功能和实现方法" type="textarea" maxlength="200"
                   show-word-limit></el-input>
       </el-form-item>
-<!--      <el-form-item label="执行环境">-->
-<!--        <el-input v-model="pageData.environment" @change="update" placeholder="请输入默认域名或ip端口，可在步骤中通过${env}使用此参数" maxlength="30" show-word-limit></el-input>-->
-<!--      </el-form-item>-->
       <el-form-item label="计划完成">
         <el-date-picker type="date" placeholder="计划完成日期" v-model="pageData.finishTime"
                         @change="update" value-format="yyyy-MM-dd" size="small"
@@ -42,7 +39,7 @@
         <el-divider content-position="right">
           <el-button @click="changeUiMode" type="text">检查并同步</el-button>
           <span>主要步骤@Test</span>
-          <el-tooltip class="item" effect="dark" content="主要步骤会前置步骤后执行，是用例主体，不可为空" placement="top-start">
+          <el-tooltip class="item" effect="dark" content="用例主体，相当于@Test，步骤会按列表显示的顺序执行" placement="top-start">
             <i class="el-icon-info"></i>
           </el-tooltip>
         </el-divider>
@@ -51,45 +48,40 @@
       <!--ui模式-->
       <div v-else>
         <el-divider content-position="right">
-          <el-button @click="createRelatedStep(pageData.mainStepList !== null ? pageData.mainStepList.length + 1 : 1, 2, null)" type="text">新增</el-button>
-<!--          <el-button @click="pageControl.isNewMainStep=true" type="text">关联</el-button>-->
-          <el-button v-if="pageData.mainStepList !== null && pageData.mainStepList.length !== 0" @click="deleteStep(pageData.mainStepList.pop())" type="text">删除</el-button>
-          <span>主要步骤@Test</span>
-          <el-tooltip class="item" effect="dark" content="主要步骤会前置步骤后执行，是用例主体，不可为空" placement="top-start">
+          <span>主要步骤</span>
+          <el-tooltip class="item" effect="dark" content="用例主体，相当于@Test，步骤会按列表显示的顺序执行" placement="top-start">
             <i class="el-icon-info"></i>
           </el-tooltip>
+          <el-divider direction="vertical"></el-divider>
+          <el-button @click="createRelatedStep(pageData.mainStepList !== null ? pageData.mainStepList.length + 1 : 1, 2, null)" type="text">新增</el-button>
+          <el-button v-if="pageData.mainStepList !== null && pageData.mainStepList.length !== 0" @click="deleteStep(pageData.mainStepList.pop())" type="text">删除</el-button>
         </el-divider>
-<!--        <div v-if="pageControl.isNewMainStep">-->
-<!--          <el-input v-model="pageControl.mainStepId" placeholder="请输入要关联的步骤编号" size="small"-->
-<!--                    maxlength="20" show-word-limit>-->
-<!--            <template #append>-->
-<!--              <el-button @click="createRelatedStep(pageData.mainStepList !== null ? pageData.mainStepList.length + 1 : 1, 2, pageControl.mainStepId)" type="primary">确认</el-button>-->
-<!--              <el-button @click="pageControl.isNewMainStep=false">取消</el-button>-->
-<!--            </template>-->
-<!--          </el-input>-->
-<!--        </div>-->
         <!--列表-->
         <el-table border :data="pageData.mainStepList" @row-click="edit" :row-style="{cursor: 'pointer'}" size="mini" style="width: 100%">
-          <el-table-column label="编号" width="130">
+<!--          <el-table-column label="编号" width="50">-->
+<!--            <template slot-scope="scope">-->
+<!--              {{scope.row.autoStep.stepId}}-->
+<!--            </template>-->
+<!--          </el-table-column>-->
+          <el-table-column label="步骤简介" width="200" show-overflow-tooltip>
             <template slot-scope="scope">
-              {{scope.row.autoStep.stepId}}
+              {{getStepDesc(scope.row.autoStep)}}
             </template>
           </el-table-column>
-          <el-table-column label="标题" width="150" show-overflow-tooltip>
+          <el-table-column label="注释" width="100">
             <template slot-scope="scope">
               {{scope.row.autoStep.name}}
             </template>
           </el-table-column>
           <el-table-column label="预期结果" width="150" show-overflow-tooltip>
             <template slot-scope="scope">
-              <el-tag type="info" size="mini">{{ getAssertType(scope.row.autoStep.assertType) }}</el-tag>
-              <span>{{scope.row.autoStep.assertExpect}}</span>
+              <span>{{getExpect(scope.row.autoStep)}}</span>
             </template>
           </el-table-column>
           <el-table-column label="实际结果" show-overflow-tooltip>
             <template slot-scope="scope">
-              <el-tag type="info" size="mini">{{ scope.row.autoStep.assertResult === null ? '未校验' : scope.row.autoStep.assertResult }}</el-tag>
-              <span>{{scope.row.autoStep.assertActual}}</span>
+<!--              <el-tag type="info" size="mini">{{ scope.row.autoStep.assertResult === null ? '未校验' : scope.row.autoStep.assertResult }}</el-tag>-->
+<!--              <span>{{scope.row.autoStep.assertActual}}</span>-->
             </template>
           </el-table-column>
         </el-table>
@@ -135,107 +127,15 @@ export default {
         ownerName: 'tester',
         type: 1,
         status: 1,
-        preStepList: [{
-          type: 1,
-          sequence: null,
-          autoStep: {
-            stepId: null,
-            name: 'caseStep',
-            description: 'caseStepdesc',
-            ownerId: '12',
-            ownerName: 'tester',
-            isPublic: false,
-            type: 1,
-            assertType: -1,
-            assertExpect: '',
-            assertResult: false,
-            jdbc: {
-              dataSource: {
-                driver: 'com.mysql.cj.jdbc.Driver',
-                url: 'jdbc:mysql://118.24.117.181:3306/onepiece?useUnicode=true&characterEncoding=UTF-8&userSSL=false',
-                username: 'testerone',
-                password: 'testerone'
-              },
-              sqlList: null
-            },
-            httpRequest: {
-              httpType: 'GET',
-              httpURL: null,
-              httpHeaderList: null,
-              httpBody: null
-            },
-            rpc: {
-              url: '',
-              interfaceName: '',
-              methodName: '',
-              parameterType: '',
-              parameterList: [{
-                name: '',
-                value: '',
-                comment: ''
-              }]
-            },
-            ui: {
-              type: 1,
-              url: 'url',
-              element: 'element',
-              elementId: 1
-            }
-          }
-        }],
+        preStepList: [],
         mainSteps: '',
         mainStepList: [{
           sequence: null,
-          autoStep: {
-            stepId: null,
-            name: 'caseStep',
-            description: 'caseStepdesc',
-            ownerId: '12',
-            ownerName: 'tester',
-            isPublic: false,
-            type: 1,
-            assertType: -1,
-            assertExpect: 'expct',
-            assertActual: 'actual',
-            assertResult: false,
-            jdbc: {
-              dataSource: {
-                driver: 'com.mysql.cj.jdbc.Driver',
-                url: 'jdbc:mysql://118.24.117.181:3306/onepiece?useUnicode=true&characterEncoding=UTF-8&userSSL=false',
-                username: 'testerone',
-                password: 'testerone'
-              },
-              sqlList: null
-            },
-            httpRequest: {
-              httpType: 'GET',
-              httpURL: null,
-              httpHeaderList: null,
-              httpBody: null
-            },
-            rpc: {
-              url: '',
-              interfaceName: '',
-              methodName: '',
-              parameterType: '',
-              parameterList: [{
-                name: '',
-                value: '',
-                comment: ''
-              }]
-            },
-            ui: {
-              type: 1,
-              url: 'url',
-              element: 'element',
-              elementId: 1
-            }
-          }
+          autoStep: {}
         }],
         afterStepList: []
       },
       pageControl: {
-        // isEdit: false,
         isNewPreStep: false,
         isNewMainStep: false,
         isNewAfterStep: false,
@@ -261,16 +161,122 @@ export default {
     }
   },
   methods: {
-    getAssertType (type) {
-      switch (type) {
-        case -1:
-          return '不校验'
-        case 1:
-          return 'equals'
-        case 2:
-          return 'contains'
+    getExpect (step) {
+      if (step.moduleType === 7) {
+        return step.parameter2
+      } else {
+        return '不校验'
+      }
+    },
+    getStepDesc (step) {
+      switch (step.moduleType) {
+        case 1: // PO
+          switch (step.methodType) {
+            case 1: // poName
+              return '调用PO方法：' + step.methodName
+            case 2: // json
+              return '执行PO方法，Json格式'
+            default:
+              return '未知步骤'
+          }
+        case 2: // SQL
+          switch (step.methodType) {
+            case 1: // dbName
+              return '在' + step.methodName + '中执行SQL'
+            case 2: // json
+              return '执行SQL，Json格式'
+            default:
+              return '未知步骤'
+          }
+        case 3: // RPC
+          switch (step.methodType) {
+            case 1: // invoke
+              return '调用RPC接口'
+            case 2: // json
+              return '调用RPC接口，Json格式'
+            default:
+              return '未知步骤'
+          }
+        case 4: // HTTP
+          switch (step.methodType) {
+            case 1: // get
+              return '调用GET接口'
+            case 2: // post
+              return '调用POST接口'
+            case 3: // put
+              return '调用PUT接口'
+            case 4: // delete
+              return '调用DELETE接口'
+            default:
+              return '未知步骤'
+          }
+        case 5: // UI
+          switch (step.methodType) {
+            case 1: // openUrl
+              return '访问指定网址'
+            case 2: // click
+              return '点击指定XPATH'
+            case 3: // clickByJs
+              return '点击指定XPATH，通过JS'
+            case 4: // clickByMove
+              return '先移动到指定XPATH，再点击'
+            case 5: // sendKey
+              return '输入指定字符串'
+            case 6: // sendKeyByEnter
+              return '输入指定字符串，再按ENTER键'
+            case 7: // move
+              return '移动到指定XPATH'
+            case 8: // drag
+              return '鼠标拖拽'
+            case 9: // executeJs
+              return '执行JS'
+            case 10: // switchTab
+              return '先切换到最新标签页，然后关闭其它'
+            case 11: // clearCookies
+              return '删除COOKIES'
+            default:
+              return '未知步骤'
+          }
+        case 6: // UTIL
+          switch (step.methodType) {
+            case 1: // sleep
+              return '强制等待' + step.parameter1 + '秒'
+            case 2: // getJson
+              return '获取JSON中指定KEY的值'
+            case 3: // getJsonAny
+              return '获取JSON或子JSON中指定KEY的值'
+            case 4: // random
+              return '获取随机数'
+            case 5: // getTime
+              return '获取当前系统时间'
+            default:
+              return '未知步骤'
+          }
+        case 7: // ASSERTION
+          switch (step.methodType) {
+            case 1: // isEquals
+              return '校验实际值是否等于预期值'
+            case 2: // isContains
+              return '校验实际值是否包含预期值'
+            case 3: // isBeContains
+              return '校验预期值是否包含实际值'
+            case 4: // isDeleted
+              return '校验实际值是否逻辑删除'
+            case 5: // isNotDeleted
+              return '校验实际值是否未逻辑删除'
+            case 6: // isGreater
+              return '校验实际值是否大于预期值'
+            case 7: // isSmaller
+              return '校验实际值是否小于预期值'
+            case 8: // isXpathExist
+              return '校验指定XPATH是否在页面中存在'
+            case 9: // isXpathNotExist
+              return '校验指定XPATH是否在页面中不存在'
+            default:
+              return '未知步骤'
+          }
         default:
-          return '未知类型'
+          return '未知步骤'
       }
     },
     checkCaseType () {

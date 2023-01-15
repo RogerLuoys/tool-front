@@ -18,7 +18,6 @@
         </el-radio-group>
       </el-form-item>
       <!--模板-->
-      <el-divider content-position="right"></el-divider>
       <el-form-item label="方法类型">
         <el-row :gutter="5">
           <el-col :span="4">
@@ -26,16 +25,16 @@
             <template v-if="pageData.moduleType===1">
               <el-select v-model="pageData.methodType" @change="changeMethodType" placeholder="请求方法"
                          style="float:left; width: 100px">
-                <el-option key="1" label="Normal" :value="1"></el-option>
-                <el-option key="2" label="Json" :value="2"></el-option>
+                <el-option key="1" label="poName" :value="1"></el-option>
+                <el-option key="2" label="executeByJson" :value="2"></el-option>
               </el-select>
             </template>
             <!--SQL类型-->
             <template v-if="pageData.moduleType===2">
               <el-select v-model="pageData.methodType" @change="changeMethodType" placeholder="请求方法"
                          style="float:left; width: 100px">
-                <el-option key="1" label="Normal" :value="1"></el-option>
-                <el-option key="2" label="Json" :value="2"></el-option>
+                <el-option key="1" label="dbName" :value="1"></el-option>
+                <el-option key="2" label="executeByJson" :value="2"></el-option>
               </el-select>
             </template>
             <!--RPC类型-->
@@ -123,15 +122,15 @@
       </el-form-item>
       <el-form-item v-if="pageControl.format.paramName1 !== null" :label="pageControl.format.paramName1">
         <el-input v-model="pageData.parameter1" :autosize="{ minRows: 1, maxRows: 6}" placeholder="请输入参数1" type="textarea"
-                  maxlength="5000" show-word-limit></el-input>
+                  maxlength="8000" show-word-limit></el-input>
       </el-form-item>
       <el-form-item v-if="pageControl.format.paramName2 !== null" :label="pageControl.format.paramName2">
         <el-input v-model="pageData.parameter2" :autosize="{ minRows: 1, maxRows: 6}" placeholder="请输入参数2" type="textarea"
-                  maxlength="5000" show-word-limit></el-input>
+                  maxlength="8000" show-word-limit></el-input>
       </el-form-item>
       <el-form-item v-if="pageControl.format.paramName3 !== null" :label="pageControl.format.paramName3">
         <el-input v-model="pageData.parameter3" :autosize="{ minRows: 1, maxRows: 6}" placeholder="请输入参数3" type="textarea"
-                  maxlength="5000" show-word-limit></el-input>
+                  maxlength="4000" show-word-limit></el-input>
       </el-form-item>
       <el-form-item v-if="pageData.moduleType == null || pageData.moduleType !== -1" label="结果赋值">
         <el-input v-model="pageData.varName" placeholder="不赋值则空置"
