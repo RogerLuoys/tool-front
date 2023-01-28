@@ -41,8 +41,8 @@
             <template v-if="pageData.moduleType===3">
               <el-select v-model="pageData.methodType" @change="changeMethodType" placeholder="请求方法"
                          style="float:left; width: 100px">
-                <el-option key="1" label="Normal" :value="1"></el-option>
-                <el-option key="2" label="Json" :value="2"></el-option>
+                <el-option key="1" label="invoke" :value="1"></el-option>
+                <el-option key="2" label="executeByJson" :value="2"></el-option>
               </el-select>
             </template>
             <!--HTTP类型-->
