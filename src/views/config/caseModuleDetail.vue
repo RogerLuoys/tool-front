@@ -47,9 +47,31 @@
           <el-button @click="newParam()" type="primary" size="mini" icon="el-icon-plus" plain>新增参数</el-button>
         </div>
       </el-form-item>
-      <el-form-item label="webDriver配置">
-        <el-input v-model="pageData.description" @change="update" placeholder="请描述功能和实现方法" type="textarea" maxlength="200"
-                  show-word-limit></el-input>
+      <el-form-item label="webDriver">
+        <el-radio v-model="pageControl.webDriverType" :label="1">不需要</el-radio>
+        <el-radio v-model="pageControl.webDriverType" :label="2">chrome</el-radio>
+        <el-radio v-model="pageControl.webDriverType" :label="3">firefox</el-radio>
+        <el-radio v-model="pageControl.webDriverType" :label="4">android</el-radio>
+        <template v-if="pageControl.webDriverType !== 1">
+          <div v-for="(item, index) in pageData.argumentList" :key="index">
+            <el-row :gutter="2">
+              <el-col :span="19">
+                <el-input v-model="pageData.argumentList[index].value" @change="updateParam(pageData.argumentList[index])" size="mini" placeholder="请输入参数值"
+                          maxlength="30" show-word-limit>
+                </el-input>
+              </el-col>
+              <el-col :span="4">
+                <el-button @click="deleteUiParam(index)" size="mini">删除</el-button>
+                <el-tooltip class="item" effect="dark" :content="pageData.argumentList[index].comment" placement="top-start">
+                  <i class="el-icon-info"></i>
+                </el-tooltip>
+              </el-col>
+            </el-row>
+          </div>
+          <div>
+            <el-button @click="newUiParam()" type="primary" size="mini" icon="el-icon-plus" plain>新增参数</el-button>
+          </div>
+        </template>
       </el-form-item>
       <!--前置步骤-->
       <el-divider content-position="right">
@@ -173,6 +195,7 @@ export default {
         name: 'name',
         description: '',
         parameterList: null,
+        argumentList: null,
         finishTime: '',
         maxTime: 1,
         ownerId: '123',
@@ -187,6 +210,8 @@ export default {
         isNewPreStep: false,
         isNewAfterStep: false,
         isEditStep: false,
+        // isWebDriver: false,
+        webDriverType: 1,
         preStepId: '',
         afterStepId: '',
         selectedStep: {}
@@ -225,8 +250,8 @@ export default {
       } else {
         this.pageData.parameterList.push(config)
       }
-      this.pageControl.paramName = ''
-      this.pageControl.isNewParam = false
+      // this.pageControl.paramName = ''
+      // this.pageControl.isNewParam = false
       quickCreateConfigAPI(config).then(response => {
         if (response.data.success === true) {
           this.$message.success('添加配置成功')
@@ -238,6 +263,30 @@ export default {
       removeConfigAPI({configId: configId}).then(response => {
         if (response.data.success === true) {
           this.pageData.parameterList.splice(index, 1)
+          this.$message.success('删除步骤成功')
+        }
+      })
+    },
+    newUiParam () {
+      let config = {name: 'default', value: '', type: this.pageControl.webDriverType, caseId: this.pageData.caseId}
+      if (this.pageData.argumentList === null) {
+        this.pageData.argumentList = [config]
+      } else {
+        this.pageData.argumentList.push(config)
+      }
+      // this.pageControl.paramName = ''
+      // this.pageControl.isNewParam = false
+      quickCreateConfigAPI(config).then(response => {
+        if (response.data.success === true) {
+          this.$message.success('添加配置成功')
+        }
+      })
+    },
+    deleteUiParam (index) {
+      let configId = this.pageData.argumentList[index].configId
+      removeConfigAPI({configId: configId}).then(response => {
+        if (response.data.success === true) {
+          this.pageData.argumentList.splice(index, 1)
           this.$message.success('删除步骤成功')
         }
       })
@@ -325,6 +374,9 @@ export default {
       }).then(response => {
         if (response.data.success === true) {
           this.pageData = response.data.data
+          if (this.pageData.argumentList !== null) {
+            this.pageControl.webDriverType = this.pageData.argumentList[0].type
+          }
         }
       })
     },
