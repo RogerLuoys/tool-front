@@ -27,9 +27,11 @@
         <el-input v-model="pageData.description" @change="update" placeholder="请描述功能和实现方法" type="textarea" maxlength="200"
                   show-word-limit></el-input>
       </el-form-item>
-<!--      <el-form-item label="执行环境">-->
-<!--        <el-input v-model="pageData.environment" @change="update" placeholder="请输入默认域名或ip端口，输入值将替换用例中的执行环境" maxlength="30" show-word-limit></el-input>-->
-<!--      </el-form-item>-->
+      <el-form-item label="执行环境">
+        <el-radio v-model="pageData.slaveType" :label="1">localhost</el-radio>
+        <el-radio v-model="pageData.slaveType" :label="2">任意机器</el-radio>
+        <el-radio v-model="pageData.slaveType" :label="3">指定机器</el-radio>
+      </el-form-item>
       <!--用例列表-->
       <el-divider content-position="right">
         <span>用例列表</span>
@@ -185,6 +187,7 @@ export default {
       pageData: {
         suiteId: 0,
         name: '',
+        slaveType: 1,
         description: '',
         environment: '',
         passed: 0,
