@@ -31,6 +31,16 @@
         <el-radio v-model="pageData.slaveType" :label="1">localhost</el-radio>
         <el-radio v-model="pageData.slaveType" :label="2">任意机器</el-radio>
         <el-radio v-model="pageData.slaveType" :label="3">指定机器</el-radio>
+        <div v-if="pageData.slaveType===3">
+          <el-select v-model="pageData.slaveList" @change="assignSlave" filterable multiple placeholder="请选择要指定的机器">
+            <el-option
+              v-for="item in pageControl.options"
+              :key="item.resourceId"
+              :label="item.resourceName"
+              :value="item.resourceName">
+            </el-option>
+          </el-select>
+        </div>
       </el-form-item>
       <!--用例列表-->
       <el-divider content-position="right">
@@ -187,7 +197,8 @@ export default {
       pageData: {
         suiteId: 0,
         name: '',
-        slaveType: 1,
+        slaveType: 3,
+        slaveList: [],
         description: '',
         environment: '',
         passed: 0,
@@ -234,6 +245,13 @@ export default {
             status: 1
           }
         },
+        options: [{
+          resourceId: 1,
+          resourceName: 'test1'
+        }, {
+          resourceId: 2,
+          resourceName: 'test2'
+        }],
         search: {
           pageIndex: 1
         }
@@ -265,6 +283,14 @@ export default {
         default:
           return '未知'
       }
+    },
+    assignSlave (id) {
+      // for (let i = 0; i < this.pageControl.options.length; i++) {
+      //   if (this.pageControl.options[i].methodId === id) {
+      //     this.pageData.methodName = this.pageControl.options[i].methodName
+      //     break
+      //   }
+      // }
     },
     relateSetting (command) {
       switch (command) {
