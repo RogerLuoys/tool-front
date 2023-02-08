@@ -28,23 +28,41 @@
                   show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="执行环境">
-        <el-radio v-model="pageData.slaveType" :label="1">localhost</el-radio>
-        <el-radio v-model="pageData.slaveType" :label="2">任意机器</el-radio>
-        <el-radio v-model="pageData.slaveType" :label="3">指定机器</el-radio>
+        <el-radio v-model="pageData.slaveType" @change="update" :label="1">localhost</el-radio>
+        <el-radio v-model="pageData.slaveType" @change="update" :label="2">任意机器</el-radio>
+        <el-radio v-model="pageData.slaveType" @change="update" :label="3">指定机器</el-radio>
         <div v-if="pageData.slaveType===3">
-          <div v-for="(item, key) in pageData.slaveList" :key="key">
-            {{item}}
-            <el-button type="text">删除</el-button>
-          </div>
-          <el-button v-if="!pageControl.isAssignSlave" @click="pageControl.isAssignSlave=true">添加</el-button>
-          <el-select v-else v-model="pageControl.none" @change="assignSlave" filterable placeholder="请选择要指定的机器">
-            <el-option
-              v-for="(item, key) in pageControl.options"
-              :key="key"
-              :label="item.resourceName"
-              :value="key">
-            </el-option>
-          </el-select>
+          <el-table border :show-header="true" :data="pageData.slaveList" size="mini" style="width: 70%;">
+            <el-table-column prop="name" label="名称" width="120">
+            </el-table-column>
+            <el-table-column prop="url" label="说明" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column label="操作" width="110">
+              <template slot="header" slot-scope="scope">
+                <el-button v-if="!pageControl.isAssignSlave" @click="pageControl.isAssignSlave=true" size="mini" style="float: right">添加</el-button>
+                <el-select v-else v-model="pageControl.none" @change="assignSlave" filterable placeholder="请选择要指定的机器" size="mini" style="float: right">
+                  <el-option
+                    v-for="(item, key) in pageControl.options"
+                    :key="key"
+                    :label="item.name"
+                    :value="key">
+                  </el-option>
+                </el-select>
+              </template>
+              <template slot-scope="scope">
+                <el-link @click="removeRelatedSlave(scope.row.resourceId)" :underline="false" size="mini" type="primary" style="float: right">删除</el-link>
+              </template>
+            </el-table-column>
+          </el-table>
+<!--          <el-button v-if="!pageControl.isAssignSlave" @click="pageControl.isAssignSlave=true">添加</el-button>-->
+<!--          <el-select v-else v-model="pageControl.none" @change="assignSlave" filterable placeholder="请选择要指定的机器">-->
+<!--            <el-option-->
+<!--              v-for="(item, key) in pageControl.options"-->
+<!--              :key="key"-->
+<!--              :label="item.name"-->
+<!--              :value="key">-->
+<!--            </el-option>-->
+<!--          </el-select>-->
         </div>
       </el-form-item>
       <!--用例列表-->
@@ -179,7 +197,7 @@
 
 <script>
 import tlCaseDetail from '../automation/caseDetail'
-import {createAPI, createRelatedCaseAPI, batchRelatedCaseAPI, updateAPI, useSingleAPI, updateRelatedCaseAPI, resetAPI, removeAPI, removeRelatedCaseAPI, queryDetailAPI, useAPI} from '@/api/autoSuite'
+import {createAPI, createRelatedCaseAPI, createRelatedSlaveAPI, batchRelatedCaseAPI, updateAPI, useSingleAPI, updateRelatedCaseAPI, resetAPI, removeAPI, removeRelatedCaseAPI, removeRelatedSlaveAPI, queryDetailAPI, useAPI} from '@/api/autoSuite'
 
 export default {
   components: {tlCaseDetail},
@@ -292,8 +310,6 @@ export default {
       }
     },
     assignSlave (item) {
-      console.info(this.pageControl.none)
-      console.info(this.pageControl.options[item])
       this.pageControl.isAssignSlave = false
       if (this.pageData.slaveList === null) {
         this.pageData.slaveList = [this.pageControl.options[item]]
@@ -301,14 +317,14 @@ export default {
         this.pageData.slaveList.push(this.pageControl.options[item])
       }
       this.pageControl.none = null
-      // for (let i = 0; i < this.pageControl.options.length; i++) {
-      //   if (this.pageControl.options[i].resourceId === id) {
-      //     this.pageData.slaveList.push(this.pageControl.options[i])
-      //     console.info(this.pageControl.options[i])
-      //     console.info(this.pageData.slaveList)
-      //     break
-      //   }
-      // }
+      createRelatedSlaveAPI({
+        suiteId: this.pageData.suiteId,
+        resourceId: this.pageControl.options[item].resourceId
+      }).then(response => {
+        if (response.data.success === true) {
+          this.$message.success('新增指定机器成功')
+        }
+      })
     },
     relateSetting (command) {
       switch (command) {
@@ -420,6 +436,27 @@ export default {
         if (response.data.success === true) {
           this.pageControl.isEditRelatedCase = false
           this.queryDetail()
+          this.$message.success('删除关联用例成功')
+        }
+      })
+    },
+    removeRelatedSlave (resourceId) {
+      removeRelatedSlaveAPI({
+        suiteId: this.pageData.suiteId,
+        resourceId: resourceId
+      }).then(response => {
+        if (response.data.success === true) {
+          // this.pageData.slaveList.forEach((item, index) => {
+          //   if (item.resourceId === resourceId) {
+          //     this.pageData.slaveList.slice(index, 1)
+          //   }
+          // })
+          for (let i = 0; i < this.pageData.slaveList.length; i++) {
+            if (this.pageData.slaveList[i].resourceId === resourceId) {
+              this.pageData.slaveList.splice(i, 1)
+              break
+            }
+          }
           this.$message.success('删除关联用例成功')
         }
       })

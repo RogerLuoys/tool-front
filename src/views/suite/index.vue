@@ -19,7 +19,7 @@ export default {
         if (response.data.success === true) {
           let list = []
           response.data.data.list.map(item => {
-            list.push({resourceId: item.resourceId, name: item.name, ip: item.slave.url, thread: item.slave.thread})
+            list.push({resourceId: item.resourceId, name: item.name, url: item.slave.url, thread: item.slave.thread})
           })
           this.$store.state.slaveList = list
           // console.info(this.$store.state.dbList)
