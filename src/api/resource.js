@@ -40,10 +40,10 @@ export function queryDetailAPI (params) {
   })
 }
 
-export function queryAPI (params) {
+export function queryAPI (data) {
   return api({
     url: 'resource/query',
-    method: 'get',
-    params: params
+    method: 'post',
+    data: data
   })
 }

@@ -20,12 +20,8 @@
       <el-divider content-position="right"></el-divider>
       <!--数据源模板-->
       <el-form-item label="URL">
-        <el-input v-model="pageData.slave.ip" placeholder="请输入URL"
+        <el-input v-model="pageData.slave.url" placeholder="请输入URL"
                   maxlength="200" show-word-limit></el-input>
-      </el-form-item>
-      <el-form-item label="端口">
-        <el-input v-model="pageData.slave.port" placeholder="请输入端口"
-                  maxlength="5" show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="最大线程数">
         <el-input v-model="pageData.slave.thread" placeholder="请输入最大线程数"
@@ -68,7 +64,6 @@ export default {
         type: 2,
         slave: {
           url: null,
-          port: null,
           thread: null
         }
       }

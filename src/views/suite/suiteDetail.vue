@@ -32,12 +32,17 @@
         <el-radio v-model="pageData.slaveType" :label="2">任意机器</el-radio>
         <el-radio v-model="pageData.slaveType" :label="3">指定机器</el-radio>
         <div v-if="pageData.slaveType===3">
-          <el-select v-model="pageData.slaveList" @change="assignSlave" filterable multiple placeholder="请选择要指定的机器">
+          <div v-for="(item, key) in pageData.slaveList" :key="key">
+            {{item}}
+            <el-button type="text">删除</el-button>
+          </div>
+          <el-button v-if="!pageControl.isAssignSlave" @click="pageControl.isAssignSlave=true">添加</el-button>
+          <el-select v-else v-model="pageControl.none" @change="assignSlave" filterable placeholder="请选择要指定的机器">
             <el-option
-              v-for="item in pageControl.options"
-              :key="item.resourceId"
+              v-for="(item, key) in pageControl.options"
+              :key="key"
               :label="item.resourceName"
-              :value="item.resourceName">
+              :value="key">
             </el-option>
           </el-select>
         </div>
@@ -180,8 +185,8 @@ export default {
   components: {tlCaseDetail},
   props: {
     suiteId: {
-      type: String,
-      default: ''
+      type: Number,
+      default: 0
     },
     isEdit: {
       type: Boolean,
@@ -228,12 +233,13 @@ export default {
         isRetry: false, // 控制重试失败用例弹窗
         isReset: false, // 控制重置套件弹窗
         isDelete: false, // 控制删除套件弹窗
+        isAssignSlave: false,
         relatedCaseId: '',
         relatedCaseName: '',
-        // selectedSequence: '',
+        none: null,
         selectedCaseId: '',
         selectedSuiteCase: {
-          suiteId: '',
+          suiteId: 1,
           caseId: '',
           sequence: 999,
           status: 1,
@@ -267,6 +273,7 @@ export default {
   },
   created: function () {
     console.info('created')
+    this.pageControl.options = this.$store.state.slaveList
     if (this.isEdit) {
       this.queryDetail()
     }
@@ -284,10 +291,21 @@ export default {
           return '未知'
       }
     },
-    assignSlave (id) {
+    assignSlave (item) {
+      console.info(this.pageControl.none)
+      console.info(this.pageControl.options[item])
+      this.pageControl.isAssignSlave = false
+      if (this.pageData.slaveList === null) {
+        this.pageData.slaveList = [this.pageControl.options[item]]
+      } else {
+        this.pageData.slaveList.push(this.pageControl.options[item])
+      }
+      this.pageControl.none = null
       // for (let i = 0; i < this.pageControl.options.length; i++) {
-      //   if (this.pageControl.options[i].methodId === id) {
-      //     this.pageData.methodName = this.pageControl.options[i].methodName
+      //   if (this.pageControl.options[i].resourceId === id) {
+      //     this.pageData.slaveList.push(this.pageControl.options[i])
+      //     console.info(this.pageControl.options[i])
+      //     console.info(this.pageData.slaveList)
       //     break
       //   }
       // }

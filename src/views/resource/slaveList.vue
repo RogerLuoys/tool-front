@@ -29,7 +29,7 @@
       </el-table-column>
       <el-table-column label="地址" width="150">
         <template #default="scope">
-          <span>{{scope.row.slave.ip}}:{{scope.row.slave.port}}</span>
+          <span>{{scope.row.slave.url}}</span>
         </template>
       </el-table-column>
       <el-table-column label="最大线程数" width="150">
