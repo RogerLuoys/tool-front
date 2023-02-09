@@ -106,12 +106,22 @@ export function queryAPI (data) {
 }
 
 export function useAPI (params, baseURL) {
-  return apiSlave({
-    url: 'autoSuite/use',
-    method: 'get',
-    params: params,
-    baseURL: baseURL
-  })
+  if (baseURL.search(/localhost/i) === -1) {
+    // 非localhost，走服务器执行
+    return api({
+      url: 'autoSuite/useUnLocal',
+      method: 'get',
+      params: params
+    })
+  } else {
+    // localhost，前端直接调用
+    return apiSlave({
+      url: 'autoSuite/executeByLocal',
+      method: 'get',
+      params: params,
+      baseURL: baseURL
+    })
+  }
 }
 
 export function useSingleAPI (data, baseURL) {
