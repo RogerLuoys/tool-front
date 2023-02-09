@@ -5,7 +5,7 @@
         <span>编辑测试集</span>
       </el-col>
       <el-col :span="13" style="text-align: right">
-        <el-dropdown split-button type="primary" @click="use(false)" @command="suiteSetting" size="mini" style="float:right">
+        <el-dropdown split-button type="primary" @click="execute(false)" @command="suiteSetting" size="mini" style="float:right">
           执行套件
           <template #dropdown>
             <el-dropdown-menu>
@@ -170,7 +170,7 @@
       <div style="text-align: center">确认重试套件中所有未成功的用例？</div>
       <div style="height: 30px;"></div>
       <div style="text-align: center">
-        <el-button @click="use(true)" type="primary" size="small">确定</el-button>
+        <el-button @click="execute(true)" type="primary" size="small">确定</el-button>
         <el-button @click="pageControl.isRetry=false" size="small">取消</el-button>
       </div>
     </el-dialog>
@@ -197,7 +197,7 @@
 
 <script>
 import tlCaseDetail from '../automation/caseDetail'
-import {createAPI, createRelatedCaseAPI, createRelatedSlaveAPI, batchRelatedCaseAPI, updateAPI, useSingleAPI, updateRelatedCaseAPI, resetAPI, removeAPI, removeRelatedCaseAPI, removeRelatedSlaveAPI, queryDetailAPI, useAPI} from '@/api/autoSuite'
+import {createAPI, createRelatedCaseAPI, createRelatedSlaveAPI, batchRelatedCaseAPI, updateAPI, useSingleAPI, updateRelatedCaseAPI, resetAPI, removeAPI, removeRelatedCaseAPI, removeRelatedSlaveAPI, queryDetailAPI, executeByLocalAPI, executeByScheduleAPI} from '@/api/autoSuite'
 
 export default {
   components: {tlCaseDetail},
@@ -446,11 +446,6 @@ export default {
         resourceId: resourceId
       }).then(response => {
         if (response.data.success === true) {
-          // this.pageData.slaveList.forEach((item, index) => {
-          //   if (item.resourceId === resourceId) {
-          //     this.pageData.slaveList.slice(index, 1)
-          //   }
-          // })
           for (let i = 0; i < this.pageData.slaveList.length; i++) {
             if (this.pageData.slaveList[i].resourceId === resourceId) {
               this.pageData.slaveList.splice(i, 1)
@@ -461,16 +456,34 @@ export default {
         }
       })
     },
-    use (retry) {
-      useAPI({
-        suiteId: this.suiteId,
-        retry: retry
-      }, this.$store.state.slaveHost).then(response => {
-        if (response.data.success === true) {
-          this.pageControl.isRetry = false
-          this.$message.success('套件开始执行')
-        }
-      })
+    execute (retry) {
+      if (this.pageData.status !== 1) {
+        this.$message.warning('只有空闲状态套件才能执行')
+        return
+      }
+      if (this.pageData.slaveType === 1) {
+        executeByLocalAPI({
+          suiteId: this.suiteId,
+          retry: retry
+        }, this.$store.state.slaveHost).then(response => {
+          if (response.data.success === true) {
+            this.pageControl.isRetry = false
+            this.$message.success('套件开始执行')
+          }
+        })
+      } else {
+        executeByScheduleAPI({
+          suiteId: this.pageData.suiteId,
+          slaveType: this.pageData.slaveType,
+          slaveList: this.pageData.slaveList,
+          relatedCase: this.pageData.relatedCase
+        }).then(response => {
+          if (response.data.success === true) {
+            this.pageControl.isRetry = false
+            this.$message.success('套件开始执行')
+          }
+        })
+      }
     },
     useSingle (row) {
       this.pageControl.selectedSuiteCase = row

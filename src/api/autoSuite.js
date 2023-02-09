@@ -105,23 +105,21 @@ export function queryAPI (data) {
   })
 }
 
-export function useAPI (params, baseURL) {
-  if (baseURL.search(/localhost/i) === -1) {
-    // 非localhost，走服务器执行
-    return api({
-      url: 'autoSuite/useUnLocal',
-      method: 'get',
-      params: params
-    })
-  } else {
-    // localhost，前端直接调用
-    return apiSlave({
-      url: 'autoSuite/executeByLocal',
-      method: 'get',
-      params: params,
-      baseURL: baseURL
-    })
-  }
+export function executeByScheduleAPI (data) {
+  return api({
+    url: 'autoSuite/executeBySchedule',
+    method: 'post',
+    data: data
+  })
+}
+
+export function executeByLocalAPI (params, baseURL) {
+  return apiSlave({
+    url: 'autoSuite/executeByLocal',
+    method: 'get',
+    params: params,
+    baseURL: baseURL
+  })
 }
 
 export function useSingleAPI (data, baseURL) {
