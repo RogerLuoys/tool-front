@@ -105,6 +105,14 @@ export function queryAPI (data) {
   })
 }
 
+export function queryRelateCaseAPI (data) {
+  return api({
+    url: 'autoSuite/queryRelateCase',
+    method: 'post',
+    data: data
+  })
+}
+
 export function executeByScheduleAPI (data) {
   return api({
     url: 'autoSuite/executeBySchedule',

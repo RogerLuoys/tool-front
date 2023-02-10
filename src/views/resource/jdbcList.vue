@@ -26,7 +26,7 @@
       </el-table-column>
       <el-table-column prop="description" label="说明">
       </el-table-column>
-      <el-table-column label="链接" width="150">
+      <el-table-column label="链接" width="150" show-overflow-tooltip>
         <template #default="scope">
           <span>{{scope.row.dataSource.url}}</span>
         </template>

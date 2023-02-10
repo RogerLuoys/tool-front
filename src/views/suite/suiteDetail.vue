@@ -111,6 +111,21 @@
           </template>
         </el-table-column>
         <el-table-column label="标题" show-overflow-tooltip>
+          <template slot="header" slot-scope="scope">
+            <el-row>
+              <el-col :span="4">
+                <span>标题</span>
+              </el-col>
+              <el-col :span="20">
+                <el-input placeholder="请输入名称" clearable size="mini" v-model="pageControl.search.name"
+                          style="width:180px; float:left">
+                  <template #append>
+                    <el-button @click="queryRelateCaseList(true)" icon="el-icon-search" size="mini"></el-button>
+                  </template>
+                </el-input>
+              </el-col>
+            </el-row>
+          </template>
           <template slot-scope="scope">
             <el-link @click="editRelatedCase(scope.row)" :underline="false" type="primary">
               {{scope.row.autoCase.name}}
@@ -132,7 +147,7 @@
         </el-table-column>
       </el-table>
       <!--分页-->
-      <el-pagination layout="prev, pager, next" @current-change="queryDetail()" :current-page.sync="pageControl.search.pageIndex"
+      <el-pagination layout="prev, pager, next" @current-change="queryRelateCaseList" :current-page.sync="pageControl.search.pageIndex"
                      :total="pageData.relatedCase.total" small style="float: right">
       </el-pagination>
     </el-form>
@@ -197,7 +212,7 @@
 
 <script>
 import tlCaseDetail from '../automation/caseDetail'
-import {createAPI, createRelatedCaseAPI, createRelatedSlaveAPI, batchRelatedCaseAPI, updateAPI, useSingleAPI, updateRelatedCaseAPI, resetAPI, removeAPI, removeRelatedCaseAPI, removeRelatedSlaveAPI, queryDetailAPI, executeByLocalAPI, executeByScheduleAPI} from '@/api/autoSuite'
+import {createAPI, createRelatedCaseAPI, createRelatedSlaveAPI, batchRelatedCaseAPI, updateAPI, useSingleAPI, updateRelatedCaseAPI, resetAPI, removeAPI, removeRelatedCaseAPI, removeRelatedSlaveAPI, queryDetailAPI, executeByLocalAPI, executeByScheduleAPI, queryRelateCaseAPI} from '@/api/autoSuite'
 
 export default {
   components: {tlCaseDetail},
@@ -277,6 +292,8 @@ export default {
           resourceName: 'test2'
         }],
         search: {
+          suiteId: 0,
+          name: '',
           pageIndex: 1
         }
       }
@@ -287,11 +304,13 @@ export default {
       if (this.isEdit) {
         this.queryDetail()
       }
+      this.pageControl.search.suiteId = this.suiteId
     }
   },
   created: function () {
     console.info('created')
     this.pageControl.options = this.$store.state.slaveList
+    this.pageControl.search.suiteId = this.suiteId
     if (this.isEdit) {
       this.queryDetail()
     }
@@ -499,11 +518,21 @@ export default {
     },
     queryDetail () {
       queryDetailAPI({
-        suiteId: this.suiteId,
-        startIndex: this.pageControl.search.pageIndex
+        suiteId: this.suiteId
+        // startIndex: this.pageControl.search.pageIndex
       }).then(response => {
         if (response.data.success === true) {
           this.pageData = response.data.data
+        }
+      })
+    },
+    queryRelateCaseList (resetPage) {
+      if (resetPage) {
+        this.pageControl.search.pageIndex = 1
+      }
+      queryRelateCaseAPI(this.pageControl.search).then(response => {
+        if (response.data.success === true) {
+          this.pageData.relatedCase = response.data.data
         }
       })
     },
