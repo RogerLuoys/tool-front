@@ -24,15 +24,17 @@
       </el-table-column>
       <el-table-column prop="total" label="用例总数" width="100">
       </el-table-column>
-      <el-table-column prop="passed" label="通过" width="100">
+      <el-table-column prop="ownerName" label="责任人" width="100">
       </el-table-column>
-      <el-table-column prop="failed" label="失败" width="100">
-      </el-table-column>
-      <el-table-column label="操作" width="110">
-        <template slot-scope="scope">
-          <el-link @click="use(scope.row.suiteId)" :underline="false" type="primary">执行</el-link>
-        </template>
-      </el-table-column>
+<!--      <el-table-column prop="passed" label="通过" width="100">-->
+<!--      </el-table-column>-->
+<!--      <el-table-column prop="failed" label="失败" width="100">-->
+<!--      </el-table-column>-->
+<!--      <el-table-column label="操作" width="110">-->
+<!--        <template slot-scope="scope">-->
+<!--          <el-link @click="use(scope.row.suiteId)" :underline="false" type="primary">执行</el-link>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
     </el-table>
     <!--分页-->
     <el-pagination layout="total, prev, pager, next" @current-change="queryList()" :current-page.sync="pageControl.search.pageIndex"

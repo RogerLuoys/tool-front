@@ -13,11 +13,11 @@
     </div>
     <!--列表-->
     <el-table border :data="pageData.list" size="mini" height="calc(66.4vh)" style="width: 100%;">
-      <el-table-column prop="name" label="昵称" width="180" show-overflow-tooltip>
+      <el-table-column prop="username" label="账号" width="180" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column prop="description" label="账号" show-overflow-tooltip>
+      <el-table-column prop="nickname" label="昵称" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column prop="ownerName" label="角色" width="130" show-overflow-tooltip>
+      <el-table-column prop="type" label="角色" width="130" show-overflow-tooltip>
       </el-table-column>
       <el-table-column label="操作" width="110">
         <template slot-scope="scope">
@@ -56,16 +56,8 @@ export default {
   data () {
     return {
       pageData: {
-        list: [{
-          caseId: 1,
-          name: 'name',
-          description: 'desc',
-          finishTime: '2022-12-31',
-          ownerId: 'tester',
-          ownerName: '测试一',
-          status: 1
-        }],
-        total: 1
+        list: [],
+        total: 0
       },
       pageControl: {
         isInviteMember: false,

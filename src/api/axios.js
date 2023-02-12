@@ -13,7 +13,7 @@ const api = axios.create({
 
 // 添加请求拦截器
 api.interceptors.request.use(function (config) {
-  // 在发送请之前检查cookie，有cookie使用cookie，无cookie使用访客Id
+  // 在发送请之前检查cookie，有cookie使用cookie，无cookie使用演示账号
   let loginInfo = VueCookies.get('loginInfo')
   let projectId = VueCookies.get('projectId')
   if (loginInfo) {
