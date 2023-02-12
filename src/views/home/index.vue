@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <el-card>
     <el-row style="background-color: #FFFFFF; height: 35px">
       <el-col :span="20">
         <el-descriptions>
@@ -8,10 +8,9 @@
         </el-descriptions>
       </el-col>
       <el-col :span="4">
-<!--        <el-link :underline="false" type="primary">更新</el-link>-->
         <el-link @click="$router.push('/login')" :underline="false" type="primary">切换账号</el-link>
-        <el-link v-if="pageControl.isCalendarVisible" @click="pageControl.isCalendarVisible = false" :underline="false" type="primary">切换至周历</el-link>
-        <el-link v-else @click="pageControl.isCalendarVisible = true" :underline="false" type="primary">切换至日历</el-link>
+        <el-link v-if="pageControl.isCalendarVisible" @click="pageControl.isCalendarVisible = false" :underline="false" type="primary">任务日历</el-link>
+        <el-link v-else @click="pageControl.isCalendarVisible = true" :underline="false" type="primary">统计数据</el-link>
       </el-col>
     </el-row>
     <div style="height: 10px"></div>
@@ -19,38 +18,25 @@
       <tl-task-month-list></tl-task-month-list>
     </div>
     <div v-else>
-      <div>待定</div>
-<!--      <tl-task-weekly-list></tl-task-weekly-list>-->
+      <div>用例总数</div>
+      <tl-test></tl-test>
+      <tl-total-case></tl-total-case>
     </div>
-  </div>
-<!--  <el-container style="height: 100%;">-->
-<!--    <el-aside width="800px">-->
-<!--      <div>-->
-<!--        <el-input v-model="$store.state.slaveHost"></el-input>-->
-<!--        <el-button @click="test">调主服务器</el-button>-->
-<!--        <el-button @click="slaveNode">调从服务器</el-button>-->
-<!--      </div>-->
-<!--      <div>-->
-<!--        <el-button @click="isVisible=true">查看</el-button>-->
-<!--      </div>-->
-<!--      <div style="cursor: pointer">-->
-<!--        测试-->
-<!--      </div>-->
-<!--    </el-aside>-->
-<!--    <el-main style="background-color: lightgrey">-->
-<!--      <tl-profile></tl-profile>-->
-<!--    </el-main>-->
-<!--  </el-container>-->
+<!--    <el-dialog :visible.sync="pageControl.isCalendarVisible" width="50%">-->
+<!--      <tl-task-month-list></tl-task-month-list>-->
+<!--    </el-dialog>-->
+  </el-card>
 </template>
 
 <script>
 
 import {queryDetailAPI} from '@/api/user'
 import tlTaskMonthList from './taskMonthList'
-import tlTaskWeeklyList from './taskWeeklyList'
+import tlTest from './test'
+import tlTotalCase from './totalCase'
 
 export default {
-  components: {tlTaskMonthList, tlTaskWeeklyList},
+  components: {tlTaskMonthList, tlTest, tlTotalCase},
   data () {
     return {
       pageData: {
@@ -62,7 +48,7 @@ export default {
         type: ''
       },
       pageControl: {
-        isCalendarVisible: false
+        isCalendarVisible: true
       }
     }
   },

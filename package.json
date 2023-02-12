@@ -12,7 +12,9 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "echarts": "^4.9.0",
     "element-ui": "^2.15.12",
+    "v-charts": "^1.19.0",
     "vue": "^2.5.2",
     "vue-axios": "^3.2.4",
     "vue-cookies": "^1.7.4",

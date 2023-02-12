@@ -31,7 +31,7 @@
 
 <script>
 import {queryByWeeklyAPI} from '@/api/task'
-import tlTaskDetail from './taskDetail'
+import tlTaskDetail from '../views/home/taskDetail'
 
 export default {
   components: {tlTaskDetail},

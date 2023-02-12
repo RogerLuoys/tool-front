@@ -26,7 +26,7 @@
                   {{ data.day.split('-').slice(2).join('-') }}
                 </div>
                 <br/>
-                <el-link type="primary" @click="callDialog(data.day)">今日有任务</el-link>
+                <el-link type="primary" @click="callDialog(data.day)">查看当日任务</el-link>
               </div>
             </el-tooltip>
           </div>

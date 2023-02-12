@@ -9,15 +9,18 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import VueCookies from 'vue-cookies'
 import store from './store'
+import VCharts from 'v-charts'
 
 Vue.use(VueAxios, axios)
 Vue.use(VueCookies)
 Vue.use(ElementUI)
+Vue.use(VCharts)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  // render: h => h(App),
   router,
   store,
   components: { App },
