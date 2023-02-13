@@ -107,10 +107,6 @@
         </el-row>
       </el-form-item>
       <el-form-item v-if="pageControl.format.functionName !== null" :label="pageControl.format.functionName">
-<!--        <el-input v-model="pageData.methodName" placeholder="请选择引用的方法名"-->
-<!--                  maxlength="30" show-word-limit></el-input>-->
-<!--        <el-input v-model="pageData.methodId" placeholder="请选择引用的方法名"-->
-<!--                  maxlength="30" show-word-limit></el-input>-->
         <el-select v-model="pageData.methodId" @change="changeMethodId" filterable placeholder="请选择引用的方法名">
           <el-option
             v-for="item in pageControl.options"

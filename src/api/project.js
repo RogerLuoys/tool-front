@@ -31,3 +31,10 @@ export function queryAPI (params) {
     params: params
   })
 }
+
+export function queryByUserAPI () {
+  return api({
+    url: 'project/queryByUser',
+    method: 'get'
+  })
+}
