@@ -132,7 +132,7 @@ export function executeByLocalAPI (params, baseURL) {
 
 export function useSingleAPI (data, baseURL) {
   return apiSlave({
-    url: 'autoSuite/useSingle',
+    url: 'autoSuite/executeBySingle',
     method: 'post',
     data: data,
     baseURL: baseURL
