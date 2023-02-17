@@ -13,7 +13,7 @@
             :value="item.projectId">
           </el-option>
         </el-select>
-        <el-row slot="reference" type="flex" justify="center" align="middle" style="cursor: pointer; height: 50px; background-color: #545c64; color: white">演示机构</el-row>
+        <el-row slot="reference" type="flex" justify="center" align="middle" style="cursor: pointer; height: 48px; background-color: #545c64; color: white">演示机构</el-row>
       </el-popover>
       <div style="background-color: #909399; height: 1px"></div>
       <el-menu class="el-menu-vertical-demo" default-active="1"
@@ -90,7 +90,7 @@ export default {
           this.$store.state.userId = response.data.data.userId
           this.$store.state.userName = response.data.data.userName
         } else {
-          this.$store.state.userId = '9999'
+          this.$store.state.userId = '-1'
           this.$store.state.userName = '演示账号'
         }
       })
@@ -99,7 +99,7 @@ export default {
       if (this.$store.state.loginInfo === '03f798da9d3e6a10cfd620229fe122d4') {
         console.info('演示账户，用演示项目')
         console.info(this.pageControl.options)
-        this.pageControl.options = [{projectId: 1, projectName: '演示项目'}]
+        this.pageControl.options = [{projectId: -1, projectName: '演示项目'}]
         console.info(this.pageControl.options)
         return
       }

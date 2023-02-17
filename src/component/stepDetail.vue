@@ -175,13 +175,7 @@ export default {
         varName: null
       },
       pageControl: {
-        options: [{
-          methodId: 1,
-          methodName: 'test'
-        }, {
-          methodId: 2,
-          methodName: 'test2'
-        }],
+        options: [],
         format: {
           functionName: null,
           paramName1: null,

@@ -1,86 +1,50 @@
 <template>
   <div>
-    <el-row style="height: 15px">
-      <el-col :span="15">
-        <span>编辑测试用例</span>
-        <el-tooltip v-if="pageData.type === 2" content="此用例包含ui步骤，将视为ui用例">
-          <el-tag size="small">ui</el-tag>
+    <!--coding模式-->
+    <div v-if="isCoding">
+      <el-divider content-position="right">
+        <el-button @click="changeUiMode" type="text">检查并同步</el-button>
+        <span>主要步骤@Test</span>
+        <el-tooltip class="item" effect="dark" content="用例主体，相当于@Test，步骤会按列表显示的顺序执行" placement="top-start">
+          <i class="el-icon-info"></i>
         </el-tooltip>
-        <el-button v-if="pageControl.isCoding===false" @click="pageControl.isCoding=true" size="small">coding</el-button>
-        <el-button v-else @click="pageControl.isCoding=false" size="small">ui</el-button>
-      </el-col>
-      <el-col :span="8" style="text-align: right">
-        <el-button @click="use()" type="primary" size="small">执行</el-button>
-        <el-popconfirm title="用例将被删除，确定吗？" @confirm="remove">
-          <template #reference>
-            <el-button size="small">删除</el-button>
+      </el-divider>
+      <el-input @change="update" type="textarea" :autosize="{minRows: 13, maxRows: 200}" placeholder="请输入脚本" v-model="pageData.mainSteps"></el-input>
+    </div>
+    <!--ui模式-->
+    <div v-else>
+      <el-divider content-position="right">
+        <span>主要步骤</span>
+        <el-tooltip class="item" effect="dark" content="用例主体，相当于@Test，步骤会按列表显示的顺序执行" placement="top-start">
+          <i class="el-icon-info"></i>
+        </el-tooltip>
+        <el-divider direction="vertical"></el-divider>
+        <el-button @click="createRelatedStep(stepList !== null ? stepList.length + 1 : 1, 2, null)" type="text">新增</el-button>
+        <el-button v-if="stepList !== null && stepList.length !== 0" @click="deleteStep(stepList.pop())" type="text">删除</el-button>
+      </el-divider>
+      <!--列表-->
+      <el-table border :data="stepList" @row-click="edit" :row-style="{cursor: 'pointer'}" size="mini" style="width: 100%">
+        <el-table-column label="步骤简介" width="200" show-overflow-tooltip>
+          <template slot-scope="scope">
+            {{getStepDesc(scope.row.autoStep)}}
           </template>
-        </el-popconfirm>
-      </el-col>
-    </el-row>
-    <!--基本信息-->
-    <el-divider content-position="right"></el-divider>
-    <el-form :model="pageData" label-width="90px" size="small">
-      <el-form-item label="标题">
-        <el-input v-model="pageData.name" @change="update" placeholder="请输入标题" maxlength="30" show-word-limit></el-input>
-      </el-form-item>
-      <el-form-item label="说明">
-        <el-input v-model="pageData.description" @change="update" placeholder="请描述功能和实现方法" type="textarea" maxlength="200"
-                  show-word-limit></el-input>
-      </el-form-item>
-      <el-form-item label="计划完成">
-        <el-date-picker type="date" placeholder="计划完成日期" v-model="pageData.finishTime"
-                        @change="update" value-format="yyyy-MM-dd" size="small"
-                        style="width: 200px"></el-date-picker>
-      </el-form-item>
-      <!--主要步骤-->
-      <!--coding模式-->
-      <div v-if="pageControl.isCoding">
-        <el-divider content-position="right">
-          <el-button @click="changeUiMode" type="text">检查并同步</el-button>
-          <span>主要步骤@Test</span>
-          <el-tooltip class="item" effect="dark" content="用例主体，相当于@Test，步骤会按列表显示的顺序执行" placement="top-start">
-            <i class="el-icon-info"></i>
-          </el-tooltip>
-        </el-divider>
-        <el-input @change="update" type="textarea" :autosize="{minRows: 13, maxRows: 200}" placeholder="请输入脚本" v-model="pageData.mainSteps"></el-input>
-      </div>
-      <!--ui模式-->
-      <div v-else>
-        <el-divider content-position="right">
-          <span>主要步骤</span>
-          <el-tooltip class="item" effect="dark" content="用例主体，相当于@Test，步骤会按列表显示的顺序执行" placement="top-start">
-            <i class="el-icon-info"></i>
-          </el-tooltip>
-          <el-divider direction="vertical"></el-divider>
-          <el-button @click="createRelatedStep(pageData.mainStepList !== null ? pageData.mainStepList.length + 1 : 1, 2, null)" type="text">新增</el-button>
-          <el-button v-if="pageData.mainStepList !== null && pageData.mainStepList.length !== 0" @click="deleteStep(pageData.mainStepList.pop())" type="text">删除</el-button>
-        </el-divider>
-        <!--列表-->
-        <el-table border :data="pageData.mainStepList" @row-click="edit" :row-style="{cursor: 'pointer'}" size="mini" style="width: 100%">
-          <el-table-column label="步骤简介" width="200" show-overflow-tooltip>
-            <template slot-scope="scope">
-              {{getStepDesc(scope.row.autoStep)}}
-            </template>
-          </el-table-column>
-          <el-table-column label="注释" width="100">
-            <template slot-scope="scope">
-              {{scope.row.autoStep.name}}
-            </template>
-          </el-table-column>
-          <el-table-column label="预期结果" width="150" show-overflow-tooltip>
-            <template slot-scope="scope">
-              <span>{{getExpect(scope.row.autoStep)}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="实际结果" show-overflow-tooltip>
-            <template slot-scope="scope">
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
-      <tl-step-list :case-id="pageData.caseId" :step-list="pageData.mainStepList" :is-coding="pageControl.isCoding"></tl-step-list>
-    </el-form>
+        </el-table-column>
+        <el-table-column label="注释" width="100">
+          <template slot-scope="scope">
+            {{scope.row.autoStep.name}}
+          </template>
+        </el-table-column>
+        <el-table-column label="预期结果" width="150" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{getExpect(scope.row.autoStep)}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="实际结果" show-overflow-tooltip>
+          <template slot-scope="scope">
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
     <!--弹窗-->
     <el-dialog v-if="pageControl.isEditStep" :visible.sync="pageControl.isEditStep" title="编辑步骤" width="65%" append-to-body>
       <tl-step-detail :case-step="pageControl.selectedStep" :visible.sync="pageControl.isEditStep" is-case-step></tl-step-detail>
@@ -89,47 +53,25 @@
 </template>
 
 <script>
-import {createAPI, createRelatedStepAPI, updateAPI, removeAPI, removeRelatedStepAPI, changeUiModeAPI, changeScriptModeAPI, queryDetailAPI, useAPI} from '@/api/autoCase'
+import {createRelatedStepAPI, removeRelatedStepAPI, changeUiModeAPI, changeScriptModeAPI} from '@/api/autoCase'
 import tlStepDetail from '@/component/stepDetail'
-import tlStepList from '@/component/stepList'
 
 export default {
-  components: {tlStepDetail, tlStepList},
+  components: {tlStepDetail},
   props: {
     caseId: {
       type: Number,
       default: 0
     },
-    isEdit: {
-      type: Boolean,
-      default: true
-    },
-    visible: {
+    stepList: {},
+    isCoding: {
       type: Boolean,
       default: true
     }
   },
   data () {
     return {
-      pageData: {
-        caseId: null,
-        name: 'name',
-        description: '',
-        environment: '',
-        finishTime: '',
-        maxTime: 1,
-        ownerId: '123',
-        ownerName: 'tester',
-        type: 1,
-        status: 1,
-        preStepList: [],
-        mainSteps: '',
-        mainStepList: [{
-          sequence: null,
-          autoStep: {}
-        }],
-        afterStepList: []
-      },
+      pageData: {},
       pageControl: {
         isNewPreStep: false,
         isNewMainStep: false,
@@ -146,14 +88,13 @@ export default {
   watch: {
     'pageControl.isEditStep': function () {
       if (!this.pageControl.isEditStep) {
-        // 不用了
         // this.checkCaseType()
       }
     }
   },
   created: function () {
     if (this.isEdit) {
-      this.queryDetail()
+      // this.queryDetail()
     }
   },
   methods: {
@@ -282,29 +223,15 @@ export default {
         }
       })
     },
-    save () {
-      if (this.isEdit) {
-        this.update()
-      } else {
-        this.create()
-      }
-    },
-    create () {
-      createAPI(this.pageData).then(response => {
-        if (response.data.success === true) {
-          this.$message.success('创建用例成功')
-        }
-      })
-    },
     createRelatedStep (sequence, type, stepId) {
       createRelatedStepAPI({
-        caseId: this.pageData.caseId,
+        caseId: this.caseId,
         sequence: sequence,
         type: type,
         stepId: stepId
       }).then(response => {
         if (response.data.success === true) {
-          this.queryDetail()
+          // this.queryDetail()
           this.$message.success('创建关联步骤成功，请自行编辑')
         }
       })
@@ -315,17 +242,10 @@ export default {
       this.pageControl.mainStepId = ''
       this.pageControl.afterStepId = ''
     },
-    update () {
-      updateAPI(this.pageData).then(response => {
-        if (response.data.success === true) {
-          this.$message.success('编辑用例成功')
-        }
-      })
-    },
     changeUiMode () {
       changeUiModeAPI(this.pageData).then(response => {
         if (response.data.success === true) {
-          this.queryDetail()
+          // this.queryDetail()
           this.$message.success('检查通过')
         }
       })
@@ -337,30 +257,8 @@ export default {
         }
       })
     },
-    remove () {
-      removeAPI({caseId: this.pageData.caseId}).then(response => {
-        if (response.data.success === true) {
-          this.$message.success('删除用例成功')
-          this.$emit('update:visible', false)
-        }
-      })
-    },
-    queryDetail () {
-      queryDetailAPI({
-        caseId: this.caseId
-      }).then(response => {
-        if (response.data.success === true) {
-          this.pageData = response.data.data
-        }
-      })
-    },
-    use () {
-      useAPI(this.pageData, this.$store.state.slaveHost).then(response => {
-        if (response.data.success === true) {
-          this.pageControl.respondData = response.data.data
-          this.$message.success('用例开始执行')
-        }
-      })
+    update () {
+      console.info('update')
     },
     edit (row, event, column) {
       console.info(row.autoStep)
