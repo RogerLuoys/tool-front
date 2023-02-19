@@ -32,18 +32,17 @@
                         style="width: 200px"></el-date-picker>
       </el-form-item>
       <!--步骤主体-->
-      <tl-step-list name="@Test" :case-id="pageData.caseId" :step-list="pageData.mainStepList" :is-coding="pageControl.isCoding" :script="pageData.mainSteps" :update="update"></tl-step-list>
+      <tl-step-list name="@Test" :case-id="pageData.caseId" :step-list="pageData.testList" :is-coding="pageControl.isCoding" :script="pageData.test" :update="update"></tl-step-list>
     </el-form>
   </div>
 </template>
 
 <script>
 import {createAPI, createRelatedStepAPI, updateAPI, removeAPI, removeRelatedStepAPI, changeUiModeAPI, changeScriptModeAPI, queryDetailAPI, useAPI} from '@/api/autoCase'
-import tlStepDetail from '@/component/stepDetail'
 import tlStepList from '@/component/stepList'
 
 export default {
-  components: {tlStepDetail, tlStepList},
+  components: {tlStepList},
   props: {
     caseId: {
       type: Number,
@@ -71,13 +70,13 @@ export default {
         ownerName: 'tester',
         type: 1,
         status: 1,
-        preStepList: [],
-        mainSteps: '',
-        mainStepList: [{
+        beforeClassList: [],
+        test: '',
+        testList: [{
           sequence: null,
           autoStep: {}
         }],
-        afterStepList: []
+        afterClassList: []
       },
       pageControl: {
         isNewPreStep: false,

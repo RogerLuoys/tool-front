@@ -74,91 +74,11 @@
         </template>
       </el-form-item>
       <!--前置步骤-->
-      <el-divider content-position="right">
-        <el-button @click="createRelatedStep(pageData.preStepList !== null ? pageData.preStepList.length + 1 : 1, 1, null)" type="text">新增</el-button>
-        <el-button v-if="pageData.preStepList !== null && pageData.preStepList.length !== 0" @click="deleteStep(pageData.preStepList.pop())" type="text">删除</el-button>
-        <span>前置步骤(@BeforeTest)</span>
-        <el-tooltip class="item" effect="dark" content="参考Testng中的@BeforeTest，会在@Test之前执行" placement="top-start">
-          <i class="el-icon-info"></i>
-        </el-tooltip>
-      </el-divider>
-      <div v-if="pageControl.isNewPreStep">
-        <el-input v-model="pageControl.preStepId" placeholder="请输入要关联的步骤编号" size="small"
-                  maxlength="20" show-word-limit>
-          <template #append>
-            <el-button @click="createRelatedStep(pageData.preStepList !== null ? pageData.preStepList.length + 1 : 1, 1, pageControl.preStepId)" type="primary">确认</el-button>
-            <el-button @click="pageControl.isNewPreStep=false">取消</el-button>
-          </template>
-        </el-input>
-      </div>
-      <!--列表-->
-      <el-table border :data="pageData.preStepList" @row-click="edit" :row-style="{cursor: 'pointer'}" size="mini" style="width: 100%">
-        <el-table-column label="编号" width="130">
-          <template slot-scope="scope">
-            {{scope.row.autoStep.stepId}}
-          </template>
-        </el-table-column>
-        <el-table-column label="标题" width="150" show-overflow-tooltip>
-          <template slot-scope="scope">
-            {{scope.row.autoStep.name}}
-          </template>
-        </el-table-column>
-        <el-table-column label="预期结果" width="150" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <el-tag type="info" size="mini">{{ getAssertType(scope.row.autoStep.assertType) }}</el-tag>
-            <span>{{scope.row.autoStep.assertExpect}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="实际结果" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <el-tag type="info" size="mini">{{ scope.row.autoStep.assertResult === null ? '未校验' : scope.row.autoStep.assertResult }}</el-tag>
-            <span>{{scope.row.autoStep.assertActual}}</span>
-          </template>
-        </el-table-column>
-      </el-table>
+      <tl-step-list name="@BeforeSuite" :case-id="pageData.caseId" :step-list="pageData.beforeSuiteList" :is-coding="pageControl.isCoding" :script="pageData.mainSteps" :update="update"></tl-step-list>
+      <tl-step-list name="@BeforeTest" :case-id="pageData.caseId" :step-list="pageData.beforeClassList" :is-coding="pageControl.isCoding" :script="pageData.mainSteps" :update="update"></tl-step-list>
       <!--后置步骤-->
-      <el-divider content-position="right">
-        <el-button @click="createRelatedStep(pageData.afterStepList !== null ? pageData.afterStepList.length + 1 : 1, 3, null)" type="text">新增</el-button>
-        <el-button v-if="pageData.afterStepList !== null && pageData.afterStepList.length !== 0" @click="deleteStep(pageData.afterStepList.pop())" type="text">删除</el-button>
-        <span>置后步骤(@AfterTest)</span>
-        <el-tooltip class="item" effect="dark" content="参考Testng中的@AfterTest，会在@Test之后执行" placement="top-start">
-          <i class="el-icon-info"></i>
-        </el-tooltip>
-      </el-divider>
-      <div v-if="pageControl.isNewAfterStep">
-        <el-input v-model="pageControl.afterStepId" placeholder="请输入要关联的步骤编号" size="small"
-                  maxlength="20" show-word-limit>
-          <template #append>
-            <el-button @click="createRelatedStep(pageData.afterStepList !== null ? pageData.afterStepList.length + 1 : 1, 1, pageControl.afterStepId)" type="primary">确认</el-button>
-            <el-button @click="pageControl.isNewAfterStep=false">取消</el-button>
-          </template>
-        </el-input>
-      </div>
-      <!--列表-->
-      <el-table border :data="pageData.afterStepList" @row-click="edit" :row-style="{cursor: 'pointer'}" size="mini" style="width: 100%">
-        <el-table-column label="编号" width="130">
-          <template slot-scope="scope">
-            {{scope.row.autoStep.stepId}}
-          </template>
-        </el-table-column>
-        <el-table-column label="标题" width="150" show-overflow-tooltip>
-          <template slot-scope="scope">
-            {{scope.row.autoStep.name}}
-          </template>
-        </el-table-column>
-        <el-table-column label="预期结果" width="150" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <el-tag type="info" size="mini">{{ getAssertType(scope.row.autoStep.assertType) }}</el-tag>
-            <span>{{scope.row.autoStep.assertExpect}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="实际结果" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <el-tag type="info" size="mini">{{ scope.row.autoStep.assertResult === null ? '未校验' : scope.row.autoStep.assertResult }}</el-tag>
-            <span>{{scope.row.autoStep.assertActual}}</span>
-          </template>
-        </el-table-column>
-      </el-table>
+      <tl-step-list name="@AfterTest" :case-id="pageData.caseId" :step-list="pageData.afterClassList" :is-coding="pageControl.isCoding" :script="pageData.mainSteps" :update="update"></tl-step-list>
+      <tl-step-list name="@AfterSuite" :case-id="pageData.caseId" :step-list="pageData.afterSuiteList" :is-coding="pageControl.isCoding" :script="pageData.mainSteps" :update="update"></tl-step-list>
     </el-form>
     <!--弹窗-->
     <!--编辑步骤-->
@@ -171,9 +91,10 @@
 <script>
 import {createAPI, createRelatedStepAPI, quickCreateConfigAPI, updateAPI, updateConfigAPI, removeAPI, removeConfigAPI, removeRelatedStepAPI, changeUiModeAPI, changeScriptModeAPI, queryDetailAPI, useAPI} from '@/api/autoCase'
 import tlStepDetail from '@/component/stepDetail'
+import tlStepList from '@/component/stepList'
 
 export default {
-  components: {tlStepDetail},
+  components: {tlStepDetail, tlStepList},
   props: {
     caseId: {
       type: Number,
@@ -202,8 +123,10 @@ export default {
         ownerName: 'tester',
         type: 1,
         status: 1,
-        preStepList: [],
-        afterStepList: []
+        beforeClassList: [],
+        afterClassList: [],
+        beforeSuiteList: [],
+        afterSuiteList: []
       },
       pageControl: {
         // isEdit: false,

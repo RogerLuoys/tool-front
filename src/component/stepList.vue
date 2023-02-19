@@ -18,7 +18,7 @@
           <i class="el-icon-info"></i>
         </el-tooltip>
         <el-divider direction="vertical"></el-divider>
-        <el-button @click="createRelatedStep(stepList !== null ? stepList.length + 1 : 1, 2)" type="text">新增</el-button>
+        <el-button @click="createRelatedStep" type="text">新增</el-button>
         <el-button v-if="stepList !== null && stepList.length !== 0" @click="deleteStep(stepList.pop())" type="text">删除</el-button>
       </el-divider>
       <!--列表-->
@@ -72,7 +72,7 @@ export default {
     },
     isCoding: {
       type: Boolean,
-      default: true
+      default: false
     },
     stepList: {},
     update: {
@@ -246,11 +246,11 @@ export default {
         }
       })
     },
-    createRelatedStep (sequence, type) {
+    createRelatedStep () {
       createRelatedStepAPI({
         caseId: this.caseId,
-        sequence: sequence,
-        type: type
+        sequence: this.stepList !== null ? this.stepList.length + 1 : 1,
+        type: this.pageControl.relationType
       }).then(response => {
         if (response.data.success === true) {
           if (this.stepList == null) {
