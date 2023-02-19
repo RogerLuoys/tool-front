@@ -1,7 +1,9 @@
 const state = () => ({
   poList: null,
   dbList: null,
-  supperCaseList: null
+  supperCaseList: null,
+  isUpdateCase: false,
+  isQueryCase: null
 })
 
 const mutations = {

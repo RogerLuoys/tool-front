@@ -3,23 +3,22 @@
     <!--coding模式-->
     <div v-if="isCoding">
       <el-divider content-position="right">
-        <el-button @click="changeUiMode" type="text">检查并同步</el-button>
-        <span>主要步骤@Test</span>
-        <el-tooltip class="item" effect="dark" content="用例主体，相当于@Test，步骤会按列表显示的顺序执行" placement="top-start">
+        <span>{{name}}</span>
+        <el-tooltip class="item" effect="dark" :content="pageControl.desc" placement="top-start">
           <i class="el-icon-info"></i>
         </el-tooltip>
       </el-divider>
-      <el-input @change="update" type="textarea" :autosize="{minRows: 13, maxRows: 200}" placeholder="请输入脚本" v-model="pageData.mainSteps"></el-input>
+      <el-input @change="update" type="textarea" :autosize="{minRows: 13, maxRows: 200}" placeholder="请输入脚本" v-model="script"></el-input>
     </div>
     <!--ui模式-->
     <div v-else>
       <el-divider content-position="right">
-        <span>主要步骤</span>
-        <el-tooltip class="item" effect="dark" content="用例主体，相当于@Test，步骤会按列表显示的顺序执行" placement="top-start">
+        <span>{{name}}</span>
+        <el-tooltip class="item" effect="dark" :content="pageControl.desc" placement="top-start">
           <i class="el-icon-info"></i>
         </el-tooltip>
         <el-divider direction="vertical"></el-divider>
-        <el-button @click="createRelatedStep(stepList !== null ? stepList.length + 1 : 1, 2, null)" type="text">新增</el-button>
+        <el-button @click="createRelatedStep(stepList !== null ? stepList.length + 1 : 1, 2)" type="text">新增</el-button>
         <el-button v-if="stepList !== null && stepList.length !== 0" @click="deleteStep(stepList.pop())" type="text">删除</el-button>
       </el-divider>
       <!--列表-->
@@ -53,7 +52,7 @@
 </template>
 
 <script>
-import {createRelatedStepAPI, removeRelatedStepAPI, changeUiModeAPI, changeScriptModeAPI} from '@/api/autoCase'
+import {createRelatedStepAPI, removeRelatedStepAPI, changeScriptModeAPI} from '@/api/autoCase'
 import tlStepDetail from '@/component/stepDetail'
 
 export default {
@@ -63,24 +62,32 @@ export default {
       type: Number,
       default: 0
     },
-    stepList: {},
+    name: {
+      type: String,
+      default: null
+    },
+    script: {
+      type: String,
+      default: null
+    },
     isCoding: {
       type: Boolean,
       default: true
+    },
+    stepList: {},
+    update: {
+      type: Function,
+      default: null
     }
   },
   data () {
     return {
       pageData: {},
       pageControl: {
-        isNewPreStep: false,
-        isNewMainStep: false,
-        isNewAfterStep: false,
         isEditStep: false,
         isCoding: false,
-        preStepId: '',
-        mainStepId: '',
-        afterStepId: '',
+        desc: null,
+        relationType: 0,
         selectedStep: {}
       }
     }
@@ -93,8 +100,23 @@ export default {
     }
   },
   created: function () {
-    if (this.isEdit) {
-      // this.queryDetail()
+    if (this.name === '@Test') {
+      this.pageControl.desc = '用例主体，相当于@Test，步骤会按列表显示的顺序执行'
+      this.pageControl.relationType = 2
+    } else if (this.name === '@BeforeTest') {
+      this.pageControl.desc = '前置步骤，相当于@BeforeTest，在@Test前执行'
+      this.pageControl.relationType = 1
+    } else if (this.name === '@AfterTest') {
+      this.pageControl.desc = '收尾步骤，相当于@AfterTest，在@Test后执行'
+      this.pageControl.relationType = 3
+    } else if (this.name === '@BeforeSuite') {
+      this.pageControl.desc = '套件总前置步骤，相当于@BeforeSuite，在@BeforeTest前执行'
+      this.pageControl.relationType = 4
+    } else if (this.name === '@AfterSuite') {
+      this.pageControl.desc = '套件总收尾步骤，相当于@AfterSuite，在@AfterTest后执行'
+      this.pageControl.relationType = 5
+    } else {
+      this.$message.error('未知步骤类型')
     }
   },
   methods: {
@@ -219,46 +241,41 @@ export default {
     deleteStep (data) {
       removeRelatedStepAPI(data).then(response => {
         if (response.data.success === true) {
+          // this.query()
           this.$message.success('删除步骤成功')
         }
       })
     },
-    createRelatedStep (sequence, type, stepId) {
+    createRelatedStep (sequence, type) {
       createRelatedStepAPI({
         caseId: this.caseId,
         sequence: sequence,
-        type: type,
-        stepId: stepId
+        type: type
       }).then(response => {
         if (response.data.success === true) {
-          // this.queryDetail()
+          if (this.stepList == null) {
+            this.stepList = [response.data.data]
+          } else {
+            this.stepList.push(response.data.data)
+          }
           this.$message.success('创建关联步骤成功，请自行编辑')
         }
       })
-      this.pageControl.isNewPreStep = false
-      this.pageControl.isNewMainStep = false
-      this.pageControl.isNewAfterStep = false
-      this.pageControl.preStepId = ''
-      this.pageControl.mainStepId = ''
-      this.pageControl.afterStepId = ''
     },
-    changeUiMode () {
-      changeUiModeAPI(this.pageData).then(response => {
-        if (response.data.success === true) {
-          // this.queryDetail()
-          this.$message.success('检查通过')
-        }
-      })
-    },
+    // changeUiMode () {
+    //   changeUiModeAPI(this.pageData).then(response => {
+    //     if (response.data.success === true) {
+    //       this.query()
+    //       this.$message.success('检查通过')
+    //     }
+    //   })
+    // },
     changeScriptMode () {
       changeScriptModeAPI(this.pageData).then(response => {
         if (response.data.success === true) {
           this.$message.success('同步成功')
         }
       })
-    },
-    update () {
-      console.info('update')
     },
     edit (row, event, column) {
       console.info(row.autoStep)

@@ -3,14 +3,12 @@
     <el-row style="height: 15px">
       <el-col :span="15">
         <span>编辑测试用例</span>
-        <el-tooltip v-if="pageData.type === 2" content="此用例包含ui步骤，将视为ui用例">
-          <el-tag size="small">ui</el-tag>
-        </el-tooltip>
         <el-button v-if="pageControl.isCoding===false" @click="pageControl.isCoding=true" size="small">coding</el-button>
         <el-button v-else @click="pageControl.isCoding=false" size="small">ui</el-button>
+        <el-button @click="changeUiMode" type="text">检查并同步</el-button>
       </el-col>
       <el-col :span="8" style="text-align: right">
-        <el-button @click="use()" type="primary" size="small">执行</el-button>
+        <el-button @click="use" type="primary" size="small">执行</el-button>
         <el-popconfirm title="用例将被删除，确定吗？" @confirm="remove">
           <template #reference>
             <el-button size="small">删除</el-button>
@@ -33,58 +31,9 @@
                         @change="update" value-format="yyyy-MM-dd" size="small"
                         style="width: 200px"></el-date-picker>
       </el-form-item>
-      <!--主要步骤-->
-      <!--coding模式-->
-      <div v-if="pageControl.isCoding">
-        <el-divider content-position="right">
-          <el-button @click="changeUiMode" type="text">检查并同步</el-button>
-          <span>主要步骤@Test</span>
-          <el-tooltip class="item" effect="dark" content="用例主体，相当于@Test，步骤会按列表显示的顺序执行" placement="top-start">
-            <i class="el-icon-info"></i>
-          </el-tooltip>
-        </el-divider>
-        <el-input @change="update" type="textarea" :autosize="{minRows: 13, maxRows: 200}" placeholder="请输入脚本" v-model="pageData.mainSteps"></el-input>
-      </div>
-      <!--ui模式-->
-      <div v-else>
-        <el-divider content-position="right">
-          <span>主要步骤</span>
-          <el-tooltip class="item" effect="dark" content="用例主体，相当于@Test，步骤会按列表显示的顺序执行" placement="top-start">
-            <i class="el-icon-info"></i>
-          </el-tooltip>
-          <el-divider direction="vertical"></el-divider>
-          <el-button @click="createRelatedStep(pageData.mainStepList !== null ? pageData.mainStepList.length + 1 : 1, 2, null)" type="text">新增</el-button>
-          <el-button v-if="pageData.mainStepList !== null && pageData.mainStepList.length !== 0" @click="deleteStep(pageData.mainStepList.pop())" type="text">删除</el-button>
-        </el-divider>
-        <!--列表-->
-        <el-table border :data="pageData.mainStepList" @row-click="edit" :row-style="{cursor: 'pointer'}" size="mini" style="width: 100%">
-          <el-table-column label="步骤简介" width="200" show-overflow-tooltip>
-            <template slot-scope="scope">
-              {{getStepDesc(scope.row.autoStep)}}
-            </template>
-          </el-table-column>
-          <el-table-column label="注释" width="100">
-            <template slot-scope="scope">
-              {{scope.row.autoStep.name}}
-            </template>
-          </el-table-column>
-          <el-table-column label="预期结果" width="150" show-overflow-tooltip>
-            <template slot-scope="scope">
-              <span>{{getExpect(scope.row.autoStep)}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="实际结果" show-overflow-tooltip>
-            <template slot-scope="scope">
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
-      <tl-step-list :case-id="pageData.caseId" :step-list="pageData.mainStepList" :is-coding="pageControl.isCoding"></tl-step-list>
+      <!--步骤主体-->
+      <tl-step-list name="@Test" :case-id="pageData.caseId" :step-list="pageData.mainStepList" :is-coding="pageControl.isCoding" :script="pageData.mainSteps" :update="update"></tl-step-list>
     </el-form>
-    <!--弹窗-->
-    <el-dialog v-if="pageControl.isEditStep" :visible.sync="pageControl.isEditStep" title="编辑步骤" width="65%" append-to-body>
-      <tl-step-detail :case-step="pageControl.selectedStep" :visible.sync="pageControl.isEditStep" is-case-step></tl-step-detail>
-    </el-dialog>
   </div>
 </template>
 
@@ -144,10 +93,10 @@ export default {
     }
   },
   watch: {
-    'pageControl.isEditStep': function () {
-      if (!this.pageControl.isEditStep) {
-        // 不用了
-        // this.checkCaseType()
+    '$store.state.isQueryCase': function (newVal, oldVal) {
+      console.info('isQueryCase')
+      if (newVal === true) {
+        this.queryDetail()
       }
     }
   },
@@ -346,6 +295,7 @@ export default {
       })
     },
     queryDetail () {
+      this.$store.state.isQueryCase = false
       queryDetailAPI({
         caseId: this.caseId
       }).then(response => {
