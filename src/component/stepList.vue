@@ -8,7 +8,7 @@
           <i class="el-icon-info"></i>
         </el-tooltip>
       </el-divider>
-      <el-input @change="update" type="textarea" :autosize="{minRows: 13, maxRows: 200}" placeholder="请输入脚本" v-model="script"></el-input>
+      <el-input @change="updateScript" type="textarea" :autosize="{minRows: 13, maxRows: 200}" placeholder="请输入脚本" v-model="pageData.script"></el-input>
     </div>
     <!--ui模式-->
     <div v-else>
@@ -19,10 +19,10 @@
         </el-tooltip>
         <el-divider direction="vertical"></el-divider>
         <el-button @click="createRelatedStep" type="text">新增</el-button>
-        <el-button v-if="stepList !== null && stepList.length !== 0" @click="deleteStep(stepList.pop())" type="text">删除</el-button>
+        <el-button v-if="pageData.stepList !== null && pageData.stepList.length !== 0" @click="deleteStep" type="text">删除</el-button>
       </el-divider>
       <!--列表-->
-      <el-table border :data="stepList" @row-click="edit" :row-style="{cursor: 'pointer'}" size="mini" style="width: 100%">
+      <el-table border :data="pageData.stepList" @row-click="edit" :row-style="{cursor: 'pointer'}" size="mini" style="width: 100%">
         <el-table-column label="步骤简介" width="200" show-overflow-tooltip>
           <template slot-scope="scope">
             {{getStepDesc(scope.row.autoStep)}}
@@ -40,6 +40,7 @@
         </el-table-column>
         <el-table-column label="实际结果" show-overflow-tooltip>
           <template slot-scope="scope">
+            {{scope.row.autoStep.result}}
           </template>
         </el-table-column>
       </el-table>
@@ -52,82 +53,102 @@
 </template>
 
 <script>
-import {createRelatedStepAPI, removeRelatedStepAPI, changeScriptModeAPI} from '@/api/autoCase'
+import {createRelatedStepAPI, updateScriptAPI, removeRelatedStepAPI} from '@/api/autoCase'
 import tlStepDetail from '@/component/stepDetail'
 
 export default {
   components: {tlStepDetail},
   props: {
-    caseId: {
-      type: Number,
-      default: 0
-    },
     name: {
-      type: String,
-      default: null
+      type: String
     },
-    script: {
-      type: String,
-      default: null
-    },
-    isCoding: {
-      type: Boolean,
-      default: false
-    },
-    stepList: {},
-    update: {
-      type: Function,
+    // isCoding: {
+    //   type: Boolean,
+    //   default: false
+    // },
+    autoCase: {
+      type: Object,
       default: null
     }
   },
   data () {
     return {
-      pageData: {},
+      pageData: {
+        caseId: 0,
+        supperCaseId: 0,
+        type: 0,
+        script: '',
+        stepList: [],
+        projectId: 0
+      },
       pageControl: {
         isEditStep: false,
-        isCoding: false,
+        isCoding: this.$store.state.isCoding,
         desc: null,
-        relationType: 0,
+        script: '',
+        // relationType: 0,
         selectedStep: {}
       }
     }
   },
+  computed: {
+    isCoding () {
+      return this.$store.state.isCoding
+    }
+  },
   watch: {
-    'pageControl.isEditStep': function () {
-      if (!this.pageControl.isEditStep) {
-        // this.checkCaseType()
-      }
+    '$store.state.isCoding': function (val) {
+      this.pageControl.isCoding = this.$store.state.isCoding
+      console.info('watch')
     }
   },
   created: function () {
+    this.pageData.caseId = this.autoCase.caseId
+    this.pageData.supperCaseId = this.autoCase.supperCaseId
+    this.pageData.projectId = this.autoCase.projectId
     if (this.name === '@Test') {
       this.pageControl.desc = '用例主体，相当于@Test，步骤会按列表显示的顺序执行'
-      this.pageControl.relationType = 2
-    } else if (this.name === '@BeforeTest') {
+      this.pageData.type = 2
+      this.pageData.script = this.autoCase.test
+      this.pageData.stepList = this.autoCase.testList
+    } else if (this.name === '@BeforeClass') {
       this.pageControl.desc = '前置步骤，相当于@BeforeTest，在@Test前执行'
-      this.pageControl.relationType = 1
-    } else if (this.name === '@AfterTest') {
+      this.pageData.type = 1
+      this.pageData.script = this.autoCase.beforeClass
+      this.pageData.stepList = this.autoCase.beforeClassList
+    } else if (this.name === '@AfterClass') {
       this.pageControl.desc = '收尾步骤，相当于@AfterTest，在@Test后执行'
-      this.pageControl.relationType = 3
+      this.pageData.type = 3
+      this.pageData.script = this.autoCase.afterClass
+      this.pageData.stepList = this.autoCase.afterClassList
     } else if (this.name === '@BeforeSuite') {
       this.pageControl.desc = '套件总前置步骤，相当于@BeforeSuite，在@BeforeTest前执行'
-      this.pageControl.relationType = 4
+      this.pageData.type = 4
+      this.pageData.script = this.autoCase.beforeSuite
+      this.pageData.stepList = this.autoCase.beforeSuiteList
     } else if (this.name === '@AfterSuite') {
       this.pageControl.desc = '套件总收尾步骤，相当于@AfterSuite，在@AfterTest后执行'
-      this.pageControl.relationType = 5
+      this.pageData.type = 5
+      this.pageData.script = this.autoCase.afterSuite
+      this.pageData.stepList = this.autoCase.afterSuiteList
     } else {
       this.$message.error('未知步骤类型')
     }
+    console.info('this.autoCase2')
+    console.info(this.autoCase)
+    console.info(this.autoCase.caseId)
+    console.info(this.autoCase.testList)
   },
   methods: {
     getExpect (step) {
       if (step.moduleType === 7) {
         return step.parameter2
       } else {
-        return '不校验'
+        return '--'
       }
     },
     getStepDesc (step) {
+      console.info(step)
       switch (step.moduleType) {
         case 1: // PO
           switch (step.methodType) {
@@ -238,42 +259,34 @@ export default {
           return '未知步骤'
       }
     },
-    deleteStep (data) {
-      removeRelatedStepAPI(data).then(response => {
+    deleteStep () {
+      removeRelatedStepAPI(this.pageData.stepList.pop()).then(response => {
         if (response.data.success === true) {
-          // this.query()
           this.$message.success('删除步骤成功')
         }
       })
     },
     createRelatedStep () {
       createRelatedStepAPI({
-        caseId: this.caseId,
-        sequence: this.stepList !== null ? this.stepList.length + 1 : 1,
-        type: this.pageControl.relationType
+        caseId: this.pageData.caseId,
+        sequence: this.pageData.stepList !== null ? this.pageData.stepList.length + 1 : 1,
+        type: this.pageData.type
       }).then(response => {
         if (response.data.success === true) {
-          if (this.stepList == null) {
-            this.stepList = [response.data.data]
+          if (this.pageData.stepList == null) {
+            this.pageData.stepList = [response.data.data]
           } else {
-            this.stepList.push(response.data.data)
+            this.pageData.stepList.push(response.data.data)
           }
           this.$message.success('创建关联步骤成功，请自行编辑')
         }
       })
     },
-    // changeUiMode () {
-    //   changeUiModeAPI(this.pageData).then(response => {
-    //     if (response.data.success === true) {
-    //       this.query()
-    //       this.$message.success('检查通过')
-    //     }
-    //   })
-    // },
-    changeScriptMode () {
-      changeScriptModeAPI(this.pageData).then(response => {
+    updateScript () {
+      updateScriptAPI(this.pageData).then(response => {
         if (response.data.success === true) {
-          this.$message.success('同步成功')
+          this.pageData = response.data.data
+          this.$message.success('脚本已更新')
         }
       })
     },

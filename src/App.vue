@@ -69,6 +69,12 @@ export default {
     console.info('创建实例')
     // 默认从服务器为localhost
     this.$store.state.slaveHost = 'http://localhost:9011/'
+    // 取cookie中的模式信息
+    if (this.$cookies.get('isCoding')) {
+      this.$store.state.isCoding = this.$cookies.get('isCoding')
+    } else {
+      this.$store.state.isCoding = false
+    }
     // 如cookie中有登录信息，则换成cookie的账号
     if (this.$cookies.get('loginInfo')) {
       this.$store.state.loginInfo = this.$cookies.get('loginInfo')

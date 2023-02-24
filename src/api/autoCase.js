@@ -73,6 +73,14 @@ export function updateConfigAPI (data) {
   })
 }
 
+export function updateScriptAPI (data) {
+  return api({
+    url: 'autoCase/updateScript',
+    method: 'put',
+    data: data
+  })
+}
+
 export function changeUiModeAPI (data) {
   return api({
     url: 'autoCase/changeUiMode',
