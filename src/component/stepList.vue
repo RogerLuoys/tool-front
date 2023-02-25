@@ -62,10 +62,10 @@ export default {
     name: {
       type: String
     },
-    // isCoding: {
-    //   type: Boolean,
-    //   default: false
-    // },
+    isCoding: {
+      type: Boolean,
+      default: false
+    },
     autoCase: {
       type: Object,
       default: null
@@ -91,55 +91,49 @@ export default {
       }
     }
   },
-  computed: {
-    isCoding () {
-      return this.$store.state.isCoding
-    }
-  },
   watch: {
-    '$store.state.isCoding': function (val) {
+    'autoCase': function (val) {
       this.pageControl.isCoding = this.$store.state.isCoding
-      console.info('watch')
+      this.setPageData()
     }
   },
   created: function () {
-    this.pageData.caseId = this.autoCase.caseId
-    this.pageData.supperCaseId = this.autoCase.supperCaseId
-    this.pageData.projectId = this.autoCase.projectId
-    if (this.name === '@Test') {
-      this.pageControl.desc = '用例主体，相当于@Test，步骤会按列表显示的顺序执行'
-      this.pageData.type = 2
-      this.pageData.script = this.autoCase.test
-      this.pageData.stepList = this.autoCase.testList
-    } else if (this.name === '@BeforeClass') {
-      this.pageControl.desc = '前置步骤，相当于@BeforeTest，在@Test前执行'
-      this.pageData.type = 1
-      this.pageData.script = this.autoCase.beforeClass
-      this.pageData.stepList = this.autoCase.beforeClassList
-    } else if (this.name === '@AfterClass') {
-      this.pageControl.desc = '收尾步骤，相当于@AfterTest，在@Test后执行'
-      this.pageData.type = 3
-      this.pageData.script = this.autoCase.afterClass
-      this.pageData.stepList = this.autoCase.afterClassList
-    } else if (this.name === '@BeforeSuite') {
-      this.pageControl.desc = '套件总前置步骤，相当于@BeforeSuite，在@BeforeTest前执行'
-      this.pageData.type = 4
-      this.pageData.script = this.autoCase.beforeSuite
-      this.pageData.stepList = this.autoCase.beforeSuiteList
-    } else if (this.name === '@AfterSuite') {
-      this.pageControl.desc = '套件总收尾步骤，相当于@AfterSuite，在@AfterTest后执行'
-      this.pageData.type = 5
-      this.pageData.script = this.autoCase.afterSuite
-      this.pageData.stepList = this.autoCase.afterSuiteList
-    } else {
-      this.$message.error('未知步骤类型')
-    }
-    console.info('this.autoCase2')
-    console.info(this.autoCase)
-    console.info(this.autoCase.caseId)
-    console.info(this.autoCase.testList)
+    this.setPageData()
   },
   methods: {
+    setPageData () {
+      this.pageData.caseId = this.autoCase.caseId
+      this.pageData.supperCaseId = this.autoCase.supperCaseId
+      this.pageData.projectId = this.autoCase.projectId
+      if (this.name === '@Test') {
+        this.pageControl.desc = '用例主体，相当于@Test，步骤会按列表显示的顺序执行'
+        this.pageData.type = 2
+        this.pageData.script = this.autoCase.testScript
+        this.pageData.stepList = this.autoCase.testList
+      } else if (this.name === '@BeforeClass') {
+        this.pageControl.desc = '前置步骤，相当于@BeforeTest，在@Test前执行'
+        this.pageData.type = 1
+        this.pageData.script = this.autoCase.beforeClassScript
+        this.pageData.stepList = this.autoCase.beforeClassList
+      } else if (this.name === '@AfterClass') {
+        this.pageControl.desc = '收尾步骤，相当于@AfterTest，在@Test后执行'
+        this.pageData.type = 3
+        this.pageData.script = this.autoCase.afterClassScript
+        this.pageData.stepList = this.autoCase.afterClassList
+      } else if (this.name === '@BeforeSuite') {
+        this.pageControl.desc = '套件总前置步骤，相当于@BeforeSuite，在@BeforeTest前执行'
+        this.pageData.type = 4
+        this.pageData.script = this.autoCase.beforeSuiteScript
+        this.pageData.stepList = this.autoCase.beforeSuiteList
+      } else if (this.name === '@AfterSuite') {
+        this.pageControl.desc = '套件总收尾步骤，相当于@AfterSuite，在@AfterTest后执行'
+        this.pageData.type = 5
+        this.pageData.script = this.autoCase.afterSuiteScript
+        this.pageData.stepList = this.autoCase.afterSuiteList
+      } else {
+        this.$message.error('未知步骤类型')
+      }
+    },
     getExpect (step) {
       if (step.moduleType === 7) {
         return step.parameter2

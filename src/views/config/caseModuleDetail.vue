@@ -74,11 +74,11 @@
         </template>
       </el-form-item>
       <!--前置步骤-->
-      <tl-step-list name="@BeforeSuite" :case-id="pageData.caseId" :step-list="pageData.beforeSuiteList" :is-coding="pageControl.isCoding" :script="pageData.mainSteps" :update="update"></tl-step-list>
-      <tl-step-list name="@BeforeTest" :case-id="pageData.caseId" :step-list="pageData.beforeClassList" :is-coding="pageControl.isCoding" :script="pageData.mainSteps" :update="update"></tl-step-list>
+      <tl-step-list name="@BeforeSuite" :autoCase="pageData" :is-coding="pageControl.isCoding"></tl-step-list>
+      <tl-step-list name="@BeforeClass" :autoCase="pageData" :is-coding="pageControl.isCoding"></tl-step-list>
       <!--后置步骤-->
-      <tl-step-list name="@AfterTest" :case-id="pageData.caseId" :step-list="pageData.afterClassList" :is-coding="pageControl.isCoding" :script="pageData.mainSteps" :update="update"></tl-step-list>
-      <tl-step-list name="@AfterSuite" :case-id="pageData.caseId" :step-list="pageData.afterSuiteList" :is-coding="pageControl.isCoding" :script="pageData.mainSteps" :update="update"></tl-step-list>
+      <tl-step-list name="@AfterClass" :autoCase="pageData" :is-coding="pageControl.isCoding"></tl-step-list>
+      <tl-step-list name="@AfterSuite" :autoCase="pageData" :is-coding="pageControl.isCoding"></tl-step-list>
     </el-form>
     <!--弹窗-->
     <!--编辑步骤-->

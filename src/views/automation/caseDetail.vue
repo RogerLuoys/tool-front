@@ -3,8 +3,8 @@
     <el-row style="height: 15px">
       <el-col :span="15">
         <span>编辑测试用例</span>
-        <el-button v-if="$store.state.isCoding===false" @click="$store.state.isCoding=true" size="small">coding</el-button>
-        <el-button v-else @click="$store.state.isCoding=false" size="small">ui</el-button>
+        <el-button v-if="pageControl.isCoding===false" @click="pageControl.isCoding=true" size="small">coding</el-button>
+        <el-button v-else @click="pageControl.isCoding=false" size="small">ui</el-button>
 <!--        <el-button @click="changeUiMode" type="text">检查并同步</el-button>-->
       </el-col>
       <el-col :span="8" style="text-align: right">
@@ -32,7 +32,7 @@
                         style="width: 200px"></el-date-picker>
       </el-form-item>
       <!--步骤主体-->
-      <tl-step-list v-if="pageData.caseId !== null" name="@Test" :autoCase="pageData" :is-coding="pageControl.isCoding"></tl-step-list>
+      <tl-step-list name="@Test" :autoCase="pageData" :is-coding="pageControl.isCoding"></tl-step-list>
     </el-form>
   </div>
 </template>
@@ -47,10 +47,6 @@ export default {
     caseId: {
       type: Number,
       default: 0
-    },
-    isEdit: {
-      type: Boolean,
-      default: true
     },
     visible: {
       type: Boolean,
@@ -91,22 +87,16 @@ export default {
       }
     }
   },
-  watch: {
-    '$store.state.isQueryCase': function (newVal, oldVal) {
-      console.info('isQueryCase')
-      if (newVal === true) {
-        this.queryDetail()
-      }
-    }
-  },
+  // watch: {
+  //   '$store.state.isQueryCase': function (newVal, oldVal) {
+  //     console.info('isQueryCase')
+  //     if (newVal === true) {
+  //       this.queryDetail()
+  //     }
+  //   }
+  // },
   created: function () {
-    if (this.isEdit) {
-      this.queryDetail()
-      console.info('detail')
-      console.info(this.pageData.toString())
-      console.info(this.pageData.caseId)
-      console.info(this.pageData.testList)
-    }
+    this.queryDetail()
   },
   methods: {
     getExpect (step) {
