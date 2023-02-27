@@ -137,7 +137,24 @@ export default {
         webDriverType: 1,
         preStepId: '',
         afterStepId: '',
-        selectedStep: {}
+        selectedStep: {},
+        options: [
+          {value: '--no-sandbox', desc: '解决DevToolsActivePort文件不存在的报错'},
+          {value: 'url=data:,', desc: '设置启动浏览器空白页'},
+          {value: '--start-maximized', desc: '浏览器最大化'},
+          {value: '--disable-gpu', desc: '谷歌禁用GPU加速'},
+          {value: '--hide-scrollbars', desc: '隐藏滚动条'},
+          {value: '--headless', desc: '不打开浏览器，后台运行'},
+          {value: 'disable-infobars', desc: '去掉Chrome提示受到自动软件控制'},
+          {value: '--no-sandbox', desc: '解决DevToolsActivePort文件不存在的报错'},
+          {value: '--no-sandbox', desc: '解决DevToolsActivePort文件不存在的报错'},
+          {value: '--no-sandbox', desc: '解决DevToolsActivePort文件不存在的报错'},
+          {value: '--no-sandbox', desc: '解决DevToolsActivePort文件不存在的报错'},
+          {value: '--no-sandbox', desc: '解决DevToolsActivePort文件不存在的报错'},
+          {value: '--no-sandbox', desc: '解决DevToolsActivePort文件不存在的报错'},
+          {value: '--no-sandbox', desc: '解决DevToolsActivePort文件不存在的报错'},
+          {value: '--no-sandbox', desc: '解决DevToolsActivePort文件不存在的报错'}
+        ]
       }
     }
   },

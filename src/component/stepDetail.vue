@@ -53,6 +53,10 @@
                 <el-option key="2" label="post" :value="2"></el-option>
                 <el-option key="3" label="put" :value="3"></el-option>
                 <el-option key="4" label="delete" :value="4"></el-option>
+                <el-option key="5" label="getForHeader" :value="5"></el-option>
+                <el-option key="6" label="postForHeader" :value="6"></el-option>
+                <el-option key="7" label="setDefaultHeader" :value="7"></el-option>
+                <el-option key="8" label="setDefaultUrl" :value="8"></el-option>
               </el-select>
             </template>
             <!--UI类型-->

@@ -28,17 +28,17 @@
             {{getStepDesc(scope.row.autoStep)}}
           </template>
         </el-table-column>
-        <el-table-column label="注释" width="100">
+        <el-table-column label="注释" width="100" show-overflow-tooltip>
           <template slot-scope="scope">
             {{scope.row.autoStep.name}}
           </template>
         </el-table-column>
-        <el-table-column label="预期结果" width="150" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{getExpect(scope.row.autoStep)}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="实际结果" show-overflow-tooltip>
+<!--        <el-table-column label="预期结果" width="150" show-overflow-tooltip>-->
+<!--          <template slot-scope="scope">-->
+<!--            <span>{{getExpect(scope.row.autoStep)}}</span>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
+        <el-table-column label="执行结果" show-overflow-tooltip>
           <template slot-scope="scope">
             {{scope.row.autoStep.result}}
           </template>
@@ -134,13 +134,20 @@ export default {
         this.$message.error('未知步骤类型')
       }
     },
-    getExpect (step) {
-      if (step.moduleType === 7) {
-        return step.parameter2
-      } else {
-        return '--'
-      }
-    },
+    // getExpect (step) {
+    //   if (step.moduleType === 7) {
+    //     return step.parameter2
+    //   } else {
+    //     return '--'
+    //   }
+    // },
+    // getActual (step) {
+    //   if (step.moduleType === 7) {
+    //     return step.parameter1
+    //   } else {
+    //     return step.result
+    //   }
+    // },
     getStepDesc (step) {
       console.info(step)
       switch (step.moduleType) {
