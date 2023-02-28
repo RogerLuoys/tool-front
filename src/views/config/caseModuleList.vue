@@ -18,11 +18,6 @@
     <el-table border :data="pageData.list" @row-click="edit" :row-style="{cursor: 'pointer'}" size="mini" height="calc(66.4vh)" style="width: 100%;">
       <el-table-column prop="caseId" label="编号" width="120">
       </el-table-column>
-<!--      <el-table-column prop="type" label="状态" width="90">-->
-<!--        <template #default="scope">-->
-<!--          <el-tag size="small">{{ getStatus(scope.row.status) }}</el-tag>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
       <el-table-column prop="name" label="标题" width="180" show-overflow-tooltip>
       </el-table-column>
       <el-table-column prop="description" label="说明" show-overflow-tooltip>

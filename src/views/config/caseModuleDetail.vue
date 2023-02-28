@@ -59,6 +59,17 @@
                 <el-input v-model="pageData.argumentList[index].value" @change="updateParam(pageData.argumentList[index])" size="mini" placeholder="请输入参数值"
                           maxlength="30" show-word-limit>
                 </el-input>
+                <el-autocomplete
+                  v-model="pageData.argumentList[index].value"
+                  :fetch-suggestions="querySearch" :trigger-on-focus="false"
+                  placeholder="请输入参数值" size="mini"
+                  @change="updateParam(pageData.argumentList[index])"
+                  @select="handleSelect" style="width: 300px">
+                  <template slot-scope="{ item }">
+                    <div class="name">{{ item.value }}</div>
+                    <div class="addr">{{ item.desc }}</div>
+                  </template>
+                </el-autocomplete>
               </el-col>
               <el-col :span="4">
                 <el-button @click="deleteUiParam(index)" size="mini">删除</el-button>
@@ -72,6 +83,16 @@
             <el-button @click="newUiParam()" type="primary" size="mini" icon="el-icon-plus" plain>新增参数</el-button>
           </div>
         </template>
+        <el-autocomplete
+          v-model="pageControl.state"
+          :fetch-suggestions="querySearch"
+          placeholder="请输入内容"
+          @select="handleSelect">
+          <template slot-scope="{ item }">
+            <div class="name">{{ item.value }}</div>
+            <div class="addr">{{ item.desc }}</div>
+          </template>
+        </el-autocomplete>
       </el-form-item>
       <!--前置步骤-->
       <tl-step-list name="@BeforeSuite" :autoCase="pageData" :is-coding="pageControl.isCoding"></tl-step-list>
@@ -116,7 +137,7 @@ export default {
         name: 'name',
         description: '',
         parameterList: null,
-        argumentList: null,
+        argumentList: [],
         finishTime: '',
         maxTime: 1,
         ownerId: '123',
@@ -138,18 +159,20 @@ export default {
         preStepId: '',
         afterStepId: '',
         selectedStep: {},
+        restaurants: [],
+        state: '',
         options: [
           {value: '--no-sandbox', desc: '解决DevToolsActivePort文件不存在的报错'},
           {value: 'url=data:,', desc: '设置启动浏览器空白页'},
           {value: '--start-maximized', desc: '浏览器最大化'},
           {value: '--disable-gpu', desc: '谷歌禁用GPU加速'},
           {value: '--hide-scrollbars', desc: '隐藏滚动条'},
-          {value: '--headless', desc: '不打开浏览器，后台运行'},
-          {value: 'disable-infobars', desc: '去掉Chrome提示受到自动软件控制'},
-          {value: '--no-sandbox', desc: '解决DevToolsActivePort文件不存在的报错'},
-          {value: '--no-sandbox', desc: '解决DevToolsActivePort文件不存在的报错'},
-          {value: '--no-sandbox', desc: '解决DevToolsActivePort文件不存在的报错'},
-          {value: '--no-sandbox', desc: '解决DevToolsActivePort文件不存在的报错'},
+          {value: '--headless', desc: '后台运行浏览器不提供可视化页面，linux下如果系统不支持可视化不加这条会启动失败'},
+          {value: '--disable-infobars', desc: '去掉Chrome提示受到自动软件控制'},
+          {value: 'window-size=1920x1280', desc: '设置分辨率'},
+          {value: 'blink-settings=imagesEnabled=false', desc: '不加载图片'},
+          {value: '--disable-javascript', desc: '禁用JavaScript'},
+          {value: '--user-agent=""', desc: '设置请求头的User-Agent'},
           {value: '--no-sandbox', desc: '解决DevToolsActivePort文件不存在的报错'},
           {value: '--no-sandbox', desc: '解决DevToolsActivePort文件不存在的报错'},
           {value: '--no-sandbox', desc: '解决DevToolsActivePort文件不存在的报错'},
@@ -171,30 +194,36 @@ export default {
     }
   },
   methods: {
-    getAssertType (type) {
-      switch (type) {
-        case -1:
-          return '不校验'
-        case 1:
-          return 'equals'
-        case 2:
-          return 'contains'
-        default:
-          return '未知类型'
+    querySearch (queryString, cb) {
+      let restaurants = this.pageControl.options
+      let results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants
+      // 调用 callback 返回建议列表的数据
+      cb(results)
+    },
+    createFilter (queryString) {
+      return (restaurant) => {
+        return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
       }
+    },
+    handleSelect (item) {
+      console.log(item)
     },
     newParam () {
       let config = {name: 'default', value: '', type: 1, caseId: this.pageData.caseId}
-      if (this.pageData.parameterList === null) {
-        this.pageData.parameterList = [config]
-      } else {
-        this.pageData.parameterList.push(config)
-      }
-      // this.pageControl.paramName = ''
-      // this.pageControl.isNewParam = false
+      // if (this.pageData.parameterList === null) {
+      //   this.pageData.parameterList = [config]
+      // } else {
+      //   this.pageData.parameterList.push(config)
+      // }
       quickCreateConfigAPI(config).then(response => {
         if (response.data.success === true) {
           this.$message.success('添加配置成功')
+          config.configId = response.data.data
+          if (this.pageData.argumentList === null) {
+            this.pageData.argumentList = [config]
+          } else {
+            this.pageData.argumentList.push(config)
+          }
         }
       })
     },
@@ -209,16 +238,15 @@ export default {
     },
     newUiParam () {
       let config = {name: 'default', value: '', type: this.pageControl.webDriverType, caseId: this.pageData.caseId}
-      if (this.pageData.argumentList === null) {
-        this.pageData.argumentList = [config]
-      } else {
-        this.pageData.argumentList.push(config)
-      }
-      // this.pageControl.paramName = ''
-      // this.pageControl.isNewParam = false
       quickCreateConfigAPI(config).then(response => {
         if (response.data.success === true) {
           this.$message.success('添加配置成功')
+          config.configId = response.data.data
+          if (this.pageData.argumentList === null) {
+            this.pageData.argumentList = [config]
+          } else {
+            this.pageData.argumentList.push(config)
+          }
         }
       })
     },
@@ -338,5 +366,19 @@ export default {
 </script>
 
 <style scoped>
-
+li {
+  line-height: normal;
+  padding: 7px;
+}
+.name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.addr {
+  font-size: 12px;
+  color: #b4b4b4;
+}
+.highlighted .addr {
+  color: #ddd;
+}
 </style>
