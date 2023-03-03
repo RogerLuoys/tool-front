@@ -3,9 +3,12 @@
     <el-row style="height: 15px">
       <el-col :span="15">
         <span>编辑测试用例</span>
-        <el-button v-if="pageControl.isCoding===false" @click="pageControl.isCoding=true" size="small">coding</el-button>
-        <el-button v-else @click="pageControl.isCoding=false" size="small">ui</el-button>
-<!--        <el-button @click="changeUiMode" type="text">检查并同步</el-button>-->
+        <el-button v-if="pageControl.isCoding===true" @click="changeCodeMode(false)" type="text">当前模式:code</el-button>
+        <el-button v-else @click="changeCodeMode(true)" type="text">当前模式:ui</el-button>
+<!--        <el-radio-group v-model="pageControl.isCoding" @change="$store.state.isCoding=pageControl.isCoding" size="mini">-->
+<!--          <el-radio :label="false">ui</el-radio>-->
+<!--          <el-radio :label="true">code</el-radio>-->
+<!--        </el-radio-group>-->
       </el-col>
       <el-col :span="8" style="text-align: right">
         <el-button @click="use" type="primary" size="small">执行</el-button>
@@ -96,6 +99,7 @@ export default {
   //   }
   // },
   created: function () {
+    this.pageControl.isCoding = this.$store.state.isCoding
     this.queryDetail()
   },
   methods: {
@@ -263,6 +267,10 @@ export default {
           this.$message.success('编辑用例成功')
         }
       })
+    },
+    changeCodeMode (mode) {
+      this.pageControl.isCoding = mode
+      this.$store.state.isCoding = mode
     },
     changeUiMode () {
       changeUiModeAPI(this.pageData).then(response => {

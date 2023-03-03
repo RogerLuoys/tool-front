@@ -32,7 +32,7 @@
             </el-col>
             <el-col :span="11">
               <el-input v-model="pageData.parameterList[index].value" @change="updateParam(pageData.parameterList[index])" size="mini" placeholder="请输入参数值"
-                        maxlength="30" show-word-limit>
+                        maxlength="200" show-word-limit>
               </el-input>
             </el-col>
             <el-col :span="4">
@@ -57,19 +57,19 @@
             <el-row :gutter="2">
               <el-col :span="19">
                 <el-input v-model="pageData.argumentList[index].value" @change="updateParam(pageData.argumentList[index])" size="mini" placeholder="请输入参数值"
-                          maxlength="30" show-word-limit>
+                          maxlength="200" show-word-limit>
                 </el-input>
-                <el-autocomplete
-                  v-model="pageData.argumentList[index].value"
-                  :fetch-suggestions="querySearch" :trigger-on-focus="false"
-                  placeholder="请输入参数值" size="mini"
-                  @change="updateParam(pageData.argumentList[index])"
-                  @select="handleSelect" style="width: 300px">
-                  <template slot-scope="{ item }">
-                    <div class="name">{{ item.value }}</div>
-                    <div class="addr">{{ item.desc }}</div>
-                  </template>
-                </el-autocomplete>
+<!--                <el-autocomplete-->
+<!--                  v-model="pageData.argumentList[index].value"-->
+<!--                  :fetch-suggestions="querySearch" :trigger-on-focus="false"-->
+<!--                  placeholder="请输入参数值" size="mini"-->
+<!--                  @change="updateParam(pageData.argumentList[index])"-->
+<!--                  @select="handleSelect" style="width: 300px">-->
+<!--                  <template slot-scope="{ item }">-->
+<!--                    <div class="name">{{ item.value }}</div>-->
+<!--                    <div class="addr">{{ item.desc }}</div>-->
+<!--                  </template>-->
+<!--                </el-autocomplete>-->
               </el-col>
               <el-col :span="4">
                 <el-button @click="deleteUiParam(index)" size="mini">删除</el-button>
@@ -81,18 +81,25 @@
           </div>
           <div>
             <el-button @click="newUiParam()" type="primary" size="mini" icon="el-icon-plus" plain>新增参数</el-button>
+            <el-popover placement="left" width="550" trigger="click">
+              <el-table :data="pageControl.options" height="400">
+                <el-table-column width="300" property="value" label="driver启动项"></el-table-column>
+                <el-table-column property="desc" label="说明" show-overflow-tooltip></el-table-column>
+              </el-table>
+              <el-button slot="reference" type="text">查看帮助</el-button>
+            </el-popover>
           </div>
         </template>
-        <el-autocomplete
-          v-model="pageControl.state"
-          :fetch-suggestions="querySearch"
-          placeholder="请输入内容"
-          @select="handleSelect">
-          <template slot-scope="{ item }">
-            <div class="name">{{ item.value }}</div>
-            <div class="addr">{{ item.desc }}</div>
-          </template>
-        </el-autocomplete>
+<!--        <el-autocomplete-->
+<!--          v-model="pageControl.state"-->
+<!--          :fetch-suggestions="querySearch"-->
+<!--          placeholder="请输入内容"-->
+<!--          @select="handleSelect">-->
+<!--          <template slot-scope="{ item }">-->
+<!--            <div class="name">{{ item.value }}</div>-->
+<!--            <div class="addr">{{ item.desc }}</div>-->
+<!--          </template>-->
+<!--        </el-autocomplete>-->
       </el-form-item>
       <!--前置步骤-->
       <tl-step-list name="@BeforeSuite" :autoCase="pageData" :is-coding="pageControl.isCoding"></tl-step-list>
@@ -210,19 +217,14 @@ export default {
     },
     newParam () {
       let config = {name: 'default', value: '', type: 1, caseId: this.pageData.caseId}
-      // if (this.pageData.parameterList === null) {
-      //   this.pageData.parameterList = [config]
-      // } else {
-      //   this.pageData.parameterList.push(config)
-      // }
       quickCreateConfigAPI(config).then(response => {
         if (response.data.success === true) {
           this.$message.success('添加配置成功')
           config.configId = response.data.data
-          if (this.pageData.argumentList === null) {
-            this.pageData.argumentList = [config]
+          if (this.pageData.parameterList === null) {
+            this.pageData.parameterList = [config]
           } else {
-            this.pageData.argumentList.push(config)
+            this.pageData.parameterList.push(config)
           }
         }
       })

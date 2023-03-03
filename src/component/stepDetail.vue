@@ -20,11 +20,11 @@
       <!--模板-->
       <el-form-item label="方法类型">
         <el-row :gutter="5">
-          <el-col :span="4">
+          <el-col :span="6">
             <!--PO类型-->
             <template v-if="pageData.moduleType===1">
               <el-select v-model="pageData.methodType" @change="changeMethodType" placeholder="请求方法"
-                         style="float:left; width: 100px">
+                         style="float:left; width: 150px">
                 <el-option key="1" label="poName" :value="1"></el-option>
                 <el-option key="2" label="executeByJson" :value="2"></el-option>
               </el-select>
@@ -32,7 +32,7 @@
             <!--SQL类型-->
             <template v-if="pageData.moduleType===2">
               <el-select v-model="pageData.methodType" @change="changeMethodType" placeholder="请求方法"
-                         style="float:left; width: 100px">
+                         style="float:left; width: 150px">
                 <el-option key="1" label="dbName" :value="1"></el-option>
                 <el-option key="2" label="executeByJson" :value="2"></el-option>
               </el-select>
@@ -40,7 +40,7 @@
             <!--RPC类型-->
             <template v-if="pageData.moduleType===3">
               <el-select v-model="pageData.methodType" @change="changeMethodType" placeholder="请求方法"
-                         style="float:left; width: 100px">
+                         style="float:left; width: 150px">
                 <el-option key="1" label="invoke" :value="1"></el-option>
                 <el-option key="2" label="executeByJson" :value="2"></el-option>
               </el-select>
@@ -48,7 +48,7 @@
             <!--HTTP类型-->
             <template v-if="pageData.moduleType===4">
               <el-select v-model="pageData.methodType" @change="changeMethodType" placeholder="请求方法"
-                         style="float:left; width: 100px">
+                         style="float:left; width: 150px">
                 <el-option key="1" label="get" :value="1"></el-option>
                 <el-option key="2" label="post" :value="2"></el-option>
                 <el-option key="3" label="put" :value="3"></el-option>
@@ -62,7 +62,7 @@
             <!--UI类型-->
             <template v-if="pageData.moduleType===5">
               <el-select v-model="pageData.methodType" @change="changeMethodType" placeholder="操作类型"
-                         style="float:left; width: 100px">
+                         style="float:left; width: 150px">
                 <el-option key="1" label="openUrl" :value="1"></el-option>
                 <el-option key="2" label="click" :value="2"></el-option>
                 <el-option key="3" label="clickByJs" :value="3"></el-option>
@@ -79,7 +79,7 @@
             <!--UTIL类型-->
             <template v-if="pageData.moduleType===6">
               <el-select v-model="pageData.methodType" @change="changeMethodType" placeholder="操作类型"
-                         style="float:left; width: 100px">
+                         style="float:left; width: 150px">
                 <el-option key="1" label="sleep" :value="1"></el-option>
                 <el-option key="2" label="getJson" :value="2"></el-option>
                 <el-option key="3" label="getJsonAny" :value="3"></el-option>
@@ -90,7 +90,7 @@
             <!--ASSERTION类型-->
             <template v-if="pageData.moduleType===7">
               <el-select v-model="pageData.methodType" @change="changeMethodType" placeholder="操作类型"
-                         style="float:left; width: 100px">
+                         style="float:left; width: 150px">
                 <el-option key="1" label="isEquals" :value="1"></el-option>
                 <el-option key="2" label="isContains" :value="2"></el-option>
                 <el-option key="3" label="isBeContains" :value="3"></el-option>
@@ -103,7 +103,7 @@
               </el-select>
             </template>
           </el-col>
-          <el-col :span="19">
+          <el-col :span="17">
             <el-tooltip class="item" effect="dark" :content="pageControl.format.description" placement="top-start">
               <i class="el-icon-info"></i>
             </el-tooltip>

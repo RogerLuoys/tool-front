@@ -1,22 +1,25 @@
 <template>
   <div id="app">
-    <ve-line :data="chartData"></ve-line>
+    <ve-line :data="chartData" :settings="this.chartSettings"></ve-line>
   </div>
 </template>
 
 <script>
 export default {
-  data: function () {
+  data () {
+    this.chartSettings = {
+      label: {
+        PV: '访问用户',
+        Order: '下单用户'
+      }
+    }
     return {
       chartData: {
-        columns: ['日期', '测试模块一', '测试模块二'],
+        columns: ['date', 'PV', 'Order'],
         rows: [
-          { '日期': '1月1日', '测试模块一': 123, '测试模块二': 21 },
-          { '日期': '1月2日', '测试模块一': 1223, '测试模块二': 21 },
-          { '日期': '1月3日', '测试模块一': 2123, '测试模块二': 21 },
-          { '日期': '2月4日', '测试模块一': 4123, '测试模块二': 21 },
-          { '日期': '10月5日', '测试模块一': 3123, '测试模块二': 21 },
-          { '日期': '12月6日', '测试模块一': 7123, '测试模块二': 21 }
+          { 'date': '2018-05-22', 'PV': 32371, 'Order': 19810 },
+          { 'date': '2018-05-23', 'PV': 12328, 'Order': 4398 },
+          { 'date': '2018-05-24', 'PV': 92381, 'Order': 52910 }
         ]
       }
     }
