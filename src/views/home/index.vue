@@ -19,7 +19,7 @@
     </div>
     <div v-else>
       <div>用例总数</div>
-      <tl-test></tl-test>
+<!--      <tl-test></tl-test>-->
       <tl-total-case></tl-total-case>
     </div>
 <!--    <el-dialog :visible.sync="pageControl.isCalendarVisible" width="50%">-->
@@ -48,7 +48,7 @@ export default {
         type: ''
       },
       pageControl: {
-        isCalendarVisible: true
+        isCalendarVisible: false
       }
     }
   },
