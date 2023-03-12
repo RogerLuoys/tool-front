@@ -10,11 +10,14 @@ import 'element-ui/lib/theme-chalk/index.css'
 import VueCookies from 'vue-cookies'
 import store from './store'
 import VCharts from 'v-charts'
+// import VueCodemirror from 'vue-codemirror'
+// import 'codemirror/lib/codemirror.css'
 
 Vue.use(VueAxios, axios)
 Vue.use(VueCookies)
 Vue.use(ElementUI)
 Vue.use(VCharts)
+// Vue.use(VueCodemirror)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

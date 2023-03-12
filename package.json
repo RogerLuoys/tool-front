@@ -12,11 +12,13 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "codemirror": "^5.65.12",
     "echarts": "^4.9.0",
     "element-ui": "^2.15.12",
     "v-charts": "^1.19.0",
     "vue": "^2.5.2",
     "vue-axios": "^3.2.4",
+    "vue-codemirror": "^4.0.6",
     "vue-cookies": "^1.7.4",
     "vue-router": "^3.0.1",
     "vuex": "^3.6.2"

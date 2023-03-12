@@ -1,32 +1,53 @@
 <template>
-  <div id="app">
-    <ve-line :data="chartData" :settings="this.chartSettings"></ve-line>
+  <div>
+    <codemirror
+      ref="cm"
+      v-model="values"
+      :options="options"
+    ></codemirror>
   </div>
 </template>
 
 <script>
+// 全局引入vue-codemirror
+import { codemirror } from 'vue-codemirror'
+// 引入css文件
+import 'codemirror/lib/codemirror.css'
+// 引入主题 可多个
+import 'codemirror/theme/ayu-mirage.css'
+// 引入语言模式 可多个
+import 'codemirror/mode/sql/sql.js'
 export default {
+  components: { codemirror },
+  props: {
+    value: {
+      default: ''
+    }
+  },
   data () {
-    this.chartSettings = {
-      label: {
-        PV: '访问用户',
-        Order: '下单用户'
+    return {
+      values: '',
+      options: {
+        // 语言及语法模式
+        mode: 'text/x-sql',
+        // 主题
+        theme: 'ayu-mirage',
+        // 显示函数
+        line: true,
+        lineNumbers: true,
+        // 软换行
+        lineWrapping: true,
+        // tab宽度
+        tabSize: 4
       }
     }
-    return {
-      chartData: {
-        columns: ['date', 'PV', 'Order'],
-        rows: [
-          { 'date': '2018-05-22', 'PV': 32371, 'Order': 19810 },
-          { 'date': '2018-05-23', 'PV': 12328, 'Order': 4398 },
-          { 'date': '2018-05-24', 'PV': 92381, 'Order': 52910 }
-        ]
-      }
+  },
+  methods: {
+    inputChange (content) {
+      this.$nextTick(() => {
+        console.log('content:' + content)
+      })
     }
   }
 }
 </script>
-
-<style scoped>
-
-</style>
