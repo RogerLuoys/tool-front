@@ -3,6 +3,8 @@
     <codemirror
       ref="cm"
       v-model="values"
+      @change="inputChange"
+      @input="inputChange"
       :options="options"
     ></codemirror>
   </div>
@@ -44,9 +46,8 @@ export default {
   },
   methods: {
     inputChange (content) {
-      this.$nextTick(() => {
-        console.log('content:' + content)
-      })
+      console.info('test111')
+      console.log('content:' + content)
     }
   }
 }
