@@ -7,8 +7,10 @@
         <el-tooltip class="item" effect="dark" :content="pageControl.desc" placement="top-start">
           <i class="el-icon-info"></i>
         </el-tooltip>
+        <el-divider direction="vertical"></el-divider>
+        <el-button @click="updateScript" type="text">保存脚本</el-button>
       </el-divider>
-      <el-input @change="updateScript" type="textarea" :autosize="{minRows: 13, maxRows: 200}" placeholder="请输入脚本" v-model="pageData.script"></el-input>
+      <codemirror ref="cm" v-model="pageData.script" @keyHandled="save" :options="pageControl.options"></codemirror>
     </div>
     <!--ui模式-->
     <div v-else>
@@ -48,11 +50,19 @@
 </template>
 
 <script>
+// 全局引入vue-codemirror
+import { codemirror } from 'vue-codemirror'
+// 引入css文件
+import 'codemirror/lib/codemirror.css'
+// 引入主题 可多个
+import 'codemirror/theme/ayu-mirage.css'
+// 引入语言模式 可多个
+import 'codemirror/mode/sql/sql.js'
 import {createRelatedStepAPI, updateScriptAPI, removeRelatedStepAPI} from '@/api/autoCase'
 import tlStepDetail from '@/component/stepDetail'
 
 export default {
-  components: {tlStepDetail},
+  components: {tlStepDetail, codemirror},
   props: {
     name: {
       type: String
@@ -79,10 +89,30 @@ export default {
       pageControl: {
         isEditStep: false,
         isCoding: this.$store.state.isCoding,
+        updateLock: false,
         desc: null,
         script: '',
         // relationType: 0,
-        selectedStep: {}
+        selectedStep: {},
+        options: {
+          // 语言及语法模式
+          mode: 'text/x-sql',
+          // 主题
+          theme: 'ayu-mirage',
+          // 显示函数
+          line: true,
+          lineNumbers: true,
+          // 软换行
+          lineWrapping: true,
+          // 重写Ctrl-S
+          extraKeys: {
+            'Ctrl-S': function (cm) {
+              console.info('ctrl ssss')
+            }
+          },
+          // tab宽度
+          tabSize: 4
+        }
       }
     }
   },
@@ -270,12 +300,19 @@ export default {
           this.pageData = response.data.data
           this.$message.success('脚本已更新')
         }
+        this.pageControl.updateLock = false
       })
     },
     edit (row, event, column) {
       console.info(row.autoStep)
       this.pageControl.selectedStep = row.autoStep
       this.pageControl.isEditStep = true
+    },
+    save (cm, key) {
+      if (key === 'Ctrl-S' && this.pageControl.updateLock === false) {
+        this.pageControl.updateLock = true
+        this.updateScript()
+      }
     }
   }
 }

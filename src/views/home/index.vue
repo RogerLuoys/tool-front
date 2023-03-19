@@ -16,12 +16,12 @@
     <div style="height: 10px"></div>
     <div v-if="pageControl.isCalendarVisible">
       <tl-task-month-list></tl-task-month-list>
-      <tl-test></tl-test>
     </div>
     <div v-else>
       <div>用例总数</div>
       <tl-total-case></tl-total-case>
     </div>
+    <tl-test></tl-test>
   </el-card>
 </template>
 

@@ -3,8 +3,7 @@
     <codemirror
       ref="cm"
       v-model="values"
-      @change="inputChange"
-      @input="inputChange"
+      @keyHandled="save"
       :options="options"
     ></codemirror>
   </div>
@@ -39,6 +38,13 @@ export default {
         lineNumbers: true,
         // 软换行
         lineWrapping: true,
+        // 重写Ctrl-S
+        extraKeys: {
+          'Ctrl-S': function (cm) {
+            let spaces = Array(cm.getOption('indentUnit') + 1).join('test')
+            cm.replaceSelection(spaces)
+          }
+        },
         // tab宽度
         tabSize: 4
       }
@@ -48,6 +54,9 @@ export default {
     inputChange (content) {
       console.info('test111')
       console.log('content:' + content)
+    },
+    save (cm, key) {
+      console.log('save:' + key)
     }
   }
 }
