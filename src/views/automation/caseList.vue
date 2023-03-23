@@ -5,8 +5,7 @@
       <el-select v-model="pageControl.search.type" clearable size="mini" placeholder="请选择状态"
                  style="width:110px; float:left">
         <el-option key="1" label="用例" :value="1"></el-option>
-        <el-option key="2" label="超类" :value="2"></el-option>
-        <el-option key="3" label="PO" :value="3"></el-option>
+        <el-option key="3" label="PO(公共方法)" :value="3"></el-option>
       </el-select>
       <el-select v-model="pageControl.search.status" clearable size="mini" placeholder="请选择状态"
                  style="width:110px; float:left">

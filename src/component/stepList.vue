@@ -57,7 +57,7 @@ import 'codemirror/lib/codemirror.css'
 // 引入主题 可多个
 import 'codemirror/theme/ayu-mirage.css'
 // 引入语言模式 可多个
-import 'codemirror/mode/sql/sql.js'
+import 'codemirror/mode/javascript/javascript.js'
 import {createRelatedStepAPI, updateScriptAPI, removeRelatedStepAPI} from '@/api/autoCase'
 import tlStepDetail from '@/component/stepDetail'
 
@@ -96,11 +96,11 @@ export default {
         selectedStep: {},
         options: {
           // 语言及语法模式
-          mode: 'text/x-sql',
+          mode: 'javascript',
           // 主题
           theme: 'ayu-mirage',
           // 显示函数
-          line: true,
+          // line: true,
           lineNumbers: true,
           // 软换行
           lineWrapping: true,
@@ -109,9 +109,7 @@ export default {
             'Ctrl-S': function (cm) {
               console.info('ctrl ssss')
             }
-          },
-          // tab宽度
-          tabSize: 4
+          }
         }
       }
     }
@@ -199,6 +197,14 @@ export default {
               return '调用PUT接口'
             case 4: // delete
               return '调用DELETE接口'
+            case 5: // getForHeader
+              return '通过GET接口获取response header'
+            case 6: // postForHeader
+              return '通过POST接口获取response header'
+            case 7: // setDefaultHeader
+              return '设置默认请求头'
+            case 8: // setDefaultUrl
+              return '设置默认Url(环境)'
             default:
               return '未知步骤'
           }

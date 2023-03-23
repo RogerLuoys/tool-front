@@ -322,6 +322,42 @@ export default {
                 description: 'auto.http.delete(url, body, header)'
               }
               break
+            case 5: // getForHeader
+              this.pageControl.format = {
+                functionName: null,
+                paramName1: 'url',
+                paramName2: 'headerName',
+                paramName3: null,
+                description: 'auto.http.getForHeader(url, headerName)'
+              }
+              break
+            case 6: // postForHeader
+              this.pageControl.format = {
+                functionName: null,
+                paramName1: 'url',
+                paramName2: 'body',
+                paramName3: 'headerName',
+                description: 'auto.http.postForHeader(url, body, headerName)'
+              }
+              break
+            case 7: // setDefaultHeader
+              this.pageControl.format = {
+                functionName: null,
+                paramName1: 'defaultHeader',
+                paramName2: null,
+                paramName3: null,
+                description: 'auto.http.setDefaultHeader(defaultHeader)'
+              }
+              break
+            case 8: // setDefaultUrl
+              this.pageControl.format = {
+                functionName: null,
+                paramName1: 'url',
+                paramName2: null,
+                paramName3: null,
+                description: 'auto.http.setDefaultUrl(url)'
+              }
+              break
           }
           break
         case 5:
