@@ -35,7 +35,7 @@
         </el-menu-item>
         <el-menu-item index="4" @click="$router.push('/resource')">
           <i class="el-icon-s-platform"></i>
-          <span slot="title">资源管理</span>
+          <span slot="title">模块管理</span>
         </el-menu-item>
         <el-menu-item index="5" @click="$router.push('/config')">
           <i class="el-icon-setting"></i>
@@ -83,9 +83,6 @@ export default {
     }
     this.login()
     this.queryProjectByUser()
-    console.info(this.$store.state.userId)
-    console.info(this.$store.state.userName)
-    console.info(this.$cookies.get('loginInfo'))
   },
   methods: {
     login () {

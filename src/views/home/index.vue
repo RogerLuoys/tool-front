@@ -4,7 +4,7 @@
       <el-col :span="20">
         <el-descriptions>
           <el-descriptions-item label="当前账号">{{$store.state.userName}}</el-descriptions-item>
-          <el-descriptions-item label="当前项目">{{$store.state.userId}}</el-descriptions-item>
+<!--          <el-descriptions-item label="当前项目">{{$store.state.userId}}</el-descriptions-item>-->
         </el-descriptions>
       </el-col>
       <el-col :span="4">

@@ -50,13 +50,9 @@
 </template>
 
 <script>
-// 全局引入vue-codemirror
 import { codemirror } from 'vue-codemirror'
-// 引入css文件
 import 'codemirror/lib/codemirror.css'
-// 引入主题 可多个
 import 'codemirror/theme/ayu-mirage.css'
-// 引入语言模式 可多个
 import 'codemirror/mode/javascript/javascript.js'
 import {createRelatedStepAPI, updateScriptAPI, removeRelatedStepAPI} from '@/api/autoCase'
 import tlStepDetail from '@/component/stepDetail'

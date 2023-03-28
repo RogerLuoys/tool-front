@@ -18,7 +18,6 @@
           <template #content>
             <div>1、点击下载可下载服务jar包<br/>2、通过java -jar命令可启动<br/>3、执行ui用例需要配置webdriver</div>
           </template>
-          <a href="http://8.140.8.45/resources/tool-service.jar" download="service.jar">下载</a>
         </el-tooltip>
       </el-col>
     </el-row>
