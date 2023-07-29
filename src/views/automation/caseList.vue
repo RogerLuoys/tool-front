@@ -26,7 +26,8 @@
           <el-dropdown-menu>
             <el-dropdown-item command="1">新增PO</el-dropdown-item>
             <el-dropdown-item command="2" disabled>批量导入用例</el-dropdown-item>
-            <el-dropdown-item command="3">查看超类</el-dropdown-item>
+            <el-dropdown-item command="3" disabled>查看超类</el-dropdown-item>
+            <el-dropdown-item command="4">新增目录</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -44,6 +45,8 @@
       <el-table-column prop="name" label="标题" width="180" show-overflow-tooltip>
       </el-table-column>
       <el-table-column prop="description" label="说明" show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column prop="finishTime" label="所属目录" width="130" show-overflow-tooltip>
       </el-table-column>
       <el-table-column prop="finishTime" label="计划完成时间" width="130" show-overflow-tooltip>
       </el-table-column>
