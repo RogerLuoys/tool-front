@@ -29,6 +29,10 @@
         <el-input v-model="pageData.description" @change="update" placeholder="请描述功能和实现方法" type="textarea" maxlength="200"
                   show-word-limit></el-input>
       </el-form-item>
+      <el-form-item label="所属目录">
+        <el-input v-model="pageData.description" @change="update" placeholder="还要改" maxlength="200"
+                  show-word-limit></el-input>
+      </el-form-item>
       <el-form-item label="计划完成">
         <el-date-picker type="date" placeholder="计划完成日期" v-model="pageData.finishTime"
                         @change="update" value-format="yyyy-MM-dd" size="small"
