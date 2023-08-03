@@ -27,18 +27,12 @@
       <el-table border :data="pageData.stepList" @row-click="edit" :row-style="{cursor: 'pointer'}" size="mini" style="width: 100%">
         <el-table-column label="步骤简介" width="200" show-overflow-tooltip>
           <template slot-scope="scope">
-            {{getStepDesc(scope.row.autoStep)}}
+            {{getStepDesc(scope.row)}}
           </template>
         </el-table-column>
-        <el-table-column label="注释" width="100" show-overflow-tooltip>
-          <template slot-scope="scope">
-            {{scope.row.autoStep.name}}
-          </template>
+        <el-table-column prop="name" label="注释" width="100" show-overflow-tooltip>
         </el-table-column>
-        <el-table-column label="执行结果" show-overflow-tooltip>
-          <template slot-scope="scope">
-            {{scope.row.autoStep.result}}
-          </template>
+        <el-table-column prop="result" label="执行结果" show-overflow-tooltip>
         </el-table-column>
       </el-table>
     </div>
@@ -79,8 +73,7 @@ export default {
         supperCaseId: 0,
         type: 0,
         script: '',
-        stepList: [],
-        projectId: 0
+        stepList: []
       },
       pageControl: {
         isEditStep: false,
@@ -307,7 +300,7 @@ export default {
     },
     edit (row, event, column) {
       console.info(row.autoStep)
-      this.pageControl.selectedStep = row.autoStep
+      this.pageControl.selectedStep = row
       this.pageControl.isEditStep = true
     },
     save (cm, key) {

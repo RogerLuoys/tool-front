@@ -13,7 +13,7 @@
             :value="item.projectId">
           </el-option>
         </el-select>
-        <el-row slot="reference" type="flex" justify="center" align="middle" style="cursor: pointer; height: 48px; background-color: #545c64; color: white">演示机构</el-row>
+        <el-row slot="reference" type="flex" justify="center" align="middle" style="cursor: pointer; height: 48px; background-color: #545c64; color: white">演示部门</el-row>
       </el-popover>
       <div style="background-color: #909399; height: 1px"></div>
       <el-menu class="el-menu-vertical-demo" default-active="1"

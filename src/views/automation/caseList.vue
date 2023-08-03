@@ -13,6 +13,12 @@
         <el-option key="2" label="待修复" :value="2"></el-option>
         <el-option key="3" label="已完成" :value="3"></el-option>
       </el-select>
+      <el-select v-model="pageControl.search.status" clearable size="mini" placeholder="请选择目录"
+                 style="width:110px; float:left">
+        <el-option key="1" label="计划中" :value="1"></el-option>
+        <el-option key="2" label="待修复" :value="2"></el-option>
+        <el-option key="3" label="已完成" :value="3"></el-option>
+      </el-select>
       <el-input placeholder="请输入名称" clearable size="mini" v-model="pageControl.search.name"
                 style="width:200px; float:left">
         <template #append>
