@@ -22,16 +22,16 @@
         <el-input v-model="pageData.description" @change="update" placeholder="请描述功能和实现方法" type="textarea" maxlength="200"
                   show-word-limit></el-input>
       </el-form-item>
-      <el-form-item label="参数">
+      <el-form-item label="常量">
         <div v-if="pageData.parameterList === null || pageData.parameterList.length===0">暂无参数，可点+添加</div>
         <div v-else v-for="(item, index) in pageData.parameterList" :key="index">
           <el-row :gutter="2">
             <el-col :span="8">
-              <el-input v-model="pageData.parameterList[index].name" @change="updateParam(pageData.parameterList[index])" size="mini" placeholder="请输入参数名"
+              <el-input v-model="pageData.parameterList[index].name" @change="updateConfig(pageData.parameterList[index])" size="mini" placeholder="请输入参数名"
                         maxlength="20" show-word-limit></el-input>
             </el-col>
             <el-col :span="11">
-              <el-input v-model="pageData.parameterList[index].value" @change="updateParam(pageData.parameterList[index])" size="mini" placeholder="请输入参数值"
+              <el-input v-model="pageData.parameterList[index].value" @change="updateConfig(pageData.parameterList[index])" size="mini" placeholder="请输入参数值"
                         maxlength="200" show-word-limit>
               </el-input>
             </el-col>
@@ -44,7 +44,32 @@
           </el-row>
         </div>
         <div>
-          <el-button @click="newParam()" type="primary" size="mini" icon="el-icon-plus" plain>新增参数</el-button>
+          <el-button @click="newParam()" type="primary" size="mini" icon="el-icon-plus" plain>新增常量</el-button>
+        </div>
+      </el-form-item>
+      <el-form-item label="目录">
+        <div v-if="pageData.folderList === null || pageData.folderList.length===0">暂无目录，可点+添加</div>
+        <div v-else v-for="(item, index) in pageData.folderList" :key="index">
+          <el-row :gutter="2">
+            <el-col :span="19">
+              <el-input v-model="pageData.folderList[index].name" @change="updateConfig(pageData.folderList[index])" size="mini" placeholder="请输入目录名"
+                        maxlength="20" show-word-limit></el-input>
+            </el-col>
+<!--            <el-col :span="11">-->
+<!--              <el-input v-model="pageData.parameterList[index].value" @change="updateConfig(pageData.parameterList[index])" size="mini" placeholder="请输入参数值"-->
+<!--                        maxlength="200" show-word-limit>-->
+<!--              </el-input>-->
+<!--            </el-col>-->
+            <el-col :span="4">
+              <el-button @click="deleteFolder(index)" size="mini">删除</el-button>
+<!--              <el-tooltip class="item" effect="dark" :content="'${'+pageData.parameterList[index].name+'}'" placement="top-start">-->
+<!--                <i class="el-icon-info"></i>-->
+<!--              </el-tooltip>-->
+            </el-col>
+          </el-row>
+        </div>
+        <div>
+          <el-button @click="newFolder()" type="primary" size="mini" icon="el-icon-plus" plain>新增目录</el-button>
         </div>
       </el-form-item>
       <el-form-item label="webDriver">
@@ -56,14 +81,14 @@
           <div v-for="(item, index) in pageData.argumentList" :key="index">
             <el-row :gutter="2">
               <el-col :span="19">
-                <el-input v-model="pageData.argumentList[index].value" @change="updateParam(pageData.argumentList[index])" size="mini" placeholder="请输入参数值"
+                <el-input v-model="pageData.argumentList[index].value" @change="updateConfig(pageData.argumentList[index])" size="mini" placeholder="请输入参数值"
                           maxlength="200" show-word-limit>
                 </el-input>
 <!--                <el-autocomplete-->
 <!--                  v-model="pageData.argumentList[index].value"-->
 <!--                  :fetch-suggestions="querySearch" :trigger-on-focus="false"-->
 <!--                  placeholder="请输入参数值" size="mini"-->
-<!--                  @change="updateParam(pageData.argumentList[index])"-->
+<!--                  @change="updateConfig(pageData.argumentList[index])"-->
 <!--                  @select="handleSelect" style="width: 300px">-->
 <!--                  <template slot-scope="{ item }">-->
 <!--                    <div class="name">{{ item.value }}</div>-->
@@ -144,7 +169,8 @@ export default {
         name: 'name',
         description: '',
         parameterList: null,
-        argumentList: [],
+        argumentList: null,
+        folderList: null,
         finishTime: '',
         maxTime: 1,
         ownerId: '123',
@@ -238,6 +264,29 @@ export default {
         }
       })
     },
+    newFolder () {
+      let config = {name: '目录', value: '', type: 5, caseId: this.pageData.caseId}
+      quickCreateConfigAPI(config).then(response => {
+        if (response.data.success === true) {
+          this.$message.success('添加目录成功')
+          config.configId = response.data.data
+          if (this.pageData.folderList === null) {
+            this.pageData.folderList = [config]
+          } else {
+            this.pageData.folderList.push(config)
+          }
+        }
+      })
+    },
+    deleteFolder (index) {
+      let configId = this.pageData.folderList[index].configId
+      removeConfigAPI({configId: configId}).then(response => {
+        if (response.data.success === true) {
+          this.pageData.folderList.splice(index, 1)
+          this.$message.success('删除目录成功')
+        }
+      })
+    },
     newUiParam () {
       let config = {name: 'default', value: '', type: this.pageControl.webDriverType, caseId: this.pageData.caseId}
       quickCreateConfigAPI(config).then(response => {
@@ -308,7 +357,7 @@ export default {
         }
       })
     },
-    updateParam (param) {
+    updateConfig (param) {
       updateConfigAPI(param).then(response => {
         if (response.data.success === true) {
           this.$message.success('编辑用例成功')
