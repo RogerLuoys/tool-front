@@ -30,8 +30,11 @@
                   show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="所属目录">
-        <el-input v-model="pageData.description" @change="update" placeholder="还要改" maxlength="200"
-                  show-word-limit></el-input>
+        <el-select v-model="pageData.description" clearable placeholder="请选择目录"
+                   style="width:200px">
+          <el-option v-for="item in folderList" :key="item.configId" :label="item.name" :value="item.configId">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="计划完成">
         <el-date-picker type="date" placeholder="计划完成日期" v-model="pageData.finishTime"
@@ -58,7 +61,8 @@ export default {
     visible: {
       type: Boolean,
       default: true
-    }
+    },
+    folderList: []
   },
   data () {
     return {

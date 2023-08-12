@@ -13,11 +13,10 @@
         <el-option key="2" label="待修复" :value="2"></el-option>
         <el-option key="3" label="已完成" :value="3"></el-option>
       </el-select>
-      <el-select v-model="pageControl.search.status" clearable size="mini" placeholder="请选择目录"
+      <el-select v-model="pageControl.search.folderId" clearable size="mini" placeholder="请选择目录"
                  style="width:110px; float:left">
-        <el-option key="1" label="计划中" :value="1"></el-option>
-        <el-option key="2" label="待修复" :value="2"></el-option>
-        <el-option key="3" label="已完成" :value="3"></el-option>
+        <el-option v-for="item in pageControl.folderList" :key="item.configId" :label="item.name" :value="item.configId">
+        </el-option>
       </el-select>
       <el-input placeholder="请输入名称" clearable size="mini" v-model="pageControl.search.name"
                 style="width:200px; float:left">
@@ -85,7 +84,8 @@
     <!--编辑弹窗-->
     <el-drawer :visible.sync="pageControl.isEditCase" title="编辑用例" :with-header="false" size="55%">
       <el-card style="min-height: 100%">
-        <tl-detail v-if="pageControl.isEditCase" :case-id="pageControl.selectedCaseId" :visible.sync="pageControl.isEditCase"></tl-detail>
+        <tl-detail v-if="pageControl.isEditCase" :case-id="pageControl.selectedCaseId"
+                   :visible.sync="pageControl.isEditCase" :folder-list="pageControl.folderList"></tl-detail>
       </el-card>
     </el-drawer>
     <!--执行弹窗-->
@@ -100,7 +100,7 @@
 <script>
 import tlDetail from './caseDetail'
 import tlUse from './caseUse'
-import {quickCreateAPI, queryAPI, testAPI} from '@/api/autoCase'
+import {quickCreateAPI, queryAPI, queryConfigAPI, testAPI} from '@/api/autoCase'
 
 export default {
   components: {tlDetail, tlUse},
@@ -136,10 +136,12 @@ export default {
         search: {//  列表搜索入参
           supperCaseId: 0,
           type: 1,
+          folderId: null,
           status: null,
           pageIndex: 1,
           name: null
         },
+        folderList: [],
         quickCreate: {//  快速新增用例的入参
           name: null,
           type: 1,
@@ -151,6 +153,7 @@ export default {
   created: function () {
     this.pageControl.search.supperCaseId = this.supperCaseId
     this.pageControl.quickCreate.supperCaseId = this.supperCaseId
+    this.queryFolderList()
     this.queryList()
   },
   watch: {
@@ -212,6 +215,16 @@ export default {
       queryAPI(this.pageControl.search).then(response => {
         if (response.data.success === true) {
           this.pageData = response.data.data
+        }
+      })
+    },
+    queryFolderList () {
+      queryConfigAPI({
+        caseId: this.supperCaseId,
+        type: 5
+      }).then(response => {
+        if (response.data.success === true) {
+          this.pageControl.folderList = response.data.data
         }
       })
     },

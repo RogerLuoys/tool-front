@@ -105,6 +105,14 @@ export function queryDetailAPI (params) {
   })
 }
 
+export function queryConfigAPI (params) {
+  return api({
+    url: 'autoCase/queryConfig',
+    method: 'get',
+    params: params
+  })
+}
+
 export function queryAPI (data) {
   return api({
     url: 'autoCase/query',
