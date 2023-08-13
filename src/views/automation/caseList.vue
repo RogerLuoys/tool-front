@@ -38,7 +38,6 @@
       </el-dropdown>
     </div>
     <!--列表-->
-<!--    <div style="height: 5px"></div>-->
     <el-table border :data="pageData.list" @row-click="edit" :row-style="{cursor: 'pointer'}" size="mini" height="calc(66.4vh)" style="width: 100%;">
       <el-table-column prop="caseId" label="编号" width="120">
       </el-table-column>
