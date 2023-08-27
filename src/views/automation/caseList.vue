@@ -41,7 +41,7 @@
     <el-table border :data="pageData.list" @row-click="edit" :row-style="{cursor: 'pointer'}" size="mini" height="calc(66.4vh)" style="width: 100%;">
       <el-table-column prop="caseId" label="编号" width="120">
       </el-table-column>
-      <el-table-column prop="type" label="状态" width="90">
+      <el-table-column label="状态" width="90">
         <template #default="scope">
           <el-tag size="small">{{ getStatus(scope.row.status) }}</el-tag>
         </template>
@@ -50,17 +50,15 @@
       </el-table-column>
       <el-table-column prop="description" label="说明" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column prop="finishTime" label="所属目录" width="130" show-overflow-tooltip>
+      <el-table-column prop="folderId" label="所属目录" width="130" show-overflow-tooltip>
+        <template #default="scope">
+          <span>{{ getFolderName(scope.row.folderId) }}</span>
+        </template>
       </el-table-column>
       <el-table-column prop="finishTime" label="计划完成时间" width="130" show-overflow-tooltip>
       </el-table-column>
       <el-table-column prop="ownerName" label="责任人" width="130" show-overflow-tooltip>
       </el-table-column>
-<!--      <el-table-column label="操作" width="110">-->
-<!--        <template slot-scope="scope">-->
-<!--          <el-link @click="edit(scope.row.caseId)" :underline="false" type="primary">编辑</el-link>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
     </el-table>
     <!--分页-->
     <el-pagination layout="total, prev, pager, next" @current-change="queryList()" :current-page.sync="pageControl.search.pageIndex"
@@ -189,6 +187,17 @@ export default {
           return '未知'
       }
     },
+    getFolderName (folderId) {
+      for (let item in this.pageControl.folderList) {
+        console.info(item.name)
+        console.info(item.configId)
+        console.info(folderId)
+        debugger
+        if (item.configId === folderId) {
+          return item.name
+        }
+      }
+    },
     handleCommand (command) {
       switch (command) {
         case '1':
@@ -224,6 +233,11 @@ export default {
       }).then(response => {
         if (response.data.success === true) {
           this.pageControl.folderList = response.data.data
+          if (this.pageControl.folderList === null) {
+            this.pageControl.folderList = [{configId: -1, name: '默认目录'}]
+          } else {
+            this.pageControl.folderList.push({configId: -1, name: '默认目录'})
+          }
         }
       })
     },
