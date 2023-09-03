@@ -30,16 +30,11 @@
                   show-word-limit></el-input>
       </el-form-item>
       <el-form-item label="所属目录">
-        <el-select v-model="pageData.folderId" clearable placeholder="请选择目录"
+        <el-select v-model="pageData.folderId" @change="update" clearable placeholder="请选择目录"
                    style="width:200px">
           <el-option v-for="item in folderList" :key="item.configId" :label="item.name" :value="item.configId">
           </el-option>
         </el-select>
-<!--        <el-select v-model="pageControl.search.folderId" clearable size="mini" placeholder="请选择目录"-->
-<!--                   style="width:110px; float:left">-->
-<!--          <el-option v-for="item in pageControl.folderList" :key="item.configId" :label="item.name" :value="item.configId">-->
-<!--          </el-option>-->
-<!--        </el-select>-->
       </el-form-item>
       <el-form-item label="计划完成">
         <el-date-picker type="date" placeholder="计划完成日期" v-model="pageData.finishTime"

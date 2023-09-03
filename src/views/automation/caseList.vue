@@ -188,13 +188,9 @@ export default {
       }
     },
     getFolderName (folderId) {
-      for (let item in this.pageControl.folderList) {
-        console.info(item.name)
-        console.info(item.configId)
-        console.info(folderId)
-        debugger
-        if (item.configId === folderId) {
-          return item.name
+      for (let i = 0; i < this.pageControl.folderList.length; i++) {
+        if (this.pageControl.folderList[i].configId === folderId) {
+          return this.pageControl.folderList[i].name
         }
       }
     },
