@@ -5,7 +5,7 @@ import {Message} from 'element-ui'
 const api = axios.create({
   // 我的云主机
   // 本地
-  // baseURL: 'http://localhost:9011/',
+  baseURL: 'http://localhost:8888/',
   timeout: 30000,
   withCredentials: false
 })
